@@ -51,7 +51,7 @@ Returns the information about the current user that is logged in.
 
 * Require Authentication: true
 * Request
-  * Method: ?
+  * Method: GET
   * URL: ?
   * Body: none
 
@@ -92,7 +92,7 @@ information.
 
 * Require Authentication: false
 * Request
-  * Method: ?
+  * Method: POST
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -161,7 +161,7 @@ user's information.
 
 * Require Authentication: false
 * Request
-  * Method: ?
+  * Method: POST
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -237,7 +237,7 @@ Returns all the groups.
 
 * Require Authentication: false
 * Request
-  * Method: ?
+  * Method: GET
   * URL: ?
   * Body: none
 
@@ -274,7 +274,7 @@ Returns all the groups.
 
 * Require Authentication: true
 * Request
-  * Method: ?
+  * Method: GET
   * URL: ?
   * Body: none
 
@@ -311,7 +311,7 @@ Returns the details of a group specified by its id.
 
 * Require Authentication: false
 * Request
-  * Method: ?
+  * Method: GET
   * URL: ?
   * Body: none
 
@@ -384,7 +384,7 @@ Creates and returns a new group.
 
 * Require Authentication: true
 * Request
-  * Method: ?
+  * Method: POST
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -450,7 +450,7 @@ Create and return a new image for a group specified by id.
 * Require Authentication: true
 * Require proper authorization: Current User must be the organizer for the group
 * Request
-  * Method: ?
+  * Method: PUT
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -497,7 +497,7 @@ Updates and returns an existing group.
 * Require Authentication: true
 * Require proper authorization: Group must belong to the current user
 * Request
-  * Method: ?
+  * Method: PUT
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -576,7 +576,7 @@ Deletes an existing group.
 * Require Authentication: true
 * Require proper authorization: Group must belong to the current user
 * Request
-  * Method: ?
+  * Method: DELETE
   * URL: ?
   * Body: none
 
@@ -616,7 +616,7 @@ Returns all venues for a group specified by its id
 * Require Authentication: Current User must be the organizer of the group or a member of
   the group with a status of "co-host"
 * Request
-  * Method: ?
+  * Method: GET
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -666,7 +666,7 @@ Creates and returns a new venue for a group specified by its id
 * Require Authentication: Current User must be the organizer of the group or a member of
   the group with a status of "co-host"
 * Request
-  * Method: ?
+  * Method: POST
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -741,7 +741,7 @@ Edit a new venue specified by its id
 * Require Authentication: Current User must be the organizer of the group or a member of
   the group with a status of "co-host"
 * Request
-  * Method: ?
+  * Method: PUT
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -816,7 +816,7 @@ Returns all the events.
 
 * Require Authentication: false
 * Request
-  * Method: ?
+  * Method: GET
   * URL: ?
   * Body: none
 
@@ -879,7 +879,7 @@ Returns all the events of a group specified by its id
 
 * Require Authentication: false
 * Request
-  * Method: ?
+  * Method: GET
   * URL: ?
   * Body: none
 
@@ -955,7 +955,7 @@ Returns the details of an event specified by its id.
 
 * Require Authentication: false
 * Request
-  * Method: ?
+  * Method: GET
   * URL: ?
   * Body: none
 
@@ -1029,7 +1029,7 @@ Creates and returns a new event for a group specified by its id
 * Require Authorization: Current User must be the organizer of the group or a member of
   the group with a status of "co-host"
 * Request
-  * Method: ?
+  * Method: POST
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -1112,7 +1112,7 @@ Create and return a new image for an event specified by id.
 * Require Authentication: true
 * Require proper authorization: Current User must be an attendee of the event
 * Request
-  * Method: ?
+  * Method: PUT
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -1160,7 +1160,7 @@ Edit and returns an event specified by its id
 * Require Authorization: Current User must be the organizer of the group or a member of
   the group with a status of "co-host"
 * Request
-  * Method: ?
+  * Method: PUT
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -1257,7 +1257,7 @@ Delete an event specified by its id
 * Require Authorization: Current User must be the organizer of the group or a member of
   the group with a status of "co-host"
 * Request
-  * Method: ?
+  * Method: DELETE
   * URL: ?
   * Body: none
 
@@ -1294,7 +1294,7 @@ Returns the members of a group specified by its id.
 
 * Require Authentication: false
 * Request
-  * Method: ?
+  * Method: GET
   * URL: ?
   * Body: none
 
@@ -1385,7 +1385,7 @@ Request a new membership for a group specified by id.
 
 * Require Authentication: true
 * Request
-  * Method: ?
+  * Method: POST
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -1457,7 +1457,7 @@ Change the status of a membership for a group specified by id.
   * To change the status from "member" to "co-host":
     * Current User must already be the organizer
 * Request
-  * Method: ?
+  * Method: PUT
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -1551,7 +1551,7 @@ Delete a membership to a group specified by id.
 * Require proper authorization: Current User must be the host of the group, or
   the user whose membership is being deleted
 * Request
-  * Method: ?
+  * Method: DELETE
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -1625,7 +1625,7 @@ Returns the attendees of an event specified by its id.
 
 * Require Authentication: false
 * Request
-  * Method: ?
+  * Method: GET
   * URL: ?
   * Body: none
 
@@ -1719,7 +1719,7 @@ Request attendance for an event specified by id.
 * Require Authentication: true
 * Require Authorization: Current User must be a member of the group
 * Request
-  * Method: ?
+  * Method: POST
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -1787,7 +1787,7 @@ Change the status of an attendance for an event specified by id.
 * Require proper authorization: Current User must already be the organizer or
   have a membership to the group with the status of "co-host"
 * Request
-  * Method: ?
+  * Method: PUT
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -1862,7 +1862,7 @@ Delete an attendance to an event specified by id.
 * Require proper authorization: Current User must be the host of the group, or
   the user whose attendance is being deleted
 * Request
-  * Method: ?
+  * Method: DELETE
   * URL: ?
   * Headers:
     * Content-Type: application/json
@@ -1935,7 +1935,7 @@ Delete an existing image for a Group.
 * Require proper authorization: Current user must be the organizer or "co-host"
   of the Group
 * Request
-  * Method: ?
+  * Method: DELETE
   * URL: ?
   * Body: none
 
@@ -1974,7 +1974,7 @@ Delete an existing image for an Event.
 * Require proper authorization: Current user must be the organizer or "co-host"
   of the Group that the Event belongs to
 * Request
-  * Method: ?
+  * Method: DELETE
   * URL: ?
   * Body: none
 
@@ -2011,7 +2011,7 @@ Return events filtered by query parameters.
 
 * Require Authentication: false
 * Request
-  * Method: ?
+  * Method: GET
   * URL: ?
   * Query Parameters
     * page: integer, minimum: 0, maximum: 10, default: 0
