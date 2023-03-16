@@ -39,6 +39,12 @@ app.use(
   })
 );
 
+const routes = require('./routes');
+
+// ...
+
+app.use(routes); // Connect all the routes
+
 // Catch unhandled requests and forward to error handler.
 app.use((_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
@@ -47,6 +53,8 @@ app.use((_req, _res, next) => {
   err.status = 404;
   next(err);
 });
+
+
 
 
 // Process sequelize errors
@@ -74,12 +82,6 @@ app.use((err, _req, res, _next) => {
     stack: isProduction ? null : err.stack
   });
 });
-
-const routes = require('./routes');
-
-// ...
-
-app.use(routes); // Connect all the routes
 
 
 
