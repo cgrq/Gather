@@ -1,6 +1,6 @@
 # Gather
 
-## Database Schema Design
+## Database Schema
 
 ![meetup-dbdiagram]
 
