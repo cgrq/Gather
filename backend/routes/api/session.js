@@ -12,9 +12,10 @@ const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
 
 const validateLogin = [
-    check('credential')
+    check('email')
         .exists({ checkFalsy: true })
         .notEmpty()
+        .isEmail()
         .withMessage('Please provide a valid email or username.'),
     check('password')
         .exists({ checkFalsy: true })
@@ -48,16 +49,15 @@ router.post(
     '/',
     validateLogin,
     async (req, res, next) => {
-        const { credential, password } = req.body;
+        const { email, password } = req.body;
+        console.log(`🖥 ~ file: session.js:52 ~ { email, password }:`, { email, password })
 
         const user = await User.unscoped().findOne({
             where: {
-                [Op.or]: {
-                    username: credential,
-                    email: credential
-                }
+                email
             }
         });
+        console.log(`🖥 ~ file: session.js:58 ~ user ~ user:`, user)
 
         if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
             const err = new Error('Login failed');
