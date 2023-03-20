@@ -14,7 +14,20 @@ const validateSignup = [
     check('email')
         .exists({ checkFalsy: true })
         .isEmail()
-        .withMessage('Please provide a valid email.'),
+        .withMessage('Please provide a valid email.')
+        .custom(async value => {
+            return await User.findOne({ where: { email: value } }).then(user => {
+              if (user) {
+                return Promise.reject('Email already exists');
+              }
+            });
+          }),
+    check('firstName')
+          .exists({ checkFalsy: true })
+          .withMessage('Please provide a first name'),
+    check('lastName')
+          .exists({ checkFalsy: true })
+          .withMessage('Please provide a last name'),
     check('username')
         .exists({ checkFalsy: true })
         .isLength({ min: 4 })
