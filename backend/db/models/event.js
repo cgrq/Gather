@@ -18,18 +18,41 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Event.init({
-    id: DataTypes.INTEGER,
-    venueId: DataTypes.INTEGER,
-    groupId: DataTypes.INTEGER,
-    name: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    type: DataTypes.ENUM('In Person', 'Online'),
-    capacity: DataTypes.INTEGER,
-    price: DataTypes.INTEGER,
-    startDate: DataTypes.DATE,
-    endDate: DataTypes.DATE,
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE
+    venueId: {
+      type: DataTypes.INTEGER,
+      allowNull:false
+    },
+    groupId: {
+      type: DataTypes.INTEGER,
+      allowNull:false
+    },
+    name: {
+      type:DataTypes.STRING,
+      allowNull:false
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull:false
+    },
+    type: {
+      type:DataTypes.ENUM('In Person', 'Online'),
+      allowNull:false
+    },
+    capacity: {
+      type: DataTypes.INTEGER,
+      allowNull:false
+    },
+    price: {
+      type:DataTypes.INTEGER
+    },
+    startDate: {
+      allowNull:false,
+      type:DataTypes.DATE
+    },
+    endDate: {
+      allowNull:false,
+      type:DataTypes.DATE
+    }
   }, {
     sequelize,
     modelName: 'Event',
