@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Event.hasMany(models.EventIm,{foreignKey:"sportId",hooks:true})
+
     }
   }
   Event.init({
