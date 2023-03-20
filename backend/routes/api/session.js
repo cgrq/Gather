@@ -28,6 +28,8 @@ router.get(
     '/',
     (req, res) => {
         const { user } = req;
+        console.log(`🖥 ~ file: session.js:31 ~ user:`, user)
+
         if (user) {
             const safeUser = {
                 id: user.id,
