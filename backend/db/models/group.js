@@ -12,10 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Group.belongsTo(models.User,{foreignKey:"organizerId"});
-      Group.hasMany(models.Event,{foreignKey:"groupId",hooks:true});
       Group.hasMany(models.Membership,{foreignKey:"groupId",hooks:true});
       Group.hasMany(models.Venue,{foreignKey:"groupId",hooks:true});
       Group.hasMany(models.GroupImage,{foreignKey:"groupId",hooks:true});
+      Group.hasMany(models.Event,{foreignKey:"groupId",hooks:true});
     }
   }
   Group.init({
