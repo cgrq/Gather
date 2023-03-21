@@ -22,11 +22,12 @@ module.exports = {
       },
       userId: {
         allowNull: false,
+        references:{model:"Users"},
         type: Sequelize.INTEGER
       },
       status: {
         allowNull: false,
-        type: Sequelize.ENUM
+        type: Sequelize.ENUM("member", "waitlist", "pending")
       },
       createdAt: {
         allowNull: false,
