@@ -28,7 +28,6 @@ router.get(
     '/',
     (req, res) => {
         const { user } = req;
-        console.log(`🖥 ~ file: session.js:31 ~ user:`, user)
 
         if (user) {
             const safeUser = {
@@ -52,14 +51,12 @@ router.post(
     validateLogin,
     async (req, res, next) => {
         const { email, password } = req.body;
-        console.log(`🖥 ~ file: session.js:52 ~ { email, password }:`, { email, password })
 
         const user = await User.unscoped().findOne({
             where: {
                 email
             }
         });
-        console.log(`🖥 ~ file: session.js:58 ~ user ~ user:`, user)
 
         if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
             const err = new Error('Login failed');
