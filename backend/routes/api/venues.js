@@ -32,7 +32,8 @@ const validateVenue = [
         .withMessage("Longitude is not valid"),
     handleValidationErrors
 ];
-console.log("!@!@#!@#!@#!!")
+
+
 // Edit a Venue specified by its id
 router.put(
     '/:venueId',
