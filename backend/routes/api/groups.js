@@ -6,7 +6,7 @@ const { Group, Membership, GroupImage, User, Venue } = require('../../db/models'
 
 const router = express.Router();
 
-const { requireAuth } = require('../../utils/auth')
+const { requireAuth, verifyCohostStatus } = require('../../utils/auth')
 const { formatDate } = require('../../utils/date')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -44,6 +44,7 @@ const validateGroup = [
         .withMessage("State is required"),
     handleValidationErrors
 ];
+
 
 // Get All Groups
 router.get(
@@ -299,9 +300,7 @@ router.post(
 
     }
 );
-router.use((err, req, res, next) => {
-    res.status(err.statusCode || 500).json({ message: err.message });
-});
+
 
 // Edit a Group
 router.put(
@@ -392,5 +391,103 @@ router.delete(
 
     }
 );
+
+// Get All Venues for a Group specified by its id
+router.get(
+    '/:groupId/venues',
+    [requireAuth, verifyCohostStatus],
+    async (req, res, next) => {
+        try {
+            console.log("!@#!@#!@#!@#!@@#!@#!@#!@#!@##")
+            const  parentGroupId  = req.params.groupId;
+            const userId = req.user.id;
+
+            const group = await Group.unscoped().findByPk(parentGroupId,
+                {
+                    include: [
+                        { model: Venue, attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"] }
+                    ]
+                }
+            );
+
+            if (!group) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            const Venues = group.Venues.map(venue => {
+                const {id, groupId, address, city, state, lat, lng} = venue;
+                return {id, groupId, address, city, state, lat, lng};
+            })
+
+            return res.json({
+                Venues
+            });
+
+        } catch (err) {
+            next(err)
+        }
+
+
+    }
+);
+
+router.use((err, req, res, next) => {
+    res.status(err.statusCode || 500).json({ message: err.message });
+});
+
+// Create a new Venue for a Group specified by its id
+router.post(
+    '/:groupId/venues',
+    requireAuth,
+    async (req, res, next) => {
+        try {
+            const  parentGroupId  = req.params.groupId;
+            const userId = req.user.id;
+
+            const group = await Group.unscoped().findByPk(parentGroupId,
+                {
+                    include: [
+                        { model: Venue, attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"] }
+                    ]
+                }
+            );
+
+            if (!group) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            const { organizerId } = group;
+
+            if(organizerId != userId){
+                const err = new Error("Forbidden");
+                err.statusCode = 403;
+                throw err;
+            }
+
+            const Venues = group.Venues.map(venue => {
+                const {id, groupId, address, city, state, lat, lng} = venue;
+                return {id, groupId, address, city, state, lat, lng};
+
+            })
+
+            return res.json({
+                Venues
+            });
+
+        } catch (err) {
+            next(err)
+        }
+
+
+    }
+);
+
+router.use((err, req, res, next) => {
+    res.status(err.statusCode || 500).json({ message: err.message });
+});
 
 module.exports = router;

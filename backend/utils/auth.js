@@ -1,7 +1,7 @@
 // backend/utils/auth.js
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
-const { User } = require('../db/models');
+const { User, Membership } = require('../db/models');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -71,6 +71,22 @@ const requireAuth = function (req, _res, next) {
   return next(err);
 }
 
+const verifyCohostStatus = async function (req, _res, next) {
+  const inputGroupId = req.params.groupId;
+  const user = await User.unscoped().findByPk(req.user.id, { include: [{ model: Membership }] });
+  let statusConfirmed = false;
+  user.Memberships.forEach(membership => {
+    const { groupId, status } = membership
+    if (inputGroupId == groupId && (status == "organizer(host)" || status == "co-host")) {
+      statusConfirmed = true;
+      return next();
+    }
+  })
+  if(!statusConfirmed){
+    const err = new Error("Forbidden");
+    err.statusCode = 403;
+    return next(err);
+  }
+}
 
-
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+module.exports = { setTokenCookie, restoreUser, requireAuth, verifyCohostStatus };
