@@ -277,7 +277,7 @@ router.post(
                 err.statusCode = 404;
                 throw err;
             }
-            
+
             if(group.organizerId != req.user.id){
                 const err = new Error("Forbidden");
                 err.statusCode = 403;
@@ -301,6 +301,58 @@ router.post(
 );
 router.use((err, req, res, next) => {
     res.status(err.statusCode || 500).json({ message: err.message });
-})
+});
+
+// Edit a Group
+router.put(
+    '/:groupId',
+    [requireAuth, validateGroup],
+    async (req, res, next) => {
+        try {
+            const { groupId } = req.params;
+            const { name, about, type, private, city, state} = req.body;
+            const id = req.user.id;
+
+            const group = await Group.findByPk(groupId);
+
+            if (!group) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            const organizerId = group.organizerId;
+            
+            if(organizerId != id){
+                const err = new Error("Forbidden");
+                err.statusCode = 403;
+                throw err;
+            }
+
+            group.set({ name, about, type, private, city, state});
+
+            await group.save();
+
+            const createdAt = formatDate(group.createdAt);
+            const updatedAt = formatDate(group.updatedAt);
+
+            return res.json({
+                id,
+                organizerId,
+                name,
+                about,
+                type,
+                private,
+                city,
+                state,
+                createdAt,
+                updatedAt
+            });
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
 
 module.exports = router;
