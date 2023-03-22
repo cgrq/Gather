@@ -38,7 +38,7 @@ const validateEvent = [
 router.get(
     '/',
     async (_req, res) => {
-        const event = await Event.unscoped().findAll({
+        const events = await Event.unscoped().findAll({
             include: [
                 { model: Attendance},
                 { model: EventImage},
@@ -47,9 +47,8 @@ router.get(
             ]
         });
 
-        const eventsFormatted = event.map(event => {
+        const eventsFormatted = events.map(event => {
             const { id, groupId, venueId, name, type, startDate, endDate } = event;
-            console.log(`🖥 ~ file: events.js:52 ~ eventsFormatted ~ event:`, event)
             const numAttending = event.Attendances.length;
             const previewImage = event.EventImages[0].url;
             const Group = event.Group;

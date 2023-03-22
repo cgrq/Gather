@@ -2,7 +2,7 @@
 const express = require('express');
 
 
-const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
+const { Group, Membership, Attendance, EventImage, GroupImage, User, Venue, Event } = require('../../db/models');
 
 const router = express.Router();
 
@@ -480,6 +480,69 @@ router.post(
     }
 );
 
+// Get all Events of a Group specified by its id
+router.get(
+    '/:groupId/events',
+    async (req, res, next) => {
 
+        const  parentGroupId  = req.params.groupId;
+
+        try {
+            const events = await Event.unscoped().findAll(
+                {
+                    where: {
+                        groupId: parentGroupId
+                    },
+                    include: [
+                        { model: Attendance },
+                        { model: EventImage },
+                        { model: Group, attributes: ["id", "name", "city", "state"] },
+                        { model: Venue, attributes: ["id", "city", "state"] }
+                    ]
+                }
+            );
+            if (!events.length) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+            const eventsFormatted = events.map(event => {
+                const { id, groupId, venueId, name, type, startDate, endDate } = event;
+                const numAttending = event.Attendances.length;
+                const previewImage = event.EventImages[0].url;
+                const Group = event.Group;
+                const Venue = event.Venue;
+
+                const startDateFormatted = formatDate(startDate);
+                const endDateFormatted = formatDate(endDate);
+
+                return {
+                    id,
+                    groupId,
+                    venueId,
+                    name,
+                    type,
+                    startDate: startDateFormatted,
+                    endDate: endDateFormatted,
+                    numAttending,
+                    previewImage,
+                    Group,
+                    Venue
+                }
+            })
+
+            return res.json({
+                Events: eventsFormatted
+            });
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
+
+router.use((err, req, res, next) => {
+    res.status(err.statusCode || 500).json({ message: err.message });
+})
 
 module.exports = router;
