@@ -226,5 +226,81 @@ router.post(
     }
 );
 
+// Create a Group
+router.post(
+    '/',
+    [requireAuth, validateGroup],
+    async (req, res, next) => {
+
+        const { user } = req;
+
+        const { name, about, type, private, city, state } = req.body;
+        const organizerId = user.id;
+
+        const group = await Group.create({ organizerId, name, about, type, private, city, state });
+
+        const id = group.id;
+        const createdAt = formatDate(group.createdAt);
+        const updatedAt = formatDate(group.updatedAt);
+
+        return res.json({
+            id,
+            organizerId,
+            name,
+            about,
+            type,
+            private,
+            city,
+            state,
+            createdAt,
+            updatedAt
+        });
+    }
+);
+
+// Add an Image to a Group based on the Group's id
+router.post(
+    '/:groupId/images',
+    requireAuth,
+    async (req, res, next) => {
+
+        const { groupId } = req.params;
+        const { url, preview } = req.body;
+
+        try {
+            const group = await Group.findByPk(groupId, {
+                include:[{model:User}]
+            });
+
+            if (!group) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+            
+            if(group.organizerId != req.user.id){
+                const err = new Error("Forbidden");
+                err.statusCode = 403;
+                throw err;
+            }
+
+
+            const groupImage = await GroupImage.create({groupId, url, preview});
+
+            return res.json({
+                id: groupImage.id,
+                url,
+                preview
+            });
+
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
+router.use((err, req, res, next) => {
+    res.status(err.statusCode || 500).json({ message: err.message });
+})
 
 module.exports = router;
