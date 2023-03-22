@@ -1,7 +1,7 @@
 // backend/routes/api/venues.js
 const express = require('express');
 
-const { Group, Attendance, EventImage, Venue, Event} = require('../../db/models');
+const { Group, Attendance, EventImage, Venue, Event } = require('../../db/models');
 
 const router = express.Router();
 
@@ -40,8 +40,8 @@ router.get(
     async (_req, res) => {
         const events = await Event.unscoped().findAll({
             include: [
-                { model: Attendance},
-                { model: EventImage},
+                { model: Attendance },
+                { model: EventImage },
                 { model: Group, attributes: ["id", "name", "city", "state"] },
                 { model: Venue, attributes: ["id", "city", "state"] }
             ]
@@ -78,5 +78,68 @@ router.get(
     }
 );
 
+// Get all Events of a Group specified by its id
+router.get(
+    '/:eventId',
+    async (req, res, next) => {
+
+        const { eventId } = req.params;
+
+        try {
+            const event = await Event.unscoped().findByPk(eventId,
+                {
+                    include: [
+                        { model: Attendance },
+                        { model: EventImage, attributes: ["id", "url", "preview"] },
+                        { model: Group, attributes: ["id", "name", "private", "city", "state"] },
+                        { model: Venue, attributes: ["id", "address", "city", "state", "lat", "lng"] }
+                    ]
+                }
+            );
+            if (!event) {
+                const err = new Error("Event couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            const { id, groupId, venueId, name, description, type, capacity, price, startDate, endDate } = event;
+            const numAttending = event.Attendances.length;
+            const previewImage = event.EventImages[0].url;
+            const eventGroup = event.Group;
+            const eventVenue = event.Venue;
+            const EventImages = event.EventImages;
+
+            const startDateFormatted = formatDate(startDate);
+            const endDateFormatted = formatDate(endDate);
+
+            const eventFormatted = {
+                id,
+                groupId,
+                venueId,
+                name,
+                description,
+                type,
+                capacity,
+                price,
+                startDate: startDateFormatted,
+                endDate: endDateFormatted,
+                numAttending,
+                previewImage,
+                Group: eventGroup,
+                Venue: eventVenue,
+                EventImages
+            };
+
+            return res.json(eventFormatted);
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
+
+router.use((err, req, res, next) => {
+    res.status(err.statusCode || 500).json({ message: err.message });
+})
 
 module.exports = router;
