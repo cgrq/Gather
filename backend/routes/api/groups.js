@@ -322,7 +322,7 @@ router.put(
             }
 
             const organizerId = group.organizerId;
-            
+
             if(organizerId != id){
                 const err = new Error("Forbidden");
                 err.statusCode = 403;
@@ -347,6 +347,44 @@ router.put(
                 state,
                 createdAt,
                 updatedAt
+            });
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
+
+// Delete a Group
+router.delete(
+    '/:groupId',
+    requireAuth,
+    async (req, res, next) => {
+        try {
+            const { groupId } = req.params;
+            const id = req.user.id;
+
+            const group = await Group.findByPk(groupId);
+
+            if (!group) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            const organizerId = group.organizerId;
+
+            if(organizerId != id){
+                const err = new Error("Forbidden");
+                err.statusCode = 403;
+                throw err;
+            }
+
+            await group.destroy();
+
+
+            return res.json({
+                message: "Successfully deleted"
             });
         } catch (err) {
             next(err)

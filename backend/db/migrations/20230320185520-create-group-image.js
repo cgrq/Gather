@@ -18,7 +18,8 @@ module.exports = {
       groupId: {
         allowNull: false,
         references:{model:"Groups"},
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        onDelete:"CASCADE"
       },
       url: {
         allowNull: false,
