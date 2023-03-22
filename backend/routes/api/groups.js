@@ -150,8 +150,7 @@ router.get(
             numMembers,
             GroupImages,
             Organizer,
-            Venues,
-            text: "text"
+            Venues
         }
 
 
