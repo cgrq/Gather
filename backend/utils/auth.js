@@ -1,7 +1,7 @@
 // backend/utils/auth.js
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
-const { User, Membership } = require('../db/models');
+const { User, Membership, Group, Venue } = require('../db/models');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -72,7 +72,29 @@ const requireAuth = function (req, _res, next) {
 }
 
 const verifyCohostStatus = async function (req, _res, next) {
-  const inputGroupId = req.params.groupId;
+
+
+  let inputGroupId = req.params.groupId;
+  let venueId = req.params.venueId;
+
+  if(!inputGroupId && venueId){
+    const venue = await Venue.unscoped().findByPk(venueId)
+    if (!venue) {
+      const err = new Error("Venue couldn't be found");
+      err.statusCode = 404;
+      return next(err);
+    }
+    inputGroupId = venue.groupId;
+  }
+
+  const group = await Group.findByPk(inputGroupId);
+
+  if (!group) {
+    const err = new Error("Group couldn't be found");
+    err.statusCode = 404;
+    return next(err);
+  }
+
   const user = await User.unscoped().findByPk(req.user.id, { include: [{ model: Membership }] });
   let statusConfirmed = false;
   user.Memberships.forEach(membership => {
@@ -82,7 +104,7 @@ const verifyCohostStatus = async function (req, _res, next) {
       return next();
     }
   })
-  if(!statusConfirmed){
+  if (!statusConfirmed) {
     const err = new Error("Forbidden");
     err.statusCode = 403;
     return next(err);

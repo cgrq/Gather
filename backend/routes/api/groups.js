@@ -1,6 +1,6 @@
-// backend/routes/api/session.js
+// backend/routes/api/groups.js
 const express = require('express');
-const { Op, sequelize } = require('sequelize');
+
 
 const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
 
@@ -45,6 +45,29 @@ const validateGroup = [
     handleValidationErrors
 ];
 
+const validateVenue = [
+    check('address')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage('Street address is required'),
+    check('city')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage('City is required'),
+    check('state')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("State is required"),
+    check('lat')
+        .exists({ checkFalsy: true })
+        .isFloat({ min: -90, max: 90 })
+        .withMessage("Latitude is not valid"),
+    check('lng')
+        .exists({ checkFalsy: true })
+        .isFloat({ min: -180, max: 180 })
+        .withMessage("Longitude is not valid"),
+    handleValidationErrors
+];
 
 // Get All Groups
 router.get(
@@ -58,7 +81,6 @@ router.get(
             const { id, organizerId, name, about, type, private, city, state, createdAt, updatedAt } = group;
             const numMembers = group.Memberships.length;
             const previewImage = group.GroupImages[0].url;
-
 
             const createdAtFormatted = formatDate(createdAt);
             const updatedAtFormatted = formatDate(updatedAt);
@@ -270,7 +292,7 @@ router.post(
 
         try {
             const group = await Group.findByPk(groupId, {
-                include:[{model:User}]
+                include: [{ model: User }]
             });
 
             if (!group) {
@@ -279,14 +301,14 @@ router.post(
                 throw err;
             }
 
-            if(group.organizerId != req.user.id){
+            if (group.organizerId != req.user.id) {
                 const err = new Error("Forbidden");
                 err.statusCode = 403;
                 throw err;
             }
 
 
-            const groupImage = await GroupImage.create({groupId, url, preview});
+            const groupImage = await GroupImage.create({ groupId, url, preview });
 
             return res.json({
                 id: groupImage.id,
@@ -309,7 +331,7 @@ router.put(
     async (req, res, next) => {
         try {
             const { groupId } = req.params;
-            const { name, about, type, private, city, state} = req.body;
+            const { name, about, type, private, city, state } = req.body;
             const id = req.user.id;
 
             const group = await Group.findByPk(groupId);
@@ -322,13 +344,13 @@ router.put(
 
             const organizerId = group.organizerId;
 
-            if(organizerId != id){
+            if (organizerId != id) {
                 const err = new Error("Forbidden");
                 err.statusCode = 403;
                 throw err;
             }
 
-            group.set({ name, about, type, private, city, state});
+            group.set({ name, about, type, private, city, state });
 
             await group.save();
 
@@ -373,7 +395,7 @@ router.delete(
 
             const organizerId = group.organizerId;
 
-            if(organizerId != id){
+            if (organizerId != id) {
                 const err = new Error("Forbidden");
                 err.statusCode = 403;
                 throw err;
@@ -398,8 +420,7 @@ router.get(
     [requireAuth, verifyCohostStatus],
     async (req, res, next) => {
         try {
-            console.log("!@#!@#!@#!@#!@@#!@#!@#!@#!@##")
-            const  parentGroupId  = req.params.groupId;
+            const parentGroupId = req.params.groupId;
             const userId = req.user.id;
 
             const group = await Group.unscoped().findByPk(parentGroupId,
@@ -417,8 +438,8 @@ router.get(
             }
 
             const Venues = group.Venues.map(venue => {
-                const {id, groupId, address, city, state, lat, lng} = venue;
-                return {id, groupId, address, city, state, lat, lng};
+                const { id, groupId, address, city, state, lat, lng } = venue;
+                return { id, groupId, address, city, state, lat, lng };
             })
 
             return res.json({
@@ -440,54 +461,25 @@ router.use((err, req, res, next) => {
 // Create a new Venue for a Group specified by its id
 router.post(
     '/:groupId/venues',
-    requireAuth,
+    [requireAuth, verifyCohostStatus, validateVenue],
     async (req, res, next) => {
         try {
-            const  parentGroupId  = req.params.groupId;
-            const userId = req.user.id;
+            const { groupId } = req.params;
 
-            const group = await Group.unscoped().findByPk(parentGroupId,
-                {
-                    include: [
-                        { model: Venue, attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"] }
-                    ]
-                }
-            );
+            const { address, city, state, lat, lng } = req.body;
 
-            if (!group) {
-                const err = new Error("Group couldn't be found");
-                err.statusCode = 404;
-                throw err;
-            }
+            const venue = await Venue.create({ groupId, address, city, state, lat, lng });
 
-            const { organizerId } = group;
+            const id = venue.id;
 
-            if(organizerId != userId){
-                const err = new Error("Forbidden");
-                err.statusCode = 403;
-                throw err;
-            }
-
-            const Venues = group.Venues.map(venue => {
-                const {id, groupId, address, city, state, lat, lng} = venue;
-                return {id, groupId, address, city, state, lat, lng};
-
-            })
-
-            return res.json({
-                Venues
-            });
+            return res.json({ id, groupId, address, city, state, lat, lng });
 
         } catch (err) {
             next(err)
         }
-
-
     }
 );
 
-router.use((err, req, res, next) => {
-    res.status(err.statusCode || 500).json({ message: err.message });
-});
+
 
 module.exports = router;
