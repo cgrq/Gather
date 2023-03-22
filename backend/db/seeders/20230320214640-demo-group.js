@@ -22,7 +22,7 @@ module.exports = {
         organizerId: 1,
         name: 'People Watchers',
         about: "We watch people",
-        type: "In Person",
+        type: "In person",
         private: true,
         city: "Pheonix",
         state: "Arizona"
@@ -31,7 +31,7 @@ module.exports = {
         organizerId: 2,
         name: 'Water Watchers',
         about: "We watch water",
-        type: "In Person",
+        type: "In person",
         private: true,
         city: "San Francisco",
         state: "California"

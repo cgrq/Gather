@@ -25,7 +25,7 @@ module.exports = {
         groupId: 2,
         name: "Second meetup",
         description: "A meeting of the minds",
-        type: "In Person",
+        type: "In person",
         capacity: 15,
         price: 10,
         startDate: new Date(2023, 9, 20, 8, 0, 0),

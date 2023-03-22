@@ -4,22 +4,44 @@ const { Op, sequelize } = require('sequelize');
 
 const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
 
-const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
-const { requireAuth } = require('../../utils/auth')
-const { formatDate } = require('../../utils/date')
-
 const router = express.Router();
 
+const { requireAuth } = require('../../utils/auth')
+const { formatDate } = require('../../utils/date')
+const { check } = require('express-validator');
+const { handleValidationErrors } = require('../../utils/validation');
+
+
 const validateGroup = [
-    check('email')
+    check('name')
         .exists({ checkFalsy: true })
         .notEmpty()
-        .isEmail()
-        .withMessage('Please provide a valid email or username.'),
-    check('password')
+        .isLength({ max: 60 })
+        .withMessage('Name must be 60 characters or less'),
+    check('about')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a password.'),
+        .isLength({ min: 50 })
+        .withMessage('About must be 50 characters or more'),
+    check('type')
+        .exists({ checkFalsy: true })
+        .isIn(["In person", "Online"])
+        .withMessage("Type must be 'Online' or 'In person'"),
+    check('type')
+        .exists({ checkFalsy: true })
+        .isIn(["In person", "Online"])
+        .withMessage("Type must be 'Online' or 'In person'"),
+    check('private')
+        .exists({ checkFalsy: true })
+        .isBoolean()
+        .withMessage("Private must be a boolean"),
+    check('city')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("City is required"),
+    check('state')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("State is required"),
     handleValidationErrors
 ];
 
@@ -169,38 +191,27 @@ router.get(
     }
 );
 
+router.use((err, req, res, next) => {
+    res.status(err.statusCode || 500).json({ message: err.message });
+})
 // Create a Group
 router.post(
     '/',
+    [requireAuth, validateGroup],
     async (req, res, next) => {
 
-        const { groupId } = req.params;
+        const { user } = req;
 
-        const group = await Group.unscoped().findByPk(groupId,
-            {
-                include: [
-                    { model: Membership },
-                    { model: GroupImage },
-                    { model: User, attributes: ["id", "firstName", "lastName"] },
-                    { model: GroupImage, attributes: ["id", "url", "preview"] },
-                    { model: Venue, attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"] }
-                ]
-            }
-        );
+        const { name, about, type, private, city, state } = req.body;
+        const organizerId = user.id;
 
-        const { id, organizerId, name, about, type, private, city, state, createdAt, updatedAt } = group;
-        const Organizer = await User.unscoped().findByPk(organizerId, {
-            attributes: ["id", "firstName", "lastName"]
-        })
+        const group = await Group.create({ organizerId, name, about, type, private, city, state });
 
-        const numMembers = group.Memberships.length;
-        const GroupImages = group.GroupImages;
-        const Venues = group.Venues;
+        const id = group.id;
+        const createdAt = formatDate(group.createdAt);
+        const updatedAt = formatDate(group.updatedAt);
 
-        const createdAtFormatted = formatDate(createdAt);
-        const updatedAtFormatted = formatDate(updatedAt);
-
-        groupsFormatted = {
+        return res.json({
             id,
             organizerId,
             name,
@@ -209,23 +220,11 @@ router.post(
             private,
             city,
             state,
-            createdAt: createdAtFormatted,
-            updatedAt: updatedAtFormatted,
-            numMembers,
-            GroupImages,
-            Organizer,
-            Venues
-        }
-
-
-        return res.json({
-            Groups: groupsFormatted
+            createdAt,
+            updatedAt
         });
     }
 );
 
-router.use((err,req,res,next)=>{
-    res.status(err.statusCode || 500).json({ message: err.message });
-})
 
 module.exports = router;
