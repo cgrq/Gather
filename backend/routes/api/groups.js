@@ -1,8 +1,8 @@
 // backend/routes/api/session.js
 const express = require('express');
-const { Op } = require('sequelize');
+const { Op, sequelize } = require('sequelize');
 
-const { Group, Membership, GroupImage } = require('../../db/models');
+const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -62,7 +62,7 @@ router.get(
     }
 );
 
-// Get All Groups
+// Get all Groups joined or organized by the Current User
 router.get(
     '/current',
     requireAuth,
@@ -71,7 +71,7 @@ router.get(
         const { user } = req;
 
         const groups = await Group.unscoped().findAll({
-            where: {organizerId: user.id},
+            where: { organizerId: user.id },
             include: [{ model: Membership }, { model: GroupImage, attributes: ["url"] }]
         });
 
@@ -102,8 +102,62 @@ router.get(
         return res.json({
             Groups: groupsFormatted
         });
+    }
+);
+
+// Get details of a Group from an id
+router.get(
+    '/:groupId',
+    async (req, res, next) => {
+
+        const { groupId } = req.params;
+
+        const group = await Group.unscoped().findByPk(groupId,
+            {
+                include: [
+                    { model: Membership },
+                    { model: GroupImage },
+                    { model: User, attributes: ["id", "firstName", "lastName"] },
+                    { model: GroupImage, attributes: ["id", "url", "preview"] },
+                    { model: Venue, attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"] }
+                ]
+            }
+        );
+
+        const { id, organizerId, name, about, type, private, city, state, createdAt, updatedAt } = group;
+        const Organizer = await User.unscoped().findByPk(organizerId, {
+            attributes:["id", "firstName", "lastName"]
+        })
+
+        const numMembers = group.Memberships.length;
+        const GroupImages = group.GroupImages;
+        const Venues = group.Venues;
+
+        const createdAtFormatted = formatDate(createdAt);
+        const updatedAtFormatted = formatDate(updatedAt);
+
+        groupsFormatted = {
+            id,
+            organizerId,
+            name,
+            about,
+            type,
+            private,
+            city,
+            state,
+            createdAt: createdAtFormatted,
+            updatedAt: updatedAtFormatted,
+            numMembers,
+            GroupImages,
+            Organizer,
+            Venues,
+            text: "text"
+        }
 
 
+        return res.json({
+            Groups: groupsFormatted
+        });
     }
 );
 
