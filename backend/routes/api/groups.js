@@ -112,6 +112,70 @@ router.get(
 
         const { groupId } = req.params;
 
+        try {
+            const group = await Group.unscoped().findByPk(groupId,
+                {
+                    include: [
+                        { model: Membership },
+                        { model: GroupImage },
+                        { model: User, attributes: ["id", "firstName", "lastName"] },
+                        { model: GroupImage, attributes: ["id", "url", "preview"] },
+                        { model: Venue, attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"] }
+                    ]
+                }
+            );
+            if (!group) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+            const { id, organizerId, name, about, type, private, city, state, createdAt, updatedAt } = group;
+            const Organizer = await User.unscoped().findByPk(organizerId, {
+                attributes: ["id", "firstName", "lastName"]
+            })
+
+            const numMembers = group.Memberships.length;
+            const GroupImages = group.GroupImages;
+            const Venues = group.Venues;
+
+            const createdAtFormatted = formatDate(createdAt);
+            const updatedAtFormatted = formatDate(updatedAt);
+
+            groupsFormatted = {
+                id,
+                organizerId,
+                name,
+                about,
+                type,
+                private,
+                city,
+                state,
+                createdAt: createdAtFormatted,
+                updatedAt: updatedAtFormatted,
+                numMembers,
+                GroupImages,
+                Organizer,
+                Venues
+            }
+
+
+            return res.json({
+                Groups: groupsFormatted
+            });
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
+
+// Create a Group
+router.post(
+    '/',
+    async (req, res, next) => {
+
+        const { groupId } = req.params;
+
         const group = await Group.unscoped().findByPk(groupId,
             {
                 include: [
@@ -126,7 +190,7 @@ router.get(
 
         const { id, organizerId, name, about, type, private, city, state, createdAt, updatedAt } = group;
         const Organizer = await User.unscoped().findByPk(organizerId, {
-            attributes:["id", "firstName", "lastName"]
+            attributes: ["id", "firstName", "lastName"]
         })
 
         const numMembers = group.Memberships.length;
