@@ -1,7 +1,7 @@
 // backend/utils/auth.js
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
-const { User, Membership, Group, Venue } = require('../db/models');
+const { User, Membership, Group, Venue, Event } = require('../db/models');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -72,10 +72,9 @@ const requireAuth = function (req, _res, next) {
 }
 
 const verifyCohostStatus = async function (req, _res, next) {
-
-
   let inputGroupId = req.params.groupId;
   let venueId = req.params.venueId;
+  let eventId = req.params.eventId;
 
   if(!inputGroupId && venueId){
     const venue = await Venue.unscoped().findByPk(venueId)
@@ -87,12 +86,22 @@ const verifyCohostStatus = async function (req, _res, next) {
     inputGroupId = venue.groupId;
   }
 
+  if(!inputGroupId && eventId){
+    const event = await Event.unscoped().findByPk(eventId)
+    if (!event) {
+      const err = new Error("Event couldn't be found");
+      err.statusCode = 404;
+      return next(err);
+    }
+    console.log(`🖥 ~ file: auth.js:99 ~ verifyCohostStatus ~ event.groupId:`, event.groupId)
+    inputGroupId = event.groupId;
+  }
+
   const group = await Group.findByPk(inputGroupId);
 
   if (!group) {
     const err = new Error("Group couldn't be found");
     err.statusCode = 404;
-    console.log(`🖥 ~ file: auth.js:91 ~ verifyCohostStatus ~ group:`, err)
     return next(err);
   }
 
@@ -112,4 +121,55 @@ const verifyCohostStatus = async function (req, _res, next) {
   }
 }
 
-module.exports = { setTokenCookie, restoreUser, requireAuth, verifyCohostStatus };
+const verifyMemberStatus = async function (req, _res, next) {
+  let inputGroupId = req.params.groupId;
+  let venueId = req.params.venueId;
+  let eventId = req.params.eventId;
+
+  if(!inputGroupId && venueId){
+    const venue = await Venue.unscoped().findByPk(venueId)
+    if (!venue) {
+      const err = new Error("Venue couldn't be found");
+      err.statusCode = 404;
+      return next(err);
+    }
+    inputGroupId = venue.groupId;
+  }
+
+  if(!inputGroupId && eventId){
+    const event = await Event.unscoped().findByPk(eventId)
+    if (!event) {
+      const err = new Error("Event couldn't be found");
+      err.statusCode = 404;
+      return next(err);
+    }
+    console.log(`🖥 ~ file: auth.js:99 ~ verifyCohostStatus ~ event.groupId:`, event.groupId)
+    inputGroupId = event.groupId;
+  }
+
+  const group = await Group.findByPk(inputGroupId);
+
+  if (!group) {
+    const err = new Error("Group couldn't be found");
+    err.statusCode = 404;
+    return next(err);
+  }
+
+  const user = await User.unscoped().findByPk(req.user.id, { include: [{ model: Membership }] });
+  let statusConfirmed = false;
+  user.Memberships.forEach(membership => {
+    const { groupId, status } = membership
+    if (inputGroupId == groupId && (status == "organizer(host)" || status == "co-host" || status == "member")) {
+      statusConfirmed = true;
+      return next();
+    }
+  })
+  if (!statusConfirmed) {
+    const err = new Error("Forbidden");
+    err.statusCode = 403;
+    return next(err);
+  }
+}
+
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, verifyCohostStatus, verifyMemberStatus };

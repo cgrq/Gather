@@ -5,7 +5,7 @@ const { Group, Attendance, EventImage, Venue, Event } = require('../../db/models
 
 const router = express.Router();
 
-const { requireAuth, verifyCohostStatus } = require('../../utils/auth');
+const { requireAuth, verifyMemberStatus } = require('../../utils/auth');
 const { formatDate } = require('../../utils/date');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -136,8 +136,39 @@ router.get(
     }
 );
 
+
+
+// Create an Event for a Group specified by its id
+router.post(
+    '/:eventId/images',
+    [requireAuth, verifyMemberStatus],
+    async (req, res, next) => {
+        try {
+            const { eventId } = req.params;
+
+            const { url, preview } = req.body;
+
+            const eventImage = await EventImage.create({ eventId, url, preview });
+
+            const id = eventImage.id;
+
+            return res.json({ id,url, preview });
+
+        } catch (err) {
+            next(err)
+        }
+    }
+);
+
 router.use((err, req, res, next) => {
-    res.status(err.statusCode || 500).json({ message: err.message });
-})
+    if(err.errors){
+        res.status(err.statusCode || 500).json({
+            message: err.message,
+            errors: err.errors
+        });
+    } else {
+        res.status(err.statusCode || 500).json({message:err.message});
+    }
+});
 
 module.exports = router;
