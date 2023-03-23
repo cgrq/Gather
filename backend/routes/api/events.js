@@ -181,7 +181,7 @@ router.put(
                 const err = new Error("Venue couldn't be found");
                 err.statusCode = 404;
                 return next(err);
-              }
+            }
 
             const event = await Event.findByPk(eventId);
 
@@ -232,14 +232,42 @@ router.post(
             next(err)
         }
     }
-    );
+);
+
+
+// Delete a Group
+router.delete(
+    '/:eventId',
+    [requireAuth, verifyCohostStatus],
+    async (req, res, next) => {
+        try {
+            const { eventId } = req.params;
+
+            const event = await Group.findByPk(eventId);
+
+            await event.destroy();
+
+            return res.json({
+                message: "Successfully deleted"
+            });
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
 
 
 
 
 
-    router.use((err, req, res, next) => {
-        if (err.errors) {
+
+
+
+
+
+router.use((err, req, res, next) => {
+    if (err.errors) {
         res.status(err.statusCode || 500).json({
             message: err.message,
             errors: err.errors
