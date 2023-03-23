@@ -1,7 +1,7 @@
 // backend/routes/api/groups.js
 const express = require('express');
 
-
+const { Op } = require('sequelize');
 const { Group, Membership, Attendance, EventImage, GroupImage, User, Venue, Event } = require('../../db/models');
 
 const router = express.Router();
@@ -270,13 +270,13 @@ router.get(
 );
 
 router.use((err, req, res, next) => {
-    if(err.errors){
+    if (err.errors) {
         res.status(err.statusCode || 500).json({
             message: err.message,
             errors: err.errors
         });
     } else {
-        res.status(err.statusCode || 500).json({message:err.message});
+        res.status(err.statusCode || 500).json({ message: err.message });
     }
 });
 // Create a Group
@@ -517,13 +517,13 @@ router.get(
 );
 
 router.use((err, req, res, next) => {
-    if(err.errors){
+    if (err.errors) {
         res.status(err.statusCode || 500).json({
             message: err.message,
             errors: err.errors
         });
     } else {
-        res.status(err.statusCode || 500).json({message:err.message});
+        res.status(err.statusCode || 500).json({ message: err.message });
     }
 });
 
@@ -611,13 +611,13 @@ router.get(
 );
 
 router.use((err, req, res, next) => {
-    if(err.errors){
+    if (err.errors) {
         res.status(err.statusCode || 500).json({
             message: err.message,
             errors: err.errors
         });
     } else {
-        res.status(err.statusCode || 500).json({message:err.message});
+        res.status(err.statusCode || 500).json({ message: err.message });
     }
 });
 
@@ -643,14 +643,86 @@ router.post(
     }
 );
 
+// Get all Members of a Group specified by its id
+router.get(
+    '/:groupId/members',
+    async (req, res, next) => {
+
+        const { groupId } = req.params;
+
+        try {
+            const user = await User.unscoped().findByPk(req.user.id, {
+                include: [{ model: Membership, where: { groupId }, attributes: ["status"] }]
+            });
+
+            if (!user) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            const userStatus = user.Memberships[0].status;
+
+            const memberships =
+                (userStatus === "member" || userStatus === "pending")
+                    ? await Membership.unscoped().findAll(
+                        {
+                            where: {
+                                groupId,
+                                status: {
+                                    [Op.in]: ["co-host", "host"]
+                                }
+                            },
+                            include: [
+                                { model: User, attributes: ["id", "firstName", "lastName"] }
+                            ]
+                        }
+                    )
+                    : await Membership.unscoped().findAll(
+                        {
+                            where: {
+                                groupId
+                            },
+                            include: [
+                                { model: User, attributes: ["id", "firstName", "lastName"] }
+                            ]
+                        }
+                    );
+
+            const membershipFormatted = memberships.map(membership => {
+                const { status } = membership;
+
+                const { id, firstName, lastName } = membership.User;
+
+                if (status === "member" || status === "pending") {
+
+                }
+                return {
+                    id,
+                    firstName,
+                    lastName,
+                    Membership: { status }
+                }
+            })
+
+            return res.json({
+                Members: membershipFormatted
+            });
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
+
 router.use((err, req, res, next) => {
-    if(err.errors){
+    if (err.errors) {
         res.status(err.statusCode || 500).json({
             message: err.message,
             errors: err.errors
         });
     } else {
-        res.status(err.statusCode || 500).json({message:err.message});
+        res.status(err.statusCode || 500).json({ message: err.message });
     }
 });
 
