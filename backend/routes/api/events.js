@@ -141,18 +141,18 @@ router.get(
 // Create an Event for a Group specified by its id
 router.post(
     '/:eventId/images',
-    [requireAuth, verifyCohostStatus, validateEvent],
+    [requireAuth, verifyCohostStatus],
     async (req, res, next) => {
         try {
             const { eventId } = req.params;
 
-            const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+            const { url, preview } = req.body;
 
-            const event = await EventImage.create({ });
+            const eventImage = await EventImage.create({ eventId, url, preview });
 
-            const id = event.id;
+            const id = eventImage.id;
 
-            return res.json({ id, groupId: parseInt(groupId), venueId, name, type, capacity, price, description, startDate, endDate });
+            return res.json({ id ,url, preview });
 
         } catch (err) {
             next(err)

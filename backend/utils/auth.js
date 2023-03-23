@@ -1,7 +1,7 @@
 // backend/utils/auth.js
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
-const { User, Membership, Group, Venue } = require('../db/models');
+const { User, Membership, Group, Venue, Event } = require('../db/models');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -76,6 +76,7 @@ const verifyCohostStatus = async function (req, _res, next) {
 
   let inputGroupId = req.params.groupId;
   let venueId = req.params.venueId;
+  let eventId = req.params.eventId;
 
   if(!inputGroupId && venueId){
     const venue = await Venue.unscoped().findByPk(venueId)
@@ -85,6 +86,17 @@ const verifyCohostStatus = async function (req, _res, next) {
       return next(err);
     }
     inputGroupId = venue.groupId;
+  }
+
+  if(!inputGroupId && eventId){
+    const event = await Event.unscoped().findByPk(eventId)
+    if (!event) {
+      const err = new Error("Event couldn't be found");
+      err.statusCode = 404;
+      return next(err);
+    }
+    console.log(`🖥 ~ file: auth.js:99 ~ verifyCohostStatus ~ event.groupId:`, event.groupId)
+    inputGroupId = event.groupId;
   }
 
   const group = await Group.findByPk(inputGroupId);
