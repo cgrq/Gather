@@ -78,7 +78,7 @@ router.get(
     }
 );
 
-// Get all Events of a Group specified by its id
+// Get details of an Event specified by its id
 router.get(
     '/:eventId',
     async (req, res, next) => {
@@ -104,7 +104,6 @@ router.get(
 
             const { id, groupId, venueId, name, description, type, capacity, price, startDate, endDate } = event;
             const numAttending = event.Attendances.length;
-            const previewImage = event.EventImages[0].url;
             const eventGroup = event.Group;
             const eventVenue = event.Venue;
             const EventImages = event.EventImages;
@@ -124,7 +123,6 @@ router.get(
                 startDate: startDateFormatted,
                 endDate: endDateFormatted,
                 numAttending,
-                previewImage,
                 Group: eventGroup,
                 Venue: eventVenue,
                 EventImages
