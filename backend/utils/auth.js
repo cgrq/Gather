@@ -92,6 +92,7 @@ const verifyCohostStatus = async function (req, _res, next) {
   if (!group) {
     const err = new Error("Group couldn't be found");
     err.statusCode = 404;
+    console.log(`🖥 ~ file: auth.js:91 ~ verifyCohostStatus ~ group:`, err)
     return next(err);
   }
 

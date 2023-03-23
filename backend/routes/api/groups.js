@@ -7,7 +7,7 @@ const { Group, Membership, Attendance, EventImage, GroupImage, User, Venue, Even
 const router = express.Router();
 
 const { requireAuth, verifyCohostStatus } = require('../../utils/auth')
-const { formatDate } = require('../../utils/date')
+const { formatDate, parseDate } = require('../../utils/date')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
@@ -90,7 +90,7 @@ const validateEvent = [
         .withMessage("Capacity must be an integer"),
     check('price')
         .exists({ checkFalsy: true })
-        .isInt()
+        .isDecimal()
         .withMessage("Price is invalid"),
     check('description')
         .exists({ checkFalsy: true })
@@ -100,7 +100,8 @@ const validateEvent = [
         .exists({ checkFalsy: true })
         .notEmpty()
         .custom(date => {
-            if (new Date(date) <= new Date()) {
+            const startDate = parseDate(date);
+            if (startDate <= new Date()) {
                 throw new Error('Start date must be in the future');
             }
             return true;
@@ -109,8 +110,10 @@ const validateEvent = [
     check('endDate')
         .exists({ checkFalsy: true })
         .notEmpty()
-        .custom(date => {
-            if (new Date(date) <= new Date(req.body.startDate)) {
+        .custom((date, { req }) => {
+            const endDate = parseDate(date);
+            const startDate = parseDate(req.body.startDate);
+            if (endDate <= startDate) {
                 throw new Error('End date is less than start date');
             }
             return true;
@@ -118,6 +121,8 @@ const validateEvent = [
         .withMessage("End date is less than start date"),
     handleValidationErrors
 ];
+
+
 
 // Get All Groups
 router.get(
@@ -609,12 +614,16 @@ router.post(
 
             const id = event.id;
 
-            return res.json({ id, groupId, venueId, name, type, capacity, price, description, startDate, endDate });
+            return res.json({ id, groupId: parseInt(groupId), venueId, name, type, capacity, price, description, startDate, endDate });
 
         } catch (err) {
             next(err)
         }
     }
 );
+
+router.use((err, req, res, next) => {
+    res.status(err.statusCode || 500).json({ message: err.message });
+});
 
 module.exports = router;
