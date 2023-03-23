@@ -5,7 +5,7 @@ const { Group, Attendance, EventImage, Venue, Event } = require('../../db/models
 
 const router = express.Router();
 
-const { requireAuth, verifyCohostStatus } = require('../../utils/auth');
+const { requireAuth, verifyMemberStatus } = require('../../utils/auth');
 const { formatDate } = require('../../utils/date');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -141,7 +141,7 @@ router.get(
 // Create an Event for a Group specified by its id
 router.post(
     '/:eventId/images',
-    [requireAuth, verifyCohostStatus],
+    [requireAuth, verifyMemberStatus],
     async (req, res, next) => {
         try {
             const { eventId } = req.params;
@@ -152,7 +152,7 @@ router.post(
 
             const id = eventImage.id;
 
-            return res.json({ id ,url, preview });
+            return res.json({ id,url, preview });
 
         } catch (err) {
             next(err)
