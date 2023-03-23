@@ -136,6 +136,30 @@ router.get(
     }
 );
 
+
+
+// Create an Event for a Group specified by its id
+router.post(
+    '/:eventId/images',
+    [requireAuth, verifyCohostStatus, validateEvent],
+    async (req, res, next) => {
+        try {
+            const { eventId } = req.params;
+
+            const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+
+            const event = await EventImage.create({ });
+
+            const id = event.id;
+
+            return res.json({ id, groupId: parseInt(groupId), venueId, name, type, capacity, price, description, startDate, endDate });
+
+        } catch (err) {
+            next(err)
+        }
+    }
+);
+
 router.use((err, req, res, next) => {
     if(err.errors){
         res.status(err.statusCode || 500).json({
@@ -143,7 +167,7 @@ router.use((err, req, res, next) => {
             errors: err.errors
         });
     } else {
-        res.status(err.statusCode || 500).json(err);
+        res.status(err.statusCode || 500).json({message:err.message});
     }
 });
 

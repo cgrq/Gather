@@ -270,8 +270,15 @@ router.get(
 );
 
 router.use((err, req, res, next) => {
-    res.status(err.statusCode || 500).json({ message: err.message });
-})
+    if(err.errors){
+        res.status(err.statusCode || 500).json({
+            message: err.message,
+            errors: err.errors
+        });
+    } else {
+        res.status(err.statusCode || 500).json({message:err.message});
+    }
+});
 // Create a Group
 router.post(
     '/',
@@ -516,7 +523,7 @@ router.use((err, req, res, next) => {
             errors: err.errors
         });
     } else {
-        res.status(err.statusCode || 500).json(err);
+        res.status(err.statusCode || 500).json({message:err.message});
     }
 });
 
@@ -610,7 +617,7 @@ router.use((err, req, res, next) => {
             errors: err.errors
         });
     } else {
-        res.status(err.statusCode || 500).json(err);
+        res.status(err.statusCode || 500).json({message:err.message});
     }
 });
 
@@ -643,7 +650,7 @@ router.use((err, req, res, next) => {
             errors: err.errors
         });
     } else {
-        res.status(err.statusCode || 500).json(err);
+        res.status(err.statusCode || 500).json({message:err.message});
     }
 });
 
