@@ -827,6 +827,64 @@ router.put(
     }
 );
 
+// Delete membership to a group specified by id
+router.delete(
+    '/:groupId/membership',
+    requireAuth,
+    async (req, res, next) => {
+        try {
+            const { groupId } = req.params;
+            const { memberId } = req.body;
+            const userId = req.user.id;
+
+            const group = await Group.findByPk(groupId);
+            const member = await User.findByPk(memberId);
+
+            if (!group) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            if (!member) {
+                const err = Error("Validations Error");
+                err.errors = {
+                    status: "User couldn't be found"
+                }
+                err.statusCode = 400;
+                next(err);
+            }
+
+            const memberMembership = await Membership.unscoped().findOne({ where: { userId:memberId, groupId } });
+
+            if (!memberMembership) {
+                const err = new Error("Membership does not exist for this User");
+                err.statusCode = 404;
+                return next(err);
+            }
+
+            const userMembership = await Membership.unscoped().findOne({ where: { userId, groupId } });
+            console.log(`🖥 ~ file: groups.js:841 ~ userMembership:`, userMembership)
+
+
+            if (userMembership.status !== "organizer(host)" || memberId != userId) {
+                const err = new Error("Forbidden");
+                err.statusCode = 403;
+                throw err;
+            }
+
+            await memberMembership.destroy();
+
+            return res.json({
+                message: "Successfully deleted membership from group"
+            });
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
+
 router.use((err, req, res, next) => {
     if (err.errors) {
         res.status(err.statusCode || 500).json({
