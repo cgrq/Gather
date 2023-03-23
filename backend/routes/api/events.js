@@ -137,7 +137,14 @@ router.get(
 );
 
 router.use((err, req, res, next) => {
-    res.status(err.statusCode || 500).json({ message: err.message });
-})
+    if(err.errors){
+        res.status(err.statusCode || 500).json({
+            message: err.message,
+            errors: err.errors
+        });
+    } else {
+        res.status(err.statusCode || 500).json(err);
+    }
+});
 
 module.exports = router;

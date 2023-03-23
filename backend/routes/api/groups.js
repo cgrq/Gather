@@ -510,7 +510,14 @@ router.get(
 );
 
 router.use((err, req, res, next) => {
-    res.status(err.statusCode || 500).json({ message: err.message });
+    if(err.errors){
+        res.status(err.statusCode || 500).json({
+            message: err.message,
+            errors: err.errors
+        });
+    } else {
+        res.status(err.statusCode || 500).json(err);
+    }
 });
 
 // Create a new Venue for a Group specified by its id
@@ -597,7 +604,14 @@ router.get(
 );
 
 router.use((err, req, res, next) => {
-    res.status(err.statusCode || 500).json({ message: err.message });
+    if(err.errors){
+        res.status(err.statusCode || 500).json({
+            message: err.message,
+            errors: err.errors
+        });
+    } else {
+        res.status(err.statusCode || 500).json(err);
+    }
 });
 
 // Create an Event for a Group specified by its id
@@ -623,7 +637,14 @@ router.post(
 );
 
 router.use((err, req, res, next) => {
-    res.status(err.statusCode || 500).json({ message: err.message });
+    if(err.errors){
+        res.status(err.statusCode || 500).json({
+            message: err.message,
+            errors: err.errors
+        });
+    } else {
+        res.status(err.statusCode || 500).json(err);
+    }
 });
 
 module.exports = router;
