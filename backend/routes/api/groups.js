@@ -86,11 +86,11 @@ const validateEvent = [
         .withMessage("Type must be 'Online' or 'In person'"),
     check('capacity')
         .exists({ checkFalsy: true })
-        .isInteger()
+        .isInt()
         .withMessage("Capacity must be an integer"),
     check('price')
         .exists({ checkFalsy: true })
-        .isInteger()
+        .isInt()
         .withMessage("Price is invalid"),
     check('description')
         .exists({ checkFalsy: true })
