@@ -122,8 +122,6 @@ const validateEvent = [
     handleValidationErrors
 ];
 
-
-
 // Get All Groups
 router.get(
     '/',
@@ -758,6 +756,76 @@ router.post(
     }
 );
 
+// Change the status of a membership for a group specified by id
+router.put(
+    '/:groupId/membership',
+    [requireAuth, verifyCohostStatus],
+    async (req, res, next) => {
+        try {
+            const { groupId } = req.params;
+            const { memberId, status } = req.body;
+            const userId = req.user.id;
+
+            const group = await Group.findByPk(groupId);
+            const member = await User.findByPk(memberId);
+
+            if (!group) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            if (!member) {
+                const err = Error("Validations Error");
+                err.errors = {
+                    status: "User couldn't be found"
+                }
+                err.statusCode = 400;
+                next(err);
+            }
+
+            const userMembership = await Membership.unscoped().findOne({ where: { userId, groupId } });
+
+            if (!userMembership) {
+                const err = new Error("Membership between the user and the group does not exist");
+                err.statusCode = 404;
+                return next(err);
+            }
+
+            const userStatus = userMembership.status;
+
+            if (status === "pending") {
+                const err = Error("Validations Error");
+                err.errors = {
+                    status: "Cannot change a membership status to pending"
+                }
+                err.statusCode = 400;
+                next(err);
+            }
+
+
+            if (status === "co-host" && userStatus !== "organizer(host)") {
+                const err = new Error("Forbidden");
+                err.statusCode = 403;
+                throw err;
+            }
+
+            group.set({ userId, memberId, status });
+
+            await group.save();
+
+            return res.json({
+                id: userId,
+                groupId: parseInt(groupId),
+                memberId,
+                status
+            });
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
 
 router.use((err, req, res, next) => {
     if (err.errors) {
