@@ -93,7 +93,6 @@ const verifyCohostStatus = async function (req, _res, next) {
       err.statusCode = 404;
       return next(err);
     }
-    console.log(`🖥 ~ file: auth.js:99 ~ verifyCohostStatus ~ event.groupId:`, event.groupId)
     inputGroupId = event.groupId;
   }
 

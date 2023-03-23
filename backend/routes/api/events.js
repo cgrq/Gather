@@ -5,34 +5,64 @@ const { Group, Attendance, EventImage, Venue, Event } = require('../../db/models
 
 const router = express.Router();
 
-const { requireAuth, verifyMemberStatus } = require('../../utils/auth');
-const { formatDate } = require('../../utils/date');
+const { requireAuth, verifyMemberStatus, verifyCohostStatus } = require('../../utils/auth');
+const { formatDate, parseDate } = require('../../utils/date');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const validateEvent = [
-    check('address')
+    check('venueId')
         .exists({ checkFalsy: true })
         .notEmpty()
-        .withMessage('Street address is required'),
-    check('city')
+        .withMessage('Venue does not exist'),
+    check('name')
         .exists({ checkFalsy: true })
         .notEmpty()
-        .withMessage('City is required'),
-    check('state')
+        .isLength({ min: 5 })
+        .withMessage('Name must be at least 5 characters'),
+    check('type')
         .exists({ checkFalsy: true })
         .notEmpty()
-        .withMessage("State is required"),
-    check('lat')
+        .isIn(["In person", "Online"])
+        .withMessage("Type must be 'Online' or 'In person'"),
+    check('capacity')
         .exists({ checkFalsy: true })
-        .isFloat({ min: -90, max: 90 })
-        .withMessage("Latitude is not valid"),
-    check('lng')
+        .isInt()
+        .withMessage("Capacity must be an integer"),
+    check('price')
         .exists({ checkFalsy: true })
-        .isFloat({ min: -180, max: 180 })
-        .withMessage("Longitude is not valid"),
+        .isDecimal()
+        .withMessage("Price is invalid"),
+    check('description')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("Description is required"),
+    check('startDate')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .custom(date => {
+            const startDate = parseDate(date);
+            if (startDate <= new Date()) {
+                throw new Error('Start date must be in the future');
+            }
+            return true;
+        })
+        .withMessage("Start date must be in the future"),
+    check('endDate')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .custom((date, { req }) => {
+            const endDate = parseDate(date);
+            const startDate = parseDate(req.body.startDate);
+            if (endDate <= startDate) {
+                throw new Error('End date is less than start date');
+            }
+            return true;
+        })
+        .withMessage("End date is less than start date"),
     handleValidationErrors
 ];
+
 
 // Get All Events
 router.get(
@@ -136,7 +166,51 @@ router.get(
     }
 );
 
+// Edit a Group
+router.put(
+    '/:eventId',
+    [requireAuth, verifyCohostStatus, validateEvent],
+    async (req, res, next) => {
+        try {
+            const { eventId } = req.params;
+            const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
 
+            const venue = await Venue.unscoped().findByPk(venueId)
+
+            if (!venue) {
+                const err = new Error("Venue couldn't be found");
+                err.statusCode = 404;
+                return next(err);
+              }
+
+            const event = await Event.findByPk(eventId);
+
+            const id = event.id;
+
+            event.set({ venueId, name, type, capacity, price, description, startDate, endDate });
+
+            await event.save();
+
+            const startDateFormated = formatDate(event.startDate);
+            const endDateFormatted = formatDate(event.endDate);
+
+            return res.json({
+                id,
+                venueId,
+                name,
+                type,
+                capacity,
+                price,
+                description,
+                startDate: startDateFormated,
+                endDate: endDateFormatted
+            });
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
 
 // Create an Event for a Group specified by its id
 router.post(
@@ -152,22 +226,26 @@ router.post(
 
             const id = eventImage.id;
 
-            return res.json({ id,url, preview });
+            return res.json({ id, url, preview });
 
         } catch (err) {
             next(err)
         }
     }
-);
+    );
 
-router.use((err, req, res, next) => {
-    if(err.errors){
+
+
+
+
+    router.use((err, req, res, next) => {
+        if (err.errors) {
         res.status(err.statusCode || 500).json({
             message: err.message,
             errors: err.errors
         });
     } else {
-        res.status(err.statusCode || 500).json({message:err.message});
+        res.status(err.statusCode || 500).json({ message: err.message });
     }
 });
 
