@@ -267,16 +267,6 @@ router.get(
     }
 );
 
-router.use((err, req, res, next) => {
-    if (err.errors) {
-        res.status(err.statusCode || 500).json({
-            message: err.message,
-            errors: err.errors
-        });
-    } else {
-        res.status(err.statusCode || 500).json({ message: err.message });
-    }
-});
 // Create a Group
 router.post(
     '/',
@@ -514,16 +504,7 @@ router.get(
     }
 );
 
-router.use((err, req, res, next) => {
-    if (err.errors) {
-        res.status(err.statusCode || 500).json({
-            message: err.message,
-            errors: err.errors
-        });
-    } else {
-        res.status(err.statusCode || 500).json({ message: err.message });
-    }
-});
+
 
 // Create a new Venue for a Group specified by its id
 router.post(
@@ -608,16 +589,6 @@ router.get(
     }
 );
 
-router.use((err, req, res, next) => {
-    if (err.errors) {
-        res.status(err.statusCode || 500).json({
-            message: err.message,
-            errors: err.errors
-        });
-    } else {
-        res.status(err.statusCode || 500).json({ message: err.message });
-    }
-});
 
 // Create an Event for a Group specified by its id
 router.post(
