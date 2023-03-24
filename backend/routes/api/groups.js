@@ -762,13 +762,16 @@ router.put(
                 next(err);
             }
 
-            const userMembership = await Membership.unscoped().findOne({ where: { userId, groupId } });
+            const memberMembership = await Membership.unscoped().findOne({ where: { userId:memberId, groupId } });
 
-            if (!userMembership) {
+            if (!memberMembership) {
                 const err = new Error("Membership between the user and the group does not exist");
                 err.statusCode = 404;
                 return next(err);
             }
+
+            const userMembership = await Membership.unscoped().findOne({ where: { userId, groupId } });
+
 
             const userStatus = userMembership.status;
 
