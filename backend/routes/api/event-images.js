@@ -15,6 +15,7 @@ router.delete(
         try {
             const { imageId } = req.params;
             const userId = req.user.id;
+            console.log(`🖥 ~ file: event-images.js:18 ~ userId:`, userId)
 
             const image = await EventImage.findByPk(imageId, {
                 include: [
@@ -24,6 +25,7 @@ router.delete(
 
                 ]
             });
+            console.log(`🖥 ~ file: event-images.js:27 ~ image:`, image)
 
             if (!image) {
                 const err = new Error("Event Image couldn't be found");
@@ -32,6 +34,7 @@ router.delete(
             }
 
             const userMemberStatus = image.Event.Group.Memberships[0].status;
+            console.log(`🖥 ~ file: event-images.js:35 ~ userMemberStatus:`, userMemberStatus)
 
             if (userMemberStatus === "organizer(host)" || userMemberStatus === "co-host") {
                 await image.destroy();
@@ -52,5 +55,14 @@ router.delete(
 
 );
 
-
+router.use((err, req, res, next) => {
+    if (err.errors) {
+        res.status(err.statusCode || 500).json({
+            message: err.message,
+            errors: err.errors
+        });
+    } else {
+        res.status(err.statusCode || 500).json({ message: err.message });
+    }
+});
 module.exports = router;
