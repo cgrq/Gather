@@ -168,7 +168,7 @@ router.get(
     }
 );
 
-// Edit a Group
+// Edit a Event
 router.put(
     '/:eventId',
     [requireAuth, verifyCohostStatus, validateEvent],
@@ -287,7 +287,7 @@ router.get(
                 throw err;
             }
             let userMemberStatus;
-            if(event.Group){
+            if (event.Group) {
                 userMemberStatus = event.Group.Memberships[0].status;
             }
             const attendees =
@@ -356,7 +356,7 @@ router.post(
                 include: [
                     {
                         model: Group, include: [
-                            { model: Membership, where: {userId} }
+                            { model: Membership, where: { userId } }
                         ]
                     }
                 ]
@@ -370,11 +370,11 @@ router.post(
 
             let userMemberStatus;
 
-            if(event.Group){
+            if (event.Group) {
                 userMemberStatus = event.Group.Memberships[0].status;
             }
 
-            if(!userMemberStatus || userMemberStatus === "pending"){
+            if (!userMemberStatus || userMemberStatus === "pending") {
                 const err = new Error("Forbidden");
                 err.statusCode = 403;
                 throw err;
@@ -389,13 +389,13 @@ router.post(
 
             const status = attendee.status;
 
-            if(attendee){
-                if(status === "pending"){
+            if (attendee) {
+                if (status === "pending") {
                     const err = new Error("Attendance has already been requested");
                     err.statusCode = 400;
                     throw err;
                 }
-                if(status === "attending"){
+                if (status === "attending") {
                     const err = new Error("User is already an attendee of the event");
                     err.statusCode = 400;
                     throw err;
@@ -404,11 +404,68 @@ router.post(
 
             await Attendance.create({ eventId, userId, status });
 
-            return res.json({userId, status});
+            return res.json({ userId, status });
 
         } catch (err) {
             next(err)
         }
+    }
+);
+
+// Change the status of an attendance for an event specified by id
+router.put(
+    '/:eventId/attendance',
+    [requireAuth, verifyCohostStatus],
+    async (req, res, next) => {
+        try {
+            const { eventId } = req.params;
+
+            const { userId, status } = req.body;
+
+            const event = await Event.unscoped().findByPk(eventId);
+
+            if (!event) {
+                const err = new Error("Event couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            const attendee = await Attendance.unscoped().findOne({
+                where: {
+                    eventId,
+                    userId
+                }
+            });
+
+            if (!attendee) {
+                const err = new Error("Attendance between the user and the event does not exist");
+                err.statusCode = 404;
+                return next(err);
+            }
+
+            if (status === "pending") {
+                const err = new Error("Cannot change an attendance status to pending");
+                err.statusCode = 400;
+                throw err;
+            }
+
+            const id = event.id;
+
+            attendee.set({ userId, status });
+
+            await event.save();
+
+            return res.json({
+                id,
+                eventId,
+                userId,
+                status
+            });
+            
+        } catch (err) {
+            next(err)
+        }
+
     }
 );
 
