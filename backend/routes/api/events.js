@@ -364,7 +364,7 @@ router.get(
                             where: {
                                 eventId,
                                 status: {
-                                    [Op.in]: ["member", "waitlist"]
+                                    [Op.in]: ["attending", "waitlist"]
                                 }
                             },
                             include: [
