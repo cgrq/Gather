@@ -1,7 +1,7 @@
 // backend/routes/api/venues.js
 const express = require('express');
 
-const { Group, Attendance, EventImage, Venue, Event } = require('../../db/models');
+const { Group, User, Membership, Attendance, EventImage, Venue, Event } = require('../../db/models');
 
 const router = express.Router();
 
@@ -259,6 +259,83 @@ router.delete(
 
 
 
+// Get all Attendees of an Event specified by its id
+router.get(
+    '/:eventId/attendees',
+    async (req, res, next) => {
+        try {
+            const { eventId } = req.params;
+
+            const userId = req.user.id;
+
+            const event = await Event.unscoped().findByPk(eventId, {
+                include: [
+                    {
+                        model: Group, include: [
+                            { model: Membership, where: { userId } }
+                        ]
+                    }
+                ]
+            });
+
+            if (!event) {
+                const err = new Error("GEvent couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            const userMemberStatus = event.Group.Memberships[0].status;
+
+            const attendees =
+                (!userMemberStatus || userMemberStatus === "member" || userMemberStatus === "pending")
+                    ? await Attendance.unscoped().findAll(
+                        {
+                            where: {
+                                eventId,
+                                attributes: ["status"],
+                                status: {
+                                    [Op.in]: ["member", "waitlist"]
+                                }
+                            },
+                            include: [
+                                { model: User, attributes: ["id", "firstName", "lastName"] }
+                            ]
+                        }
+                    )
+                    : await Attendance.unscoped().findAll(
+                        {
+                            where: {
+                                eventId
+                            },
+                            attributes: ["status"],
+                            include: [
+                                { model: User, attributes: ["id", "firstName", "lastName"] }
+                            ]
+                        }
+                    );
+
+            const attendeesFormatted = attendees.map(attendee => {
+                const { status } = attendee;
+
+                const { id, firstName, lastName } = attendee.User;
+
+                return {
+                    id,
+                    firstName,
+                    lastName,
+                    Attendance: { status }
+                }
+            })
+
+            return res.json({
+                Attendees: attendeesFormatted
+            });
+        } catch (err) {
+            next(err)
+        }
+
+    }
+);
 
 
 
