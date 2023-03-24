@@ -1,6 +1,8 @@
 // backend/routes/api/venues.js
 const express = require('express');
 
+const { Op } = require('sequelize');
+
 const { Group, User, Membership, Attendance, EventImage, Venue, Event } = require('../../db/models');
 
 const router = express.Router();
@@ -277,22 +279,24 @@ router.get(
                     }
                 ]
             });
+            console.log(`🖥 ~ file: events.js:280 ~ event ~ event:`, event)
 
             if (!event) {
-                const err = new Error("GEvent couldn't be found");
+                const err = new Error("Event couldn't be found");
                 err.statusCode = 404;
                 throw err;
             }
-
-            const userMemberStatus = event.Group.Memberships[0].status;
-
+            let userMemberStatus;
+            if(event.Group){
+                userMemberStatus = event.Group.Memberships[0].status;
+            }
             const attendees =
                 (!userMemberStatus || userMemberStatus === "member" || userMemberStatus === "pending")
                     ? await Attendance.unscoped().findAll(
                         {
+                            attributes: ["status"],
                             where: {
                                 eventId,
-                                attributes: ["status"],
                                 status: {
                                     [Op.in]: ["member", "waitlist"]
                                 }
@@ -339,7 +343,46 @@ router.get(
 
 
 
+// Create an Event for a Group specified by its id
+router.post(
+    '/:groupId/attendance',
+    requireAuth,
+    async (req, res, next) => {
+        try {
+            const { eventId } = req.params;
 
+            const { userId, status } = req.body;
+
+            const event = await Event.unscoped().findByPk(eventId, {
+                include: [
+                    {
+                        model: Group, include: [
+                            { model: Membership, where: { userId } }
+                        ]
+                    }
+                ]
+            });
+
+            if (!event) {
+                const err = new Error("GEvent couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            const userMemberStatus = event.Group.Memberships[0].status;
+            console.log(`🖥 ~ file: events.js:369 ~ userMemberStatus:`, userMemberStatus)
+
+            const eventsss = await Event.create({ groupId, venueId, name, type, capacity, price, description, startDate, endDate });
+
+            const id = event.id;
+
+            return res.json({ id, groupId: parseInt(groupId), venueId, name, type, capacity, price, description, startDate, endDate });
+
+        } catch (err) {
+            next(err)
+        }
+    }
+);
 
 
 

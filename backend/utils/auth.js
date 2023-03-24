@@ -170,4 +170,6 @@ const verifyMemberStatus = async function (req, _res, next) {
 }
 
 
+
+
 module.exports = { setTokenCookie, restoreUser, requireAuth, verifyCohostStatus, verifyMemberStatus };
