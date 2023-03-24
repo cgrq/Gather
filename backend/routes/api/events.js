@@ -341,50 +341,76 @@ router.get(
     }
 );
 
-
-
 // Create an Event for a Group specified by its id
 router.post(
-    '/:groupId/attendance',
+    '/:eventId/attendance',
     requireAuth,
     async (req, res, next) => {
         try {
             const { eventId } = req.params;
 
-            const { userId, status } = req.body;
+            const userId = req.user.id;
+
 
             const event = await Event.unscoped().findByPk(eventId, {
                 include: [
                     {
                         model: Group, include: [
-                            { model: Membership, where: { userId } }
+                            { model: Membership, where: {userId} }
                         ]
                     }
                 ]
             });
 
             if (!event) {
-                const err = new Error("GEvent couldn't be found");
+                const err = new Error("Event couldn't be found");
                 err.statusCode = 404;
                 throw err;
             }
 
-            const userMemberStatus = event.Group.Memberships[0].status;
-            console.log(`🖥 ~ file: events.js:369 ~ userMemberStatus:`, userMemberStatus)
+            let userMemberStatus;
 
-            const eventsss = await Event.create({ groupId, venueId, name, type, capacity, price, description, startDate, endDate });
+            if(event.Group){
+                userMemberStatus = event.Group.Memberships[0].status;
+            }
 
-            const id = event.id;
+            if(!userMemberStatus || userMemberStatus === "pending"){
+                const err = new Error("Forbidden");
+                err.statusCode = 403;
+                throw err;
+            }
 
-            return res.json({ id, groupId: parseInt(groupId), venueId, name, type, capacity, price, description, startDate, endDate });
+            const attendee = await Attendance.unscoped().findOne({
+                where: {
+                    eventId,
+                    userId
+                }
+            });
+
+            const status = attendee.status;
+
+            if(attendee){
+                if(status === "pending"){
+                    const err = new Error("Attendance has already been requested");
+                    err.statusCode = 400;
+                    throw err;
+                }
+                if(status === "attending"){
+                    const err = new Error("User is already an attendee of the event");
+                    err.statusCode = 400;
+                    throw err;
+                }
+            }
+
+            await Attendance.create({ eventId, userId, status });
+
+            return res.json({userId, status});
 
         } catch (err) {
             next(err)
         }
     }
 );
-
-
 
 router.use((err, req, res, next) => {
     if (err.errors) {
