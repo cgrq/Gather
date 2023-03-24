@@ -26,11 +26,13 @@ router.delete(
                 err.statusCode = 404;
                 throw err;
             }
+            let userMemberStatus;
 
-            const userMemberStatus = image.Group.Memberships[0].status;
+            if(image.Group) userMemberStatus = image.Group.Memberships[0].status
+
             console.log(`🖥 ~ file: group-images.js:31 ~ userMemberStatus:`, userMemberStatus)
 
-            if (userMemberStatus === "organizer(host)" || userMemberStatus === "co-host") {
+            if (userMemberStatus || userMemberStatus === "organizer(host)" || userMemberStatus === "co-host") {
                 await image.destroy();
 
                 return res.json({
