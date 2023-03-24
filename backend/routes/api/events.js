@@ -567,9 +567,11 @@ router.delete(
                 err.statusCode = 404;
                 return next(err);
             }
+            let userMemberStatus;
 
-            const userMemberStatus = attendee.Event.Group.Memberships[0].status
-            if (userMemberStatus !== "organizer(host)" || userId != userCurrentId) {
+            if(attendee.Event.Group) userMemberStatus = attendee.Event.Group.Memberships[0].status
+
+            if (!userMemberStatus || userMemberStatus !== "organizer(host)" || userId != userCurrentId) {
                 const err = new Error("Only the User or organizer may delete an Attendance");
                 err.statusCode = 403;
                 throw err;
