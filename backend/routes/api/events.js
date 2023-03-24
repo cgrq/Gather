@@ -461,13 +461,64 @@ router.put(
                 userId,
                 status
             });
-            
+
         } catch (err) {
             next(err)
         }
 
     }
 );
+
+// Delete attendance to an event specified by id
+router.delete(
+    '/:eventId/attendance',
+    requireAuth,
+    async (req, res, next) => {
+        try {
+            const { eventId } = req.params;
+            const { userId } = req.body;
+            const userCurrentId = req.user.id;
+
+            const attendee = await Attendance.findByPk(eventId,{
+                include:[
+                    {model: Event, include:[
+                        {model:Group, include:[{model:Membership, where:{userId}}]}]}
+                ]
+            });
+
+            const event = await Event.unscoped().findByPk(eventId);
+
+            if (!event) {
+                const err = new Error("Event couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            if (!attendee) {
+                const err = new Error("Attendance does not exist for this User");
+                err.statusCode = 404;
+                return next(err);
+            }
+
+            const userMemberStatus = attendee.Event.Group.Memberships[0].status
+            if (userMemberStatus !== "organizer(host)" || userId != userCurrentId) {
+                const err = new Error("Only the User or organizer may delete an Attendance");
+                err.statusCode = 403;
+                throw err;
+            }
+
+            await attendee.destroy();
+
+            return res.json({
+                message: "Successfully deleted attendance from event"
+            });
+        } catch (err) {
+            next(err)
+        }
+    }
+
+);
+
 
 router.use((err, req, res, next) => {
     if (err.errors) {
