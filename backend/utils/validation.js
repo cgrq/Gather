@@ -17,9 +17,6 @@ const handleValidationErrors = (req, _res, next) => {
     const err = Error("Bad request.");
     err.errors = errors;
     err.statusCode = 400;
-    if(err.errors.email === "Email already exists"){
-      err.statusCode = 403;
-    }
     err.title = "Bad request.";
     next(err);
   }
