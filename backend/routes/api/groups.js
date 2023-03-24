@@ -140,7 +140,7 @@ router.get(
         const groupsFormatted = groups.map(group => {
             const { id, organizerId, name, about, type, private, city, state, createdAt, updatedAt } = group;
             const numMembers = group.Memberships.length;
-            const previewImage = group.GroupImages[0].url;
+            const previewImage = group.GroupImages[0] ? group.GroupImages[0].url : "no image";
 
             const createdAtFormatted = formatDate(createdAt);
             const updatedAtFormatted = formatDate(updatedAt);
@@ -183,7 +183,7 @@ router.get(
         const groupsFormatted = groups.map(group => {
             const { id, organizerId, name, about, type, private, city, state, createdAt, updatedAt } = group;
             const numMembers = group.Memberships.length;
-            const previewImage = group.GroupImages[0].url;
+            const previewImage = group.GroupImages[0] ? group.GroupImages[0].url : "no image";
 
             const createdAtFormatted = formatDate(createdAt);
             const updatedAtFormatted = formatDate(updatedAt);
