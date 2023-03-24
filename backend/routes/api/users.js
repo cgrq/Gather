@@ -25,32 +25,6 @@ const validateSignup = [
     handleValidationErrors
 ];
 
-const validateSignup2 = [
-    check('email')
-        .exists({ checkFalsy: true })
-        .isEmail()
-        .withMessage("Invalid email"),
-    check('firstName')
-          .exists({ checkFalsy: true })
-          .withMessage('Please provide a first name'),
-    check('lastName')
-          .exists({ checkFalsy: true })
-          .withMessage('Please provide a last name'),
-    check('username')
-        .exists({ checkFalsy: true })
-        .isLength({ min: 4 })
-        .withMessage('Please provide a username with at least 4 characters.'),
-    check('username')
-        .not()
-        .isEmail()
-        .withMessage('Username cannot be an email.'),
-    check('password')
-        .exists({ checkFalsy: true })
-        .isLength({ min: 6 })
-        .withMessage('Password must be 6 characters or more.'),
-    handleValidationErrors
-];
-
 // Sign up
 router.post(
     '',
@@ -69,7 +43,6 @@ router.post(
             const err = new Error("User already exists");
             err.statusCode = 500;
             err.errors = {};
-            console.log(`🖥 ~ file: users.js:78 ~ existingUser.email:`, existingUser)
 
             if(username == existingUser.username){
                 err.errors.username = "User with that username already exists";
