@@ -9,7 +9,7 @@ const router = express.Router();
 
 const { requireAuth, verifyMemberStatus, verifyCohostStatus } = require('../../utils/auth');
 const { formatDate, parseDate } = require('../../utils/date');
-const { check } = require('express-validator');
+const { check, query } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const validateEvent = [
@@ -65,24 +65,90 @@ const validateEvent = [
     handleValidationErrors
 ];
 
+const validateEventQueries = [
+    query('page')
+        .optional()
+        .isInt({ min: 1, max: 10 })
+        .default(1)
+        .withMessage('Page must be greater than or equal to 1'),
+    query('size')
+        .optional()
+        .isInt({ min: 1, max: 20 })
+        .default(20)
+        .withMessage('Size must be greater than or equal to 1'),
+    query('name')
+        .optional()
+        .isString()
+        .withMessage('Name must be a string'),
+    query('type')
+        .optional()
+        .isString()
+        .isIn(["In person", "Online"])
+        .withMessage("Type must be 'Online' or 'In person'"),
+    query('startDate')
+        .optional()
+        .isString()
+        .custom(date => {
+            const startDate = parseDate(date);
+            if (isNaN(startDate.getTime())) {
+                throw new Error('Start date must be a valid datetime');
+              }
+            return true;
+        })
+        .withMessage('Start date must be a valid datetime'),
+    handleValidationErrors
+];
+
 
 // Get All Events
 router.get(
     '/',
-    async (_req, res) => {
-        const events = await Event.unscoped().findAll({
+    validateEventQueries,
+    async (req, res) => {
+
+        const { page = 1, size = 20, name, type, startDate } = req.query;
+        console.log(`🖥 ~ file: events.js:110 ~ startDate:`, startDate)
+
+        let where = {};
+
+        if (name) {
+            where.name = name;
+        }
+
+        if (type) {
+            where.type = type;
+        }
+
+        if (startDate) {
+            where.startDate = startDate;
+        }
+
+        let pagination = {};
+
+        const offset = size * (page - 1);
+
+        pagination.limit = size;
+        pagination.offset = offset;
+
+        const options = {
             include: [
                 { model: Attendance },
                 { model: EventImage },
                 { model: Group, attributes: ["id", "name", "city", "state"] },
                 { model: Venue, attributes: ["id", "city", "state"] }
-            ]
-        });
+            ],
+            ...pagination
+        }
+
+        if(Object.keys(where).length) options.where = where;
+
+        const events = await Event.unscoped().findAll(options);
 
         const eventsFormatted = events.map(event => {
             const { id, groupId, venueId, name, type, startDate, endDate } = event;
+            console.log(`🖥 ~ file: events.js:149 ~ eventsFormatted ~ event:`, event)
             const numAttending = event.Attendances.length;
-            const previewImage = event.EventImages[0].url;
+            const previewImage = event.EventImages[0] ? event.EventImages[0].url : "no image";
             const Group = event.Group;
             const Venue = event.Venue;
 
@@ -479,10 +545,12 @@ router.delete(
             const { userId } = req.body;
             const userCurrentId = req.user.id;
 
-            const attendee = await Attendance.findByPk(eventId,{
-                include:[
-                    {model: Event, include:[
-                        {model:Group, include:[{model:Membership, where:{userId}}]}]}
+            const attendee = await Attendance.findByPk(eventId, {
+                include: [
+                    {
+                        model: Event, include: [
+                            { model: Group, include: [{ model: Membership, where: { userId } }] }]
+                    }
                 ]
             });
 
