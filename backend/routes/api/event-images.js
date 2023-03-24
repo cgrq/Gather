@@ -24,7 +24,6 @@ router.delete(
 
                 ]
             });
-            console.log(`🖥 ~ file: event-images.js:27 ~ image:`, image)
 
             if (!image) {
                 const err = new Error("Event Image couldn't be found");
@@ -32,8 +31,7 @@ router.delete(
                 throw err;
             }
 
-            const userMemberStatus = image.Group.Memberships[0].status;
-            console.log(`🖥 ~ file: group-images.js:31 ~ userMemberStatus:`, userMemberStatus)
+            const userMemberStatus = image.Event.Group.Memberships[0].status;
 
             if (userMemberStatus === "organizer(host)" || userMemberStatus === "co-host") {
                 await image.destroy();
