@@ -773,7 +773,11 @@ router.put(
             const userMembership = await Membership.unscoped().findOne({ where: { userId, groupId } });
 
 
-            const userStatus = userMembership.status;
+            if (!userMembership || (status === "co-host" && userMembership.status !== "organizer(host)")) {
+                const err = new Error("Forbidden");
+                err.statusCode = 403;
+                throw err;
+            }
 
             if (status === "pending") {
                 const err = Error("Validations Error");
@@ -785,11 +789,6 @@ router.put(
             }
 
 
-            if (status === "co-host" && userStatus !== "organizer(host)") {
-                const err = new Error("Forbidden");
-                err.statusCode = 403;
-                throw err;
-            }
 
             group.set({ userId, memberId, status });
 
@@ -845,10 +844,10 @@ router.delete(
             }
 
             const userMembership = await Membership.unscoped().findOne({ where: { userId, groupId } });
-            console.log(`🖥 ~ file: groups.js:841 ~ userMembership:`, userMembership)
+            console.log(`🖥 ~ file: groups.js:848 ~ userMembership:`, userMembership)
 
 
-            if (userMembership.status !== "organizer(host)" || memberId != userId) {
+            if (!userMembership || userMembership.status !== "organizer(host)" || memberId != userId) {
                 const err = new Error("Forbidden");
                 err.statusCode = 403;
                 throw err;
