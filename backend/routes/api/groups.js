@@ -291,37 +291,7 @@ router.post(
         const createdAt = formatDate(group.createdAt);
         const updatedAt = formatDate(group.updatedAt);
 
-        return res.json({
-            id,
-            organizerId,
-            name,
-            about,
-            type,
-            private,
-            city,
-            state,
-            createdAt,
-            updatedAt
-        });
-    }
-);
-
-// Create a Group
-router.post(
-    '/',
-    [requireAuth, validateGroup],
-    async (req, res, next) => {
-
-        const { user } = req;
-
-        const { name, about, type, private, city, state } = req.body;
-        const organizerId = user.id;
-
-        const group = await Group.create({ organizerId, name, about, type, private, city, state });
-
-        const id = group.id;
-        const createdAt = formatDate(group.createdAt);
-        const updatedAt = formatDate(group.updatedAt);
+        await Membership.create({userId:organizerId, groupId:id, status:"organizer(host)"});
 
         return res.json({
             id,
@@ -337,6 +307,7 @@ router.post(
         });
     }
 );
+
 
 // Add an Image to a Group based on the Group's id
 router.post(
@@ -364,7 +335,6 @@ router.post(
                 throw err;
             }
 
-
             const groupImage = await GroupImage.create({ groupId, url, preview });
 
             return res.json({
@@ -389,7 +359,7 @@ router.put(
         try {
             const { groupId } = req.params;
             const { name, about, type, private, city, state } = req.body;
-            const id = req.user.id;
+            const userId = req.user.id;
 
             const group = await Group.findByPk(groupId);
 
@@ -401,7 +371,7 @@ router.put(
 
             const organizerId = group.organizerId;
 
-            if (organizerId != id) {
+            if (organizerId != userId) {
                 const err = new Error("Forbidden");
                 err.statusCode = 403;
                 throw err;
@@ -411,6 +381,7 @@ router.put(
 
             await group.save();
 
+            const id = group.id;
             const createdAt = formatDate(group.createdAt);
             const updatedAt = formatDate(group.updatedAt);
 
@@ -706,7 +677,7 @@ router.post(
                 return next(err);
             }
 
-            const { memberId, status } = req.body;
+            const memberId = req.user.id;
 
             const existingMembership = await Membership.unscoped().findOne({ where: { userId: memberId, groupId } });
 
@@ -723,6 +694,7 @@ router.post(
                     throw err;
                 }
             }
+            const status = "pending"
 
             const membership = await Membership.create({ userId: memberId, groupId, status });
 
