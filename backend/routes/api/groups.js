@@ -599,6 +599,7 @@ router.post(
 // Get all Members of a Group specified by its id
 router.get(
     '/:groupId/members',
+    requireAuth,
     async (req, res, next) => {
 
         const { groupId } = req.params;
@@ -606,6 +607,7 @@ router.get(
         try {
 
             const group = await Group.findByPk(groupId);
+            console.log(`🖥 ~ file: groups.js:609 ~ group:`, group)
             if (!group) {
                 const err = new Error("Group couldn't be found");
                 err.statusCode = 404;
@@ -827,7 +829,7 @@ router.delete(
             console.log(`🖥 ~ file: groups.js:848 ~ userMembership:`, userMembership)
 
 
-            if (!userMembership || userMembership.status !== "organizer(host)" || memberId != userId) {
+            if (!userMembership || (userMembership.status !== "organizer(host)" && memberId != userId)) {
                 const err = new Error("Forbidden");
                 err.statusCode = 403;
                 throw err;
