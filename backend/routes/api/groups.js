@@ -615,7 +615,7 @@ router.get(
                 include: [{ model: Membership, where: { groupId }, attributes: ["status"] }]
             });
 
-            const userStatus = user.Memberships[0].status;
+            const userStatus = user.Memberships[0] ? user.Memberships[0].status : null;
 
             const memberships =
                 (userStatus === "member" || userStatus === "pending")
