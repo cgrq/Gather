@@ -92,14 +92,21 @@ const validateEventQueries = [
             const startDate = parseDate(date);
             if (isNaN(startDate.getTime())) {
                 throw new Error('Start date must be a valid datetime');
-              }
+            }
             return true;
         })
         .withMessage('Start date must be a valid datetime'),
     handleValidationErrors
 ];
 
-
+const validateAttendance = [
+    check('status')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .isIn(["attending", "waitlist"])
+        .withMessage("Status must be 'attending' or 'waitlist'"),
+    handleValidationErrors
+]
 // Get All Events
 router.get(
     '/',
@@ -140,7 +147,7 @@ router.get(
             ...pagination
         }
 
-        if(Object.keys(where).length) options.where = where;
+        if (Object.keys(where).length) options.where = where;
 
         const events = await Event.unscoped().findAll(options);
 
@@ -456,7 +463,7 @@ router.post(
             if (attendee) {
 
                 const status = attendee.status;
-                if (status === "pending" || status === "waitlist" ) {
+                if (status === "pending" || status === "waitlist") {
                     const err = new Error("Attendance has already been requested");
                     err.statusCode = 400;
                     throw err;
@@ -482,17 +489,14 @@ router.post(
 // Change the status of an attendance for an event specified by id
 router.put(
     '/:eventId/attendance',
-    [requireAuth, verifyCohostStatus],
+    [requireAuth, verifyCohostStatus, validateAttendance],
     async (req, res, next) => {
         try {
             const { eventId } = req.params;
-            console.log(`🖥 ~ file: events.js:488 ~ eventId:`, eventId)
 
             const { memberId, status } = req.body;
-            console.log(`🖥 ~ file: events.js:490 ~ memberId:`, memberId)
 
             const event = await Event.unscoped().findByPk(eventId);
-            console.log(`🖥 ~ file: events.js:494 ~ event:`, event)
 
             if (!event) {
                 const err = new Error("Event couldn't be found");
@@ -524,11 +528,11 @@ router.put(
 
             attendee.set({ memberId, status });
 
-            await event.save();
+            await attendee.save();
 
             return res.json({
                 id,
-                eventId,
+                eventId: parseInt(eventId),
                 memberId,
                 status
             });
@@ -550,16 +554,12 @@ router.delete(
             const { userId } = req.body;
             const userCurrentId = req.user.id;
 
-            const attendee = await Attendance.findByPk(eventId, {
-                include: [
-                    {
-                        model: Event, include: [
-                            { model: Group, include: [{ model: Membership, where: { userId } }] }]
-                    }
-                ]
-            });
+            const attendee = await Attendance.findOne({where: {userId}});
 
-            const event = await Event.unscoped().findByPk(eventId);
+            const event = await Event.unscoped().findByPk(eventId, {
+                include: [
+                    { model: Group, include: [{ model: Membership, where: { userId:userCurrentId } }] }]
+            });
 
             if (!event) {
                 const err = new Error("Event couldn't be found");
@@ -574,9 +574,10 @@ router.delete(
             }
             let userMemberStatus;
 
-            if(attendee.Event.Group) userMemberStatus = attendee.Event.Group.Memberships[0].status
 
-            if (!userMemberStatus || userMemberStatus !== "organizer(host)" || userId != userCurrentId) {
+            if (event.Group) userMemberStatus = event.Group.Memberships[0].status
+
+            if (!userMemberStatus || (userMemberStatus !== "organizer(host)" && userId != userCurrentId)) {
                 const err = new Error("Only the User or organizer may delete an Attendance");
                 err.statusCode = 403;
                 throw err;
