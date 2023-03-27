@@ -604,16 +604,16 @@ router.get(
         const { groupId } = req.params;
 
         try {
-            const user = await User.unscoped().findByPk(req.user.id, {
-                include: [{ model: Membership, where: { groupId }, attributes: ["status"] }]
-            });
-            console.log(`🖥 ~ file: groups.js:606 ~ user ~ user:`, user)
 
-            if (!user) {
+            const group = await Group.findByPk(groupId);
+            if (!group) {
                 const err = new Error("Group couldn't be found");
                 err.statusCode = 404;
                 throw err;
             }
+            const user = await User.unscoped().findByPk(req.user.id, {
+                include: [{ model: Membership, where: { groupId }, attributes: ["status"] }]
+            });
 
             const userStatus = user.Memberships[0].status;
 
