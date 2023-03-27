@@ -229,6 +229,8 @@ router.get(
                     ]
                 }
             );
+            console.log(`🖥 ~ file: groups.js:232 ~ group:`, group)
+
             if (!group) {
                 const err = new Error("Group couldn't be found");
                 err.statusCode = 404;
@@ -601,6 +603,7 @@ router.get(
             const user = await User.unscoped().findByPk(req.user.id, {
                 include: [{ model: Membership, where: { groupId }, attributes: ["status"] }]
             });
+            console.log(`🖥 ~ file: groups.js:606 ~ user ~ user:`, user)
 
             if (!user) {
                 const err = new Error("Group couldn't be found");
@@ -617,7 +620,7 @@ router.get(
                             where: {
                                 groupId,
                                 status: {
-                                    [Op.in]: ["co-host", "host"]
+                                    [Op.in]: ["co-host", "organizer(host)"]
                                 }
                             },
                             include: [
@@ -694,6 +697,7 @@ router.post(
                     throw err;
                 }
             }
+
             const status = "pending"
 
             const membership = await Membership.create({ userId: memberId, groupId, status });
@@ -760,11 +764,9 @@ router.put(
                 next(err);
             }
 
+            memberMembership.set({ memberId, groupId, status });
 
-
-            group.set({ userId, memberId, status });
-
-            await group.save();
+            await memberMembership.save();
 
             return res.json({
                 id: userId,

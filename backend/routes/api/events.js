@@ -407,7 +407,7 @@ router.get(
     }
 );
 
-// Create an Event for a Group specified by its id
+// Request Attendance to an Event
 router.post(
     '/:eventId/attendance',
     requireAuth,
@@ -416,7 +416,6 @@ router.post(
             const { eventId } = req.params;
 
             const userId = req.user.id;
-
 
             const event = await Event.unscoped().findByPk(eventId, {
                 include: [
@@ -453,10 +452,11 @@ router.post(
                 }
             });
 
-            const status = attendee.status;
 
             if (attendee) {
-                if (status === "pending") {
+
+                const status = attendee.status;
+                if (status === "pending" || status === "waitlist" ) {
                     const err = new Error("Attendance has already been requested");
                     err.statusCode = 400;
                     throw err;
@@ -467,6 +467,7 @@ router.post(
                     throw err;
                 }
             }
+            const status = "pending"
 
             await Attendance.create({ eventId, userId, status });
 
@@ -485,10 +486,13 @@ router.put(
     async (req, res, next) => {
         try {
             const { eventId } = req.params;
+            console.log(`🖥 ~ file: events.js:488 ~ eventId:`, eventId)
 
-            const { userId, status } = req.body;
+            const { memberId, status } = req.body;
+            console.log(`🖥 ~ file: events.js:490 ~ memberId:`, memberId)
 
             const event = await Event.unscoped().findByPk(eventId);
+            console.log(`🖥 ~ file: events.js:494 ~ event:`, event)
 
             if (!event) {
                 const err = new Error("Event couldn't be found");
@@ -499,9 +503,10 @@ router.put(
             const attendee = await Attendance.unscoped().findOne({
                 where: {
                     eventId,
-                    userId
+                    userId: memberId
                 }
             });
+            console.log(`🖥 ~ file: events.js:506 ~ attendee ~ attendee:`, attendee)
 
             if (!attendee) {
                 const err = new Error("Attendance between the user and the event does not exist");
@@ -517,14 +522,14 @@ router.put(
 
             const id = event.id;
 
-            attendee.set({ userId, status });
+            attendee.set({ memberId, status });
 
             await event.save();
 
             return res.json({
                 id,
                 eventId,
-                userId,
+                memberId,
                 status
             });
 
