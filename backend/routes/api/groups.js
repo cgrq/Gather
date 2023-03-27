@@ -516,6 +516,14 @@ router.get(
         const parentGroupId = req.params.groupId;
 
         try {
+            const group = await Group.unscoped().findByPk(parentGroupId)
+
+            if (!group) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
             const events = await Event.unscoped().findAll(
                 {
                     where: {
@@ -529,15 +537,11 @@ router.get(
                     ]
                 }
             );
-            if (!events.length) {
-                const err = new Error("Group couldn't be found");
-                err.statusCode = 404;
-                throw err;
-            }
+
             const eventsFormatted = events.map(event => {
                 const { id, groupId, venueId, name, type, startDate, endDate } = event;
                 const numAttending = event.Attendances.length;
-                const previewImage = event.EventImages[0].url;
+                const previewImage = event.EventImages[0] ? event.EventImages[0].url: "no image";
                 const Group = event.Group;
                 const Venue = event.Venue;
 
