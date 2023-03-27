@@ -186,7 +186,6 @@ router.get(
 // Get details of an Event specified by its id
 router.get(
     '/:eventId',
-    requireAuth,
     async (req, res, next) => {
 
         const { eventId } = req.params;
