@@ -297,7 +297,11 @@ router.post(
 
             const { url, preview } = req.body;
 
+            const userId = req.user.id;
+
             const eventImage = await EventImage.create({ eventId, url, preview });
+
+            await Attendance.create({eventId, userId, status:"attending"})
 
             const id = eventImage.id;
 
