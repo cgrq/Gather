@@ -614,8 +614,10 @@ router.get(
             const user = await User.unscoped().findByPk(req.user.id, {
                 include: [{ model: Membership, where: { groupId }, attributes: ["status"] }]
             });
+            console.log(`🖥 ~ file: groups.js:617 ~ user ~ user :`, user )
 
-            const userStatus = user.Memberships[0] ? user.Memberships[0].status : null;
+            const userStatus = (user && user.Memberships[0]) ? user.Memberships[0].status : null;
+            console.log(`🖥 ~ file: groups.js:619 ~  userStatus:`,  userStatus)
 
             const memberships =
                 (userStatus === "member" || userStatus === "pending")
