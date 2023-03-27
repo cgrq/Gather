@@ -492,7 +492,7 @@ router.post(
 // Change the status of an attendance for an event specified by id
 router.put(
     '/:eventId/attendance',
-    [requireAuth, verifyCohostStatus, validateAttendance],
+    [requireAuth, verifyCohostStatus],
     async (req, res, next) => {
         try {
             const { eventId } = req.params;
