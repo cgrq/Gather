@@ -582,9 +582,13 @@ router.post(
         try {
             const { groupId } = req.params;
 
+            const userId = req.user.id;
+
             const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
 
             const event = await Event.create({ groupId, venueId, name, type, capacity, price, description, startDate, endDate });
+
+            await Attendance.create({eventId: event.id, userId, status:"attending"})
 
             const id = event.id;
 

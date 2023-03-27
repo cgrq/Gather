@@ -287,7 +287,7 @@ router.put(
     }
 );
 
-// Create an Event for a Group specified by its id
+// Create an EventImage for a Group specified by its id
 router.post(
     '/:eventId/images',
     [requireAuth, verifyMemberStatus],
@@ -301,7 +301,6 @@ router.post(
 
             const eventImage = await EventImage.create({ eventId, url, preview });
 
-            await Attendance.create({eventId, userId, status:"attending"})
 
             const id = eventImage.id;
 
