@@ -119,7 +119,10 @@ information.
 
     ```json
     {
-      "message": "Invalid credentials",
+      "message": "Login failed",
+      "errors": {
+          "credential": "The provided credentials were invalid."
+      }
     }
     ```
 
