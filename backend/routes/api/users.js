@@ -16,6 +16,15 @@ const validateSignup = [
         .exists({ checkFalsy: true })
         .isEmail()
         .withMessage("Invalid email"),
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~****
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~****
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~****
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~****
+    // Need to add username validation~****
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~****
+    // ~~~~~~~~~~~~~~~~~~~~~~~~****
+    // ~~~~~~~~~~~~~~~~~~~~****
+    // ~~~~~~~~~~~~~~~~****
     check('firstName')
           .exists({ checkFalsy: true })
           .withMessage('First Name is required'),
