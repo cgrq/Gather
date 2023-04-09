@@ -1,7 +1,7 @@
 import React from "react";
 import { useModal } from "../../context/Modal"
 
-export const OpenModalButton = ({modalComponent, buttonText, onButtonClick, onModalClose}) => {
+const OpenModalButton = ({modalComponent, buttonText, onButtonClick, onModalClose}) => {
     const {setModalContent, setOnModalClose} = useModal();
 
     const onClick = (e) => {
@@ -14,3 +14,4 @@ export const OpenModalButton = ({modalComponent, buttonText, onButtonClick, onMo
         <button onClick={onClick}>{buttonText}</button>
     )
 }
+ export default OpenModalButton;
