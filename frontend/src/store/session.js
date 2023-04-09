@@ -6,7 +6,6 @@ const REMOVE_USER = "session/removeUser";
 
 
 const setUser = (user) => {
-  console.log(`🖥 ~ file: Action:`, user)
 
   return {
     type: SET_USER,

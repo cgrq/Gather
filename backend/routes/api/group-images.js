@@ -30,7 +30,6 @@ router.delete(
 
             if(image.Group) userMemberStatus = image.Group.Memberships[0].status
 
-            console.log(`🖥 ~ file: group-images.js:31 ~ userMemberStatus:`, userMemberStatus)
 
             if (userMemberStatus || userMemberStatus === "organizer(host)" || userMemberStatus === "co-host") {
                 await image.destroy();

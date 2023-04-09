@@ -29,7 +29,6 @@ router.use('/group-images', groupImagesRouter);
 router.use('/event-images', eventImagesRouter);
 
 router.use((req,res,next) => {
-  console.log(`🖥 ~ file: index.js:31 ~ router.use ~ req:`,  req.body)
   next();
 })
 

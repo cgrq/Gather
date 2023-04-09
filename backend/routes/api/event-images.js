@@ -15,7 +15,6 @@ router.delete(
         try {
             const { imageId } = req.params;
             const userId = req.user.id;
-            console.log(`🖥 ~ file: event-images.js:18 ~ userId:`, userId)
 
             const image = await EventImage.findByPk(imageId, {
                 include: [

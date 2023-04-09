@@ -114,7 +114,6 @@ router.get(
     async (req, res) => {
 
         const { page = 1, size = 20, name, type, startDate } = req.query;
-        console.log(`🖥 ~ file: events.js:110 ~ startDate:`, startDate)
 
         let where = {};
 
@@ -153,7 +152,6 @@ router.get(
 
         const eventsFormatted = events.map(event => {
             const { id, groupId, venueId, name, type, startDate, endDate } = event;
-            console.log(`🖥 ~ file: events.js:149 ~ eventsFormatted ~ event:`, event)
             const numAttending = event.Attendances.length;
             const previewImage = event.EventImages[0] ? event.EventImages[0].url : "no image";
             const Group = event.Group;
@@ -355,7 +353,6 @@ router.get(
                     }
                 ]
             });
-            console.log(`🖥 ~ file: events.js:280 ~ event ~ event:`, event)
 
             if (!event) {
                 const err = new Error("Event couldn't be found");
@@ -513,7 +510,6 @@ router.put(
                     userId: memberId
                 }
             });
-            console.log(`🖥 ~ file: events.js:506 ~ attendee ~ attendee:`, attendee)
 
             if (!attendee) {
                 const err = new Error("Attendance between the user and the event does not exist");
