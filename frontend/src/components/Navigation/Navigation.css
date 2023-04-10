@@ -1,3 +1,32 @@
 .hidden{
     display: none
 }
+
+.navList{
+    list-style: none;
+    display:flex;
+    padding: 20px 40px;
+    border-bottom:4px solid rgb(237, 237, 237);
+    flex-flow:row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.navlist > li{
+    display:flex;
+    justify-content: flex-end;
+    flex-flow: column nowrap;
+}
+
+.gatherTitle > img{
+    width:140px;
+}
+
+button{
+    background:none;
+    border:none;
+}
+
+i{
+    font-size: 40px;
+    color:rgb(211, 211, 211)
+}
