@@ -44,7 +44,7 @@ function ProfileButton({ user }) {
       <button onClick={openMenu}>
         <i className="fas fa-user-circle" />
       </button>
-      <ul className={ulClassName} ref={ulRef}>
+      <ul className={`${ulClassName} profile-list`} ref={ulRef}>
         {user ? (
           <>
             <li>{user.username}</li>

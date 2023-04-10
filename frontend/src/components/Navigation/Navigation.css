@@ -2,25 +2,6 @@
     display: none
 }
 
-.navList{
-    list-style: none;
-    display:flex;
-    padding: 20px 40px;
-    border-bottom:4px solid rgb(237, 237, 237);
-    flex-flow:row nowrap;
-    justify-content: space-between;
-    align-items: center;
-}
-.navlist > li{
-    display:flex;
-    justify-content: flex-end;
-    flex-flow: column nowrap;
-}
-
-.gatherTitle > img{
-    width:140px;
-}
-
 button{
     background:none;
     border:none;
@@ -29,4 +10,34 @@ button{
 i{
     font-size: 40px;
     color:rgb(211, 211, 211)
+}
+
+.gather-title > img{
+    width:140px;
+}
+
+
+.nav-list{
+    list-style: none;
+    display:flex;
+    padding: 20px 40px;
+    border-bottom:4px solid rgb(237, 237, 237);
+    flex-flow:row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-container{
+    position:relative;
+}
+
+.profile-list{
+    position:absolute;
+    right:0;
+    border: 1px solid black;
+    background-color:white;
+}
+
+.profile-list > li {
+    list-style: none;
 }
