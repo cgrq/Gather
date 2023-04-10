@@ -26,5 +26,20 @@ Hosting:
 
 
 
-# Landing Page
+# Features
+
+Homepage:
+
 ![landing page](assets/docs/landing-page.png)
+
+# Roadmap
+
+  * Groups (coming soon)
+  * Events (coming soon)
+  * RSVPs (coming soon)
+  * Joining Groups (coming soon)
+  * Search by location and group info (name, description) (coming soon)
+  * Calendar (on group page) (coming soon)
+  * Calendar (for all groups in search results) (coming soon)
+  * AWS/S3 Image Upload (coming soon)
+  * Google Maps Integration (coming soon)
