@@ -2,10 +2,6 @@
     display: none
 }
 
-button{
-    background:none;
-    border:none;
-}
 
 i{
     font-size: 40px;
@@ -29,10 +25,18 @@ i{
 
 .profile-container{
     position:relative;
+    display:flex;
+    justify-content: flex-end;
+}
+
+.profile-icon-button{
+    background:none;
+    border:none;
 }
 
 .profile-list{
     position:absolute;
+    top:40;
     right:0;
     border: 1px solid black;
     background-color:white;
@@ -40,4 +44,8 @@ i{
 
 .profile-list > li {
     list-style: none;
+}
+
+.profile-list button{
+    width:100px;
 }
