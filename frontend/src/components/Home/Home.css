@@ -1,0 +1,45 @@
+.home-container{
+    display:flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    width:60%;
+    margin:0 auto;
+}
+
+/* Section One */
+
+.section-one-container{
+    margin-top:60px;
+    display:flex;
+    justify-content: space-between;
+}
+
+.section-one-container  h1{
+    font-size: 60px;
+    margin-bottom:20px;
+}
+
+.section-one-container > div{
+    width:50%;
+}
+
+.section-one-container > img{
+    width:380px;
+    height:380px;
+}
+
+/* Section Two */
+
+.section-two-container{
+    display:flex;
+    flex-flow: column;
+    align-items: center;
+    width:60%;
+    margin-top:60px;
+}
+
+.section-two-container h2{
+    font-size: 40px;
+    margin-bottom:20px;
+}
