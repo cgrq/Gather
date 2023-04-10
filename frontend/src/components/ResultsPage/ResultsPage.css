@@ -1,0 +1,40 @@
+.isDisabled{
+    color:rgb(188, 188, 188) !important;
+    pointer-events: none;
+    text-decoration: none;
+}
+
+.results-container{
+
+}
+
+.results-header-container{
+    display:flex;
+    flex-flow:column nowrap;
+    align-items: flex-start;
+    width:40%;
+    margin:auto;
+    border:1px solid black
+}
+.results-header-container ul{
+    display:flex;
+    justify-content: flex-start;
+    list-style: none;
+}
+
+.results-header-container p{
+    font-size: 20px;
+    margin:10px;
+}
+
+.results-nav{
+    font-size: 30px;
+}
+
+.results-nav li{
+    margin:10px;
+}
+
+.results-nav li a{
+    color:teal;
+}

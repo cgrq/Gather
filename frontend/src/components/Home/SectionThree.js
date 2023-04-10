@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 function SectionThree(){
@@ -10,7 +11,7 @@ function SectionThree(){
         <div className="section-three-container">
             <ActionCard
                 iconImgPath={"./placeholder-icon.png"}
-                linkPath={"/"}
+                linkPath={"/groups"}
                 title={"See all groups"}
                 caption={seeAllGroupsCaption} />
             <ActionCard
@@ -32,11 +33,7 @@ function ActionCard({iconImgPath, linkPath, title, caption, disabled=false}){
     return (
         <div className="action-card-container">
             <img src={iconImgPath} />
-            {
-            disabled
-                ? <div>{title}</div>
-                : <a href={linkPath}>{title}</a>
-            }
+            <NavLink className={disabled ? "isDisabled" : ""} to={linkPath}>{title}</NavLink>
             <p>{caption}</p>
         </div>
     )

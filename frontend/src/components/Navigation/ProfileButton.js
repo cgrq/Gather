@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
+import { NavLink } from 'react-router-dom';
 import SignupFormModal from '../SignupFormModal';
 
 function ProfileButton({ user }) {
@@ -71,6 +72,7 @@ function ProfileButton({ user }) {
             </li>
           </>
         )}
+        <li><NavLink to="/groups">View groups</NavLink></li>
       </ul>
     </>
   );

@@ -71,12 +71,14 @@
     margin:20px 0;
     text-decoration: none;
 }
-.action-card-container div{
-    color:rgb(188, 188, 188)
-}
 
 .action-card-container a:hover{
     text-decoration:underline;
+}
+
+.isDisabled{
+    color:rgb(188, 188, 188) !important;
+    pointer-events: none;
 }
 
 /* Section Four */
