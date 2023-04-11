@@ -2,6 +2,11 @@
     text-decoration: none !important;
 }
 
+.join-button{
+    background-color: red;
+    color:white;
+}
+
 /* Group List Item */
 .item-container{
     display:flex;
@@ -25,5 +30,49 @@
 }
  .about{
     width:400px;
+ }
 
+ /* Group ID Page */
+
+ .group-page-container,
+ .group-page-top-background,
+ .group-page-bottom-background {
+    width:100%;
+    display:flex;
+    flex-flow:column nowrap;
+ }
+ .group-page-bottom-background{
+    background-color:rgb(197, 197, 197);
+ }
+
+ .group-page-top-container,
+ .group-page-bottom-container{
+    display:flex;
+    flex-flow: column nowrap;
+    width:60%;
+    margin:0 auto;
+    padding:60px;
+ }
+
+ .group-page-content-row{
+    display:flex;
+    width:100%;
+ }
+ .group-page-content-row img{
+    width:700px;
+    height:350px;
+    border:1px solid black;
+    margin-right:20px;
+ }
+ .event-container{
+    background-color:white;
+    width:600px;
+    padding:20px;
+    display:flex;
+ }
+ .event-container img{
+    width:250px;
+    height:150px;
+    border:1px solid black;
+    margin-right:20px;
  }
