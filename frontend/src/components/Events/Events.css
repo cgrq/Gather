@@ -1,0 +1,18 @@
+/* Group List Item */
+
+.nav-link{
+    text-decoration: none !important;
+}
+
+.event-container{
+    background-color:white;
+    width:600px;
+    padding:20px;
+    display:flex;
+ }
+ .event-container img{
+    width:250px;
+    height:150px;
+    border:1px solid black;
+    margin-right:20px;
+ }

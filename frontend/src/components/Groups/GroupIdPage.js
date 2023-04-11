@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, NavLink } from "react-router-dom";
 import { getGroup, getGroups } from "../../store/groups";
+import EventListItem from "../Events/EventListItem";
 
 function GroupIdPage() {
     const dispatch = useDispatch()
@@ -85,14 +86,7 @@ function GroupIdPage() {
                                     if (now.getTime() < eventDate.getTime())
 
                                         return (
-                                            <div className ="event-container">
-                                                <img src={event.previewImage} />
-                                                <div>
-                                                    <div>{event.startDate}</div>
-                                                    <h2>{event.name}</h2>
-                                                    <div>{event.Venue.city + ", " + event.Venue.state}</div>
-                                                </div>
-                                            </div>
+                                            <EventListItem key={event.id} event={event}/>
                                         )
                                 })
 
@@ -108,14 +102,7 @@ function GroupIdPage() {
                                     if (now.getTime() > eventDate.getTime())
 
                                         return (
-                                            <div key={event.id} className ="event-container">
-                                                <img src={event.previewImage} />
-                                                <div>
-                                                    <div>{event.startDate}</div>
-                                                    <h2>{event.name}</h2>
-                                                    <div>{event.Venue.city + ", " + event.Venue.state}</div>
-                                                </div>
-                                            </div>
+                                            <EventListItem key={event.id} event={event}/>
                                         )
                                 })
                             }
