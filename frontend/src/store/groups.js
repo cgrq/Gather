@@ -1,3 +1,4 @@
+import { compareEventDates } from "../utils/dates";
 const ADD_GROUPS = "groups/allGroups/add";
 const ADD_GROUP = "groups/add";
 
@@ -21,6 +22,9 @@ export const getGroups = () => async(dispatch) => {
     const eventsRes = await fetch("/api/events");
     const groupsData = await groupsRes.json();
     const eventsData = await eventsRes.json();
+    console.log(`🖥 ~ file: groups.js:25 ~ getGroups ~ eventsData ~ Before:`, eventsData)
+    eventsData.Events.sort(compareEventDates)
+    console.log(`🖥 ~ file: groups.js:28 ~ getGroups ~ eventsData ~ After:`, eventsData)
 
     const eventsByGroupId = {};
     eventsData.Events.forEach(event => {

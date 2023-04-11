@@ -14,10 +14,10 @@ function Groups(){
     },[dispatch])
 
     if(!groups) return null;
+
     if (groups.hasOwnProperty('optionalOrderedList')) {
         delete groups.optionalOrderedList;
     }
-
     return(
         <ResultsPage page="groups" dataObj={groups}></ResultsPage>
     )
