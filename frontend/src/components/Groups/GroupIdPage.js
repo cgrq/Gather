@@ -9,14 +9,6 @@ function GroupIdPage() {
     const group = useSelector(state => state.groups[groupId]);
     const groups = useSelector(state => state.groups.allGroups);
     const sessionUser = useSelector(state => state.session.user);
-    // const newDate = new Date();
-    // const year = newDate.getFullYear();
-    // const month = String(newDate.getMonth() + 1).padStart(2, '0');
-    // const day = String(newDate.getDate()).padStart(2, '0');
-    // const hours = String(newDate.getHours()).padStart(2, '0');
-    // const minutes = String(newDate.getMinutes()).padStart(2, '0');
-    // const seconds = String(newDate.getSeconds()).padStart(2, '0');
-    // const timeNow = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
     useEffect(() => {
         dispatch(getGroups());
