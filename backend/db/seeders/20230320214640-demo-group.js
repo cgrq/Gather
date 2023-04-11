@@ -12,7 +12,7 @@ module.exports = {
       {
         organizerId: 1,
         name: 'Tree Watchers',
-        about: "In botany, a tree is a perennial plant with an elongated stem, or trunk, usually supporting branches and leaves. In some usages, the definition of a tree may be narrower, including only woody plants with secondary growth, plants that are usable as lumber or plants above a specified height.",
+        about: "In botany, a tree is a perennial plant with an elongated stem, or trunk, usually supporting branches and leaves. In some usages, the definition of a tree may be narrower, including only woody plants with secondary growth.",
         type: "Online",
         private: false,
         city: "Tempe",
@@ -21,7 +21,7 @@ module.exports = {
       {
         organizerId: 1,
         name: 'People Watchers',
-        about: "People-watching or crowd watching is the act of observing people and their interactions as a subconscious doing. It involves picking up on idiosyncrasies to try to interpret or guess at another person's story, interactions, and relationships with the limited details they have. This includes speech in action, relationship interactions, body language, expressions, clothing and activities. Eavesdropping may accompany the activity, though is not required.",
+        about: "People-watching or crowd watching is the act of observing people and their interactions as a subconscious doing. Eavesdropping may accompany the activity, though is not required.",
         type: "In person",
         private: true,
         city: "Pheonix",
@@ -39,7 +39,7 @@ module.exports = {
       {
         organizerId: 2,
         name: 'Hitch Hikers',
-        about: "Hitchhiking is a means of transportation that is gained by asking individuals, usually strangers, for a ride in their car or other vehicle. The ride is usually, but not always, free. Nomads have also used hitchhiking as a primary mode of travel for the better part of the last century, and continue to do so today.",
+        about: "Hitchhiking is a means of transportation that is gained by asking individuals, usually strangers, for a ride in their car or other vehicle. Nomads have also used hitchhiking as a primary mode of travel for the better part of the last century.",
         type: "In person",
         private: false,
         city: "Tempe",
@@ -48,7 +48,7 @@ module.exports = {
       {
         organizerId: 3,
         name: 'Basketball Bunch',
-        about: "Basketball is a team sport in which two teams, most commonly of five players each, opposing one another on a rectangular court, compete with the primary objective of shooting a basketball through the defender's hoop, while preventing the opposing team from shooting through their own hoop.",
+        about: "Basketball is a team sport in which two teams opposing one another on a rectangular court, compete with the primary objective of shooting a basketball through the defender's hoop, while preventing the opposing team from shooting through their own hoop.",
         type: "In person",
         private: true,
         city: "Pheonix",
