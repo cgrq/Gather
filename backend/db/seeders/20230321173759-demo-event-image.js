@@ -36,7 +36,7 @@ module.exports = {
       },
       {
         eventId: 6,
-        url:"https://media.istockphoto.com/photos/large-group-of-cheerful-people-picture-id539077871?k=20&m=539077871&s=170667a&w=0&h=EFaz-wAHUE1etUQR___Ud78CWNNSxrj1CdH1b8cr7QA=",
+        url:"https://i.huffpost.com/gen/2201762/images/o-BIG-GROUP-OF-DIVERSE-PEOPLE-facebook.jpg",
         preview: true
       },
       {
@@ -71,7 +71,7 @@ module.exports = {
       },
       {
         eventId: 13,
-        url:"https://ca-times.brightspotcdn.com/dims4/default/2d17a6d/2147483647/strip/true/crop/5494x3663+0+0/resize/840x560!/quality/90/?url=https:%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2F2a%2F43%2F301d23144250a09c0ea9b9c8a9db%2Fla-photos-1staff-788547-me-post-pandemic-hoops-jja-0011.JPG",
+        url:"https://i.pinimg.com/originals/7b/7b/65/7b7b655e7cef1495f7fb2d22c712602e.jpg",
         preview: true
       },
       {
