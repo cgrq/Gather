@@ -1,20 +1,19 @@
-.isDisabled{
+.looksDisabled{
     color:rgb(188, 188, 188) !important;
-    pointer-events: none;
     text-decoration: none;
 }
 
 .results-container{
-
+    width:40%;
+    margin:auto;
 }
+
+/* Header */
 
 .results-header-container{
     display:flex;
     flex-flow:column nowrap;
     align-items: flex-start;
-    width:40%;
-    margin:auto;
-    border:1px solid black
 }
 .results-header-container ul{
     display:flex;
@@ -37,4 +36,10 @@
 
 .results-nav li a{
     color:teal;
+}
+
+/* Body */
+
+.results-body-container{
+
 }

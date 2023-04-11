@@ -29,6 +29,9 @@ function App() {
           <Route exact path="/events">
             <Events />
           </Route>
+          <Route path="/groups/:groupId">
+            
+          </Route>
         </Switch>}
     </>
   );

@@ -1,1 +1,29 @@
+.nav-link{
+    text-decoration: none !important;
+}
 
+/* Group List Item */
+.item-container{
+    display:flex;
+    width:100%;
+    border-top:1px solid black;
+}
+.image-container {
+    width:250px;
+    height:150px;
+    border:1px solid rgb(210, 210, 210);
+}
+.image-container > img {
+    object-fit: contain;
+}
+
+.text-container{
+    display:flex;
+    flex-flow:column nowrap;
+    color:black;
+    margin:0 auto;
+}
+ .about{
+    width:400px;
+
+ }
