@@ -37,7 +37,7 @@ function GroupIdPage() {
                         <NavLink to="/groups">{"< Groups"}</NavLink>
                     </div>
                     <div className="group-page-content-row">
-                        <img src={group.GroupImages[0]} />
+                        <img src={group.GroupImages[0].url} />
                         <div>
                             <h1 className="group-name">{group.name}</h1>
                             <div>{group.city + ", " + group.state} </div>
