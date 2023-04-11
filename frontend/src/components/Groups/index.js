@@ -7,7 +7,7 @@ import { getGroups } from "../../store/groups";
 function Groups(){
     const dispatch = useDispatch()
     const groups = useSelector(state => state.groups.allGroups);
-
+    
     useEffect(()=>{
         dispatch(getGroups());
     },[dispatch])

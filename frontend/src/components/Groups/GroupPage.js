@@ -1,21 +1,26 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, NavLink } from "react-router-dom";
-import { getGroup } from "../../store/groups";
+import { getGroup, getGroups } from "../../store/groups";
 
 function GroupPage() {
-    const { groupId } = useParams();
     const dispatch = useDispatch()
+    const { groupId } = useParams();
     const group = useSelector(state => state.groups[groupId]);
-    const groups = useSelector(state => state.groups.allGroups)
-    const numberOfEvents = groups[groupId].events ? groups[groupId].events.length : 0;
+    const groups = useSelector(state => state.groups.allGroups);
+    const sessionUser = useSelector(state => state.session.user);
 
+    useEffect(() => {
+        dispatch(getGroups());
+    }, [dispatch])
     useEffect(() => {
         dispatch(getGroup(groupId));
     }, [dispatch])
 
-    if (!group) return null;
+    if (!group || !groups) return null;
 
+    const isOrganizer = (sessionUser && sessionUser.id) === group.Organizer.id;
+    const numberOfEvents = groups[groupId].events.length > 0 ? groups[groupId].events.length : 0;
     return (
         <div className="group-page-container">
             <div className="group-page-top-container">
@@ -27,10 +32,20 @@ function GroupPage() {
                     <div>
                         <div>{group.name}</div>
                         <div>{group.location}</div>
-                        <div>{`${numberOfEvents} ${(numberOfEvents === 1) ? "event" : "events"} · ${groups[groupId].private ? "Private" : "Public"}`}</div>
+                        <div>{`${numberOfEvents}
+                                ${(numberOfEvents === 1)
+                                ? "event"
+                                : "events"}
+                                ·
+                                ${groups[groupId].private
+                                ? "Private"
+                                : "Public"}`}</div>
                         <div>{ }</div>
-                        <div>{`Organized by ${group.Organizer.firstName} ${group.Organizer.lastName}`}</div>
-                        <button>Join this group</button>
+                        <div>{`Organized by: ${group.Organizer.firstName} ${group.Organizer.lastName}`}</div>
+                        {
+                            (isOrganizer || !sessionUser)
+                                ? ""
+                                :<button>Join this group</button>}
                     </div>
                 </div>
             </div>
@@ -44,7 +59,22 @@ function GroupPage() {
                     <p>{groups[groupId].about}</p>
                 </div><div className="group-page-bottom-row">
                     <h2>Upcoming Events</h2>
-                    <p></p>
+                    <p>
+                        {
+                            groups[groupId].events
+                                ? groups[groupId].events.map(event => (
+                                    <div>
+                                        <img src={event.previewImage} />
+                                        <div>
+                                            <div>{event.startDate}</div>
+                                            <div>{event.name}</div>
+                                            <div>{event.Venue.city + ", " + event.Venue.state}</div>
+                                        </div>
+                                    </div>
+                                ))
+                                : <div>No upcoming events</div>
+                        }
+                    </p>
                 </div>
             </div>
         </div>
