@@ -7,7 +7,9 @@ import { getGroups } from "../../store/groups";
 function Groups(){
     const dispatch = useDispatch()
     const groups = useSelector(state => state.groups.allGroups);
-    
+    console.log(`🖥 ~ file: index.js:10 ~ Groups ~ groups:`, groups)
+    delete groups.optionalOrderedList
+
     useEffect(()=>{
         dispatch(getGroups());
     },[dispatch])

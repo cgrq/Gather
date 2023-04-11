@@ -1,9 +1,8 @@
 import { NavLink } from "react-router-dom";
 
 function GroupListItem({group}){
-    console.log(`🖥 ~ file: GroupListItem.js:4 ~ GroupListItem ~ group:`, group)
     return(
-        <NavLink to={`groups/${group.id}`} className="nav-link">
+        <NavLink  to={`groups/${group.id}`} className="nav-link">
             <div className="item-container">
                 <div className="image-container">
                     <img src={group.previewImage} />

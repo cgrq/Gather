@@ -108,7 +108,7 @@ function GroupIdPage() {
                                     if (now.getTime() > eventDate.getTime())
 
                                         return (
-                                            <div className ="event-container">
+                                            <div key={event.id} className ="event-container">
                                                 <img src={event.previewImage} />
                                                 <div>
                                                     <div>{event.startDate}</div>

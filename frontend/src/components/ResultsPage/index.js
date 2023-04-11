@@ -26,8 +26,7 @@ function ResultsPage({ page, dataObj }) {
             <div className="results-body-container">
                 {
                     page === "groups"
-                        ? data.map((item) => <GroupListItem group={item} />)
-                        : <></>
+                        && data.map((group) => <GroupListItem key={group.id} group={group} />)
                 }
             </div>
         </div>
