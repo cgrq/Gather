@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, NavLink } from "react-router-dom";
 import { getGroup, getGroups } from "../../store/groups";
 
-function GroupPage() {
+function GroupIdPage() {
     const dispatch = useDispatch()
     const { groupId } = useParams();
     const group = useSelector(state => state.groups[groupId]);
@@ -135,4 +135,4 @@ function GroupPage() {
     )
 }
 
-export default GroupPage;
+export default GroupIdPage;

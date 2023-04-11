@@ -6,7 +6,7 @@ import Navigation from "./components/Navigation";
 import Home from "./components/Home";
 import Groups from "./components/Groups";
 import Events from "./components/Events";
-import GroupPage from "./components/Groups/GroupPage";
+import GroupIdPage from "./components/Groups/GroupIdPage";
 
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
             <Events />
           </Route>
           <Route path="/groups/:groupId">
-            <GroupPage />
+            <GroupIdPage />
           </Route>
         </Switch>}
     </>

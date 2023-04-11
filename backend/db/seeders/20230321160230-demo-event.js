@@ -17,19 +17,63 @@ module.exports = {
         type: "Online",
         capacity: 10,
         price: 0,
-        startDate: new Date(2023, 10, 26, 9, 0, 0),
-        endDate: new Date(2023, 10, 26, 10, 0, 0)
+        startDate: new Date(2021, 11, 26, 9, 0, 0),
+        endDate: new Date(2021, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 1,
+        groupId: 1,
+        name: "Second meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2022, 11, 26, 9, 0, 0),
+        endDate: new Date(2022, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 1,
+        groupId: 1,
+        name: "Third meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2023, 11, 26, 9, 0, 0),
+        endDate: new Date(2023, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 2,
+        groupId: 2,
+        name: "Inital meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2021, 11, 26, 9, 0, 0),
+        endDate: new Date(2021, 11, 26, 10, 0, 0)
       },
       {
         venueId: 2,
         groupId: 2,
         name: "Second meetup",
         description: "A meeting of the minds",
-        type: "In person",
-        capacity: 15,
-        price: 10,
-        startDate: new Date(2023, 9, 20, 8, 0, 0),
-        endDate: new Date(2023, 9, 20, 9, 0, 0)
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2022, 11, 26, 9, 0, 0),
+        endDate: new Date(2022, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 2,
+        groupId: 2,
+        name: "Third meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2023, 11, 26, 9, 0, 0),
+        endDate: new Date(2023, 11, 26, 10, 0, 0)
       },
       {
         venueId: 3,
@@ -37,11 +81,132 @@ module.exports = {
         name: "Inital meetup",
         description: "A meeting of the minds",
         type: "Online",
-        capacity: 20,
-        price: 5,
-        startDate: new Date(2023, 8, 10, 6, 0, 0),
-        endDate: new Date(2023, 8, 10, 7, 0, 0)
-      }
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2021, 11, 26, 9, 0, 0),
+        endDate: new Date(2021, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 3,
+        groupId: 3,
+        name: "Second meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2022, 11, 26, 9, 0, 0),
+        endDate: new Date(2022, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 3,
+        groupId: 3,
+        name: "Third meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2023, 11, 26, 9, 0, 0),
+        endDate: new Date(2023, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 4,
+        groupId: 4,
+        name: "Inital meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2021, 11, 26, 9, 0, 0),
+        endDate: new Date(2021, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 4,
+        groupId: 4,
+        name: "Second meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2022, 11, 26, 9, 0, 0),
+        endDate: new Date(2022, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 4,
+        groupId: 4,
+        name: "Third meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2023, 11, 26, 9, 0, 0),
+        endDate: new Date(2023, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 5,
+        groupId: 5,
+        name: "Inital meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2021, 11, 26, 9, 0, 0),
+        endDate: new Date(2021, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 5,
+        groupId: 5,
+        name: "Second meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2022, 11, 26, 9, 0, 0),
+        endDate: new Date(2022, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 5,
+        groupId: 5,
+        name: "Third meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2023, 11, 26, 9, 0, 0),
+        endDate: new Date(2023, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 6,
+        groupId: 6,
+        name: "Inital meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2021, 11, 26, 9, 0, 0),
+        endDate: new Date(2021, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 6,
+        groupId: 6,
+        name: "Second meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2022, 11, 26, 9, 0, 0),
+        endDate: new Date(2022, 11, 26, 10, 0, 0)
+      },
+      {
+        venueId: 6,
+        groupId: 6,
+        name: "Third meetup",
+        description: "A meeting of the minds",
+        type: "Online",
+        capacity: 10,
+        price: 0,
+        startDate: new Date(2023, 11, 26, 9, 0, 0),
+        endDate: new Date(2023, 11, 26, 10, 0, 0)
+      },
     ], {});
   },
 

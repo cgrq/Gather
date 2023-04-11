@@ -20,6 +20,7 @@
 }
 .image-container > img {
     object-fit: contain;
+    width:250px;
 }
 
 .text-container{
