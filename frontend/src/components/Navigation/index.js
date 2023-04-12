@@ -11,7 +11,7 @@ function Navigation({ isLoaded }) {
     <div className="nav-list">
 
       <NavLink className="gather-title" exact to="/">
-        <img src="./logo.png" alt="Gather" />
+        <img src={process.env.PUBLIC_URL + "/logo.png"} alt="Gather" />
       </NavLink>
 
       {isLoaded && (

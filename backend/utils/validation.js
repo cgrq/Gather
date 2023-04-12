@@ -23,6 +23,11 @@ const handleValidationErrors = (req, _res, next) => {
   next();
 };
 
+function isValidURL(url) {
+  const regex = /^https?:\/\/.*\.(gif|jpe?g|tiff?|png|webp|bmp)$/i;
+  return regex.test(url);
+}
+
 module.exports = {
-  handleValidationErrors
+  handleValidationErrors, isValidURL
 };

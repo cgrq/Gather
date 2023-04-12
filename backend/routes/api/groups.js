@@ -9,7 +9,7 @@ const router = express.Router();
 const { requireAuth, verifyCohostStatus } = require('../../utils/auth')
 const { formatDate, parseDate } = require('../../utils/date')
 const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const { handleValidationErrors, isValidURL } = require('../../utils/validation');
 
 
 const validateGroup = [
@@ -45,6 +45,21 @@ const validateGroup = [
     handleValidationErrors
 ];
 
+const validateImage = [
+    check('url')
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .withMessage('Image Url is required')
+      .custom(url => {
+        if (!isValidURL(url)) {
+            throw new Error('Invalid URL');
+        }
+        return true;
+    })
+      .withMessage('Invalid URL'),
+    handleValidationErrors
+  ];
+
 const validateVenue = [
     check('address')
         .exists({ checkFalsy: true })
@@ -75,7 +90,7 @@ const validateEvent = [
         .notEmpty()
         .custom(async id => {
             const venue = await Venue.findByPk(id);
-            if(!venue){
+            if (!venue) {
                 throw new Error('Venue does not exist');
             }
             return true;
@@ -292,7 +307,7 @@ router.post(
         const createdAt = formatDate(group.createdAt);
         const updatedAt = formatDate(group.updatedAt);
 
-        await Membership.create({userId:organizerId, groupId:id, status:"organizer(host)"});
+        await Membership.create({ userId: organizerId, groupId: id, status: "organizer(host)" });
 
         return res.json({
             id,
@@ -313,7 +328,7 @@ router.post(
 // Add an Image to a Group based on the Group's id
 router.post(
     '/:groupId/images',
-    requireAuth,
+    [requireAuth, validateImage],
     async (req, res, next) => {
 
         const { groupId } = req.params;
@@ -540,7 +555,7 @@ router.get(
             const eventsFormatted = events.map(event => {
                 const { id, groupId, venueId, name, type, startDate, endDate } = event;
                 const numAttending = event.Attendances.length;
-                const previewImage = event.EventImages[0] ? event.EventImages[0].url: "no image";
+                const previewImage = event.EventImages[0] ? event.EventImages[0].url : "no image";
                 const Group = event.Group;
                 const Venue = event.Venue;
 
@@ -587,7 +602,7 @@ router.post(
 
             const event = await Event.create({ groupId, venueId, name, type, capacity, price, description, startDate, endDate });
 
-            await Attendance.create({eventId: event.id, userId, status:"attending"})
+            await Attendance.create({ eventId: event.id, userId, status: "attending" })
 
             const id = event.id;
 
@@ -746,7 +761,7 @@ router.put(
                 next(err);
             }
 
-            const memberMembership = await Membership.unscoped().findOne({ where: { userId:memberId, groupId } });
+            const memberMembership = await Membership.unscoped().findOne({ where: { userId: memberId, groupId } });
 
             if (!memberMembership) {
                 const err = new Error("Membership between the user and the group does not exist");
@@ -817,7 +832,7 @@ router.delete(
                 next(err);
             }
 
-            const memberMembership = await Membership.unscoped().findOne({ where: { userId:memberId, groupId } });
+            const memberMembership = await Membership.unscoped().findOne({ where: { userId: memberId, groupId } });
 
             if (!memberMembership) {
                 const err = new Error("Membership does not exist for this User");

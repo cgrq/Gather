@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { createGroup, createGroupImage } from "../../store/groups"
 import { useHistory } from 'react-router-dom';
+import {isValidURL} from '../../utils/validation'
 
 function CreateGroupPage() {
     const history = useHistory();
@@ -36,6 +37,9 @@ function CreateGroupPage() {
             const data = await res.json();
             if (data && data.errors) {
                 setErrors((prevState) => {
+                    if(url.length === 0) data.errors.url = "Image Url is required";
+                    else if (!isValidURL(url)) data.errors.url = "Invalid URL";
+
                     return {
                         ...prevState,
                         ...data.errors,
@@ -56,7 +60,7 @@ function CreateGroupPage() {
             }
         });
 
-        if(group.id) history.push(`/groups/${group.id}`);
+        if(group.id && image.url) history.push(`/groups/${group.id}`);
     }
 
 return (

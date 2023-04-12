@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, NavLink } from "react-router-dom";
 import { getGroup, getGroups } from "../../store/groups";
@@ -6,10 +6,17 @@ import EventListItem from "../Events/EventListItem";
 
 function GroupIdPage() {
     const dispatch = useDispatch()
+    const [imageUrl, setImageUrl] = useState(process.env.PUBLIC_URL + "/default-image.png")
     const { groupId } = useParams();
     const group = useSelector(state => state.groups[groupId]);
     const groups = useSelector(state => state.groups.allGroups);
     const sessionUser = useSelector(state => state.session.user);
+
+    useEffect(()=>{
+        if (group && group.hasOwnProperty("GroupImages") && group.GroupImages.length > 0) {
+            setImageUrl(group.GroupImages[0].url)
+        }
+    }, [group])
 
     useEffect(() => {
         dispatch(getGroups());
@@ -41,7 +48,7 @@ function GroupIdPage() {
                         <NavLink to="/groups">{"< Groups"}</NavLink>
                     </div>
                     <div className="group-page-content-row">
-                        <img src={group.GroupImages ? group.GroupImages[0].url : ""} />
+                        <img onError={()=>setImageUrl(process.env.PUBLIC_URL + "/default-image.png")} src={imageUrl} />
                         <div>
                             <h1 className="group-name">{group.name}</h1>
                             <div>{group.city + ", " + group.state} </div>
