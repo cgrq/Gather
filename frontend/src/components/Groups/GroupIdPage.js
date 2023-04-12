@@ -13,15 +13,26 @@ function GroupIdPage() {
 
     useEffect(() => {
         dispatch(getGroups());
-    }, [dispatch])
+    }, [dispatch, groupId])
     useEffect(() => {
         dispatch(getGroup(groupId));
-    }, [dispatch])
+    }, [dispatch, groupId])
 
-    if (!group || !groups) return null;
+    if (!group || !groups || !group.hasOwnProperty("GroupImages") || !groups[groupId] || !(groups.hasOwnProperty(groupId))) return null;
+    let isOrganizer;
+    if(group.Organizer){
+        console.log(`🖥 ~ file: GroupIdPage.js:24 ~ GroupIdPage ~ group.Organizer:`, group.Organizer)
+        isOrganizer = (sessionUser && sessionUser.id) === group.Organizer.id;
+    }
+    let numberOfEvents = 0;
 
-    const isOrganizer = (sessionUser && sessionUser.id) === group.Organizer.id;
-    const numberOfEvents = groups[groupId].events.length > 0 ? groups[groupId].events.length : 0;
+    if(groups[groupId] && !(groups[groupId].hasOwnProperty("events"))){
+        groups[groupId].events = [];
+    }
+
+    if(groups[groupId] && groups[groupId].hasOwnProperty("events") && groups[groupId].events && groups[groupId].events.length > 0){
+        numberOfEvents = groups[groupId].events.length;
+    }
     return (
         <div className="group-page-container">
             <div className="group-page-top-background">
@@ -30,7 +41,7 @@ function GroupIdPage() {
                         <NavLink to="/groups">{"< Groups"}</NavLink>
                     </div>
                     <div className="group-page-content-row">
-                        <img src={group.GroupImages[0].url} />
+                        <img src={group.GroupImages ? group.GroupImages[0].url : ""} />
                         <div>
                             <h1 className="group-name">{group.name}</h1>
                             <div>{group.city + ", " + group.state} </div>
@@ -39,7 +50,7 @@ function GroupIdPage() {
                                     ? "event"
                                     : "events"}
                                 ·
-                                ${groups[groupId].private
+                                ${groups[groupId] && groups[groupId].private
                                     ? "Private"
                                     : "Public"}`}</div>
                             <div>{ }</div>

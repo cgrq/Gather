@@ -6,44 +6,44 @@ const ADD_GROUP = "groups/add";
 
 
 const addGroups = (groups) => {
-    return {
-        type:ADD_GROUPS,
-        groups
-    }
+  return {
+    type: ADD_GROUPS,
+    groups
+  }
 }
 
 const addGroup = (group) => {
   console.log("In action creator")
   return {
-      type:ADD_GROUP,
-      group
+    type: ADD_GROUP,
+    group
   }
 }
 
-export const getGroups = () => async(dispatch) => {
-    const groupsRes = await fetch("/api/groups");
-    const eventsRes = await fetch("/api/events");
-    const groupsData = await groupsRes.json();
-    const eventsData = await eventsRes.json();
-    eventsData.Events.sort(compareEventDates)
+export const getGroups = () => async (dispatch) => {
+  const groupsRes = await fetch("/api/groups");
+  const eventsRes = await fetch("/api/events");
+  const groupsData = await groupsRes.json();
+  const eventsData = await eventsRes.json();
+  eventsData.Events.sort(compareEventDates)
 
-    const eventsByGroupId = {};
-    eventsData.Events.forEach(event => {
-      if(eventsByGroupId[event.groupId]) eventsByGroupId[event.groupId].push(event);
-      else eventsByGroupId[event.groupId] = [event]
-    })
+  const eventsByGroupId = {};
+  eventsData.Events.forEach(event => {
+    if (eventsByGroupId[event.groupId]) eventsByGroupId[event.groupId].push(event);
+    else eventsByGroupId[event.groupId] = [event]
+  })
 
-    const data = groupsData.Groups.map((group)=>{
-      group.events = eventsByGroupId[group.id];
-      return group;
-    })
-    dispatch(addGroups(data));
-    return data;
+  const data = groupsData.Groups.map((group) => {
+    group.events = eventsByGroupId[group.id];
+    return group;
+  })
+  dispatch(addGroups(data));
+  return data;
 }
 
-export const createGroup = (group) => async(dispatch) => {
+export const createGroup = (group) => async (dispatch) => {
   const { name, about, isPrivate, type, city, state } = group;
-  const res = await csrfFetch("/api/groups", {
+  const groupRes = await csrfFetch("/api/groups", {
     method: "POST",
     body: JSON.stringify({
       name,
@@ -54,14 +54,28 @@ export const createGroup = (group) => async(dispatch) => {
       state
     }),
   });
-  if(res.ok){
-    const data = await res.json();
-    dispatch(addGroup(data));
-    return res;
-  }
+  const data = await groupRes.json();
+
+  dispatch(addGroup(data));
+  return data;
+}
+export const createGroupImage = (image) => async (dispatch) => {
+  const {groupId, url} = image;
+  const res = await csrfFetch(`/api/groups/${groupId}/images`, {
+    method: "POST",
+    body: JSON.stringify({
+      url,
+      preview: true
+    }),
+  });
+  const data = await res.json();
+
+  dispatch(addGroup(data));
+  return res;
 }
 
-export const getGroup = (groupId) => async(dispatch) => {
+
+export const getGroup = (groupId) => async (dispatch) => {
   console.log("In thunk")
   const res = await fetch(`/api/groups/${groupId}`);
   const data = await res.json();
@@ -73,24 +87,24 @@ export const getGroup = (groupId) => async(dispatch) => {
 const groupsReducer = (state = [], action) => {
   console.log(`🖥 ~ file: groups.js:73 ~ groupsReducer ~ action:`, action)
   console.log("IN REDUCER")
-    const newState = {...state};
-    switch (action.type) {
-      case ADD_GROUPS:
-        newState.allGroups = {}
+  const newState = { ...state };
+  switch (action.type) {
+    case ADD_GROUPS:
+      newState.allGroups = {}
 
-        action.groups.forEach(group => {
-            newState.allGroups[group.id] = group
-          });
+      action.groups.forEach(group => {
+        newState.allGroups[group.id] = group
+      });
 
-        newState.allGroups.optionalOrderedList = [];
-        return newState;
-      case ADD_GROUP:
-          newState[action.group.id] = action.group
+      newState.allGroups.optionalOrderedList = [];
+      return newState;
+    case ADD_GROUP:
+      newState[action.group.id] = action.group
 
-          return newState;
-      default:
-        return state;
-    }
-  };
+      return newState;
+    default:
+      return state;
+  }
+};
 
-  export default groupsReducer;
+export default groupsReducer;

@@ -105,3 +105,36 @@
 .event-page-details-date-pair-label{
     margin-right:10px;
 }
+
+/* Create Group Page */
+
+.create-group-page-container{
+    display:flex;
+    flex-flow:column;
+    width:70%;
+    margin:0 auto;
+}
+
+.create-group-page-row{
+     border-bottom:1px solid black;
+     padding:30px 0;
+     display:flex;
+     flex-flow: column;
+}
+
+.create-group-page-row button,.create-group-page-row textarea,.create-group-page-row input, .create-group-page-row select{
+    max-width: 200px;
+}
+
+.create-group-page-sub-row{
+    display:flex;
+    flex-flow:column;
+}
+
+.create-group-page-list{
+    margin-left:15px;
+}
+
+.create-group-page-errors{
+    color:red;
+}
