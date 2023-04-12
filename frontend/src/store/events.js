@@ -16,6 +16,40 @@ const addEvents = (events) => {
     }
 }
 
+export const createEvent = (group) => async (dispatch) => {
+    const { name, type, isPrivate, price, startDate, endDate, description } = group;
+    const groupRes = await csrfFetch("/api/events", {
+      method: "POST",
+      body: JSON.stringify({
+        name,
+        private: isPrivate,
+        type,
+        price,
+        startDate,
+        endDate,
+        description
+      }),
+    });
+    const data = await groupRes.json();
+
+    dispatch(addEvent(data));
+    return data;
+  }
+  export const createEventImage = (image) => async (dispatch) => {
+    const {eventId, url} = image;
+    const res = await csrfFetch(`/api/events/${eventId}/images`, {
+      method: "POST",
+      body: JSON.stringify({
+        url,
+        preview: true
+      }),
+    });
+    const data = await res.json();
+
+    dispatch(addGroup(data));
+    return res;
+  }
+
 export const getEvent = (eventId) => async (dispatch) => {
     const res = await fetch(`/api/events/${eventId}`);
     const data = await res.json();

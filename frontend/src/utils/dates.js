@@ -27,3 +27,19 @@ export const seperateDateAndTime = (dateTimeString) => {
     const time = newDate.toLocaleTimeString();
     return [date,time];
 }
+
+export function padZeros(num) {
+    return num.toString().padStart(2, '0');
+  }
+
+export function formatDate(unformattedDate) {
+    const date = new Date(unformattedDate);
+    return `${date.getFullYear()}-${padZeros(date.getMonth() + 1)}-${padZeros(date.getDate())} ${padZeros(date.getHours())}:${padZeros(date.getMinutes())}:${padZeros(date.getSeconds())}`;
+}
+
+export function parseDate(dateString) {
+    const [datePart, timePart] = dateString.split(' ');
+    const [year, month, day] = datePart.split('-');
+    const [hour, minute, second] = timePart.split(':');
+    return new Date(year, month - 1, day, hour, minute, second);
+  }

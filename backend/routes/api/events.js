@@ -10,7 +10,7 @@ const router = express.Router();
 const { requireAuth, verifyMemberStatus, verifyCohostStatus } = require('../../utils/auth');
 const { formatDate, parseDate } = require('../../utils/date');
 const { check, query } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const { handleValidationErrors, isValidURL } = require('../../utils/validation');
 
 const validateEvent = [
     check('venueId')
@@ -64,6 +64,21 @@ const validateEvent = [
         .withMessage("End date is less than start date"),
     handleValidationErrors
 ];
+
+const validateImage = [
+    check('url')
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .withMessage('Image Url is required')
+      .custom(url => {
+        if (!isValidURL(url)) {
+            throw new Error('Invalid URL');
+        }
+        return true;
+    })
+      .withMessage('Invalid URL'),
+    handleValidationErrors
+  ];
 
 const validateEventQueries = [
     query('page')
@@ -288,7 +303,7 @@ router.put(
 // Create an EventImage for a Group specified by its id
 router.post(
     '/:eventId/images',
-    [requireAuth, verifyMemberStatus],
+    [requireAuth ,verifyMemberStatus, validateImage],
     async (req, res, next) => {
         try {
             const { eventId } = req.params;
