@@ -75,9 +75,10 @@ function GroupIdPage() {
                     <div className="group-page-bottom-row">
                         <h2>What we're about</h2>
                         <p>{groups[groupId].about}</p>
-                    </div><div className="group-page-bottom-row">
+                    </div>
+                    <div className="group-page-bottom-row group-page-events-row">
                         <h2>Upcoming Events</h2>
-                        <p>
+                        <div>
                             {
                                 groups[groupId].events
                                 && groups[groupId].events.map(event => {
@@ -91,9 +92,9 @@ function GroupIdPage() {
                                 })
 
                             }
-                        </p>
+                        </div>
                         <h2>Past Events</h2>
-                        <p>
+                        <div>
                             {
                                 groups[groupId].events
                                 && groups[groupId].events.map(event => {
@@ -106,7 +107,7 @@ function GroupIdPage() {
                                         )
                                 })
                             }
-                        </p>
+                        </div>
                     </div>
                 </div>
             </div>

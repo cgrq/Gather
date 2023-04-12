@@ -22,9 +22,7 @@ export const getGroups = () => async(dispatch) => {
     const eventsRes = await fetch("/api/events");
     const groupsData = await groupsRes.json();
     const eventsData = await eventsRes.json();
-    console.log(`🖥 ~ file: groups.js:25 ~ getGroups ~ eventsData ~ Before:`, eventsData)
     eventsData.Events.sort(compareEventDates)
-    console.log(`🖥 ~ file: groups.js:28 ~ getGroups ~ eventsData ~ After:`, eventsData)
 
     const eventsByGroupId = {};
     eventsData.Events.forEach(event => {
@@ -62,7 +60,6 @@ const groupsReducer = (state = [], action) => {
         return newState;
       case ADD_GROUP:
           newState[action.group.id] = action.group
-          console.log(`🖥 ~ file: groups.js:61 ~ groupsReducer ~ action.group:`, action.group)
 
           return newState;
       default:

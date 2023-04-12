@@ -17,3 +17,13 @@ export const compareEventDates = (a, b) => {
     );
     return dateB - dateA;
 };
+
+export const seperateDateAndTime = (dateTimeString) => {
+    const [dateString, timeString] = dateTimeString.split(" ");
+    const [year, month, day] = dateString.split("-");
+    const [hours, minutes, seconds] = timeString.split(":");
+    const newDate = new Date(year, month - 1, day, hours, minutes, seconds);
+    const date = newDate.toLocaleDateString();
+    const time = newDate.toLocaleTimeString();
+    return [date,time];
+}

@@ -12,6 +12,10 @@ i{
     width:140px;
 }
 
+.right-nav-container{
+    display:flex;
+    align-items: center;
+}
 
 .nav-list{
     list-style: none;
@@ -26,6 +30,7 @@ i{
 .profile-container{
     position:relative;
     display:flex;
+    margin-left:20px;
     justify-content: flex-end;
 }
 

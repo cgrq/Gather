@@ -21,7 +21,7 @@ function SectionThree(){
                 caption={seeAllGroupsCaption} />
             <ActionCard
                 iconImgPath={"./placeholder-icon.png"}
-                linkPath={"/"}
+                linkPath={"/groups/new"}
                 title={"Start a group"}
                 caption={seeAllGroupsCaption}
                 disabled={sessionUser ? false : true} />

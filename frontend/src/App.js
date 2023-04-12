@@ -7,6 +7,8 @@ import Home from "./components/Home";
 import Groups from "./components/Groups";
 import Events from "./components/Events";
 import GroupIdPage from "./components/Groups/GroupIdPage";
+import EventIdPage from "./components/Events/EventIdPage";
+import CreateGroupPage from "./components/Groups/CreateGroupPage";
 
 
 function App() {
@@ -24,14 +26,20 @@ function App() {
           <Route exact path="/">
             <Home />
           </Route>
+          <Route path="/groups/new">
+            <CreateGroupPage />
+          </Route>
+          <Route path="/groups/:groupId">
+            <GroupIdPage />
+          </Route>
           <Route exact path="/groups">
             <Groups />
           </Route>
           <Route exact path="/events">
             <Events />
           </Route>
-          <Route path="/groups/:groupId">
-            <GroupIdPage />
+          <Route path="/events/:eventId">
+            <EventIdPage />
           </Route>
         </Switch>}
     </>
