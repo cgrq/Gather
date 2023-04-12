@@ -1,3 +1,5 @@
+import { csrfFetch } from "./csrf";
+
 import { compareEventDates } from "../utils/dates";
 const ADD_GROUPS = "groups/allGroups/add";
 const ADD_GROUP = "groups/add";
@@ -11,6 +13,7 @@ const addGroups = (groups) => {
 }
 
 const addGroup = (group) => {
+  console.log("In action creator")
   return {
       type:ADD_GROUP,
       group
@@ -38,7 +41,28 @@ export const getGroups = () => async(dispatch) => {
     return data;
 }
 
+export const createGroup = (group) => async(dispatch) => {
+  const { name, about, isPrivate, type, city, state } = group;
+  const res = await csrfFetch("/api/groups", {
+    method: "POST",
+    body: JSON.stringify({
+      name,
+      about,
+      type,
+      private: isPrivate,
+      city,
+      state
+    }),
+  });
+  if(res.ok){
+    const data = await res.json();
+    dispatch(addGroup(data));
+    return res;
+  }
+}
+
 export const getGroup = (groupId) => async(dispatch) => {
+  console.log("In thunk")
   const res = await fetch(`/api/groups/${groupId}`);
   const data = await res.json();
 
@@ -47,6 +71,8 @@ export const getGroup = (groupId) => async(dispatch) => {
 }
 
 const groupsReducer = (state = [], action) => {
+  console.log(`🖥 ~ file: groups.js:73 ~ groupsReducer ~ action:`, action)
+  console.log("IN REDUCER")
     const newState = {...state};
     switch (action.type) {
       case ADD_GROUPS:
