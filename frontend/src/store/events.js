@@ -2,8 +2,9 @@ import { csrfFetch } from "./csrf";
 
 const ADD_EVENT = "events/:eventId/add";
 const ADD_EVENTS = "events/allEvents/add";
-
 const ADD_IMAGE = "events/:eventId/images/add";
+const DELETE_EVENT = "events/:eventId/delete";
+
 
 const addEvent = (event) => {
   return {
@@ -15,6 +16,12 @@ const addEvents = (events) => {
   return {
     type: ADD_EVENTS,
     events
+  }
+}
+const deleteEvent = (eventId) => {
+  return {
+    type: DELETE_EVENT,
+    eventId
   }
 }
 const addImage = (eventId, image) => {
@@ -73,6 +80,17 @@ export const createEventImage = (image) => async (dispatch) => {
   return imageData;
 }
 
+export const removeEvent = (eventId) => async (dispatch) => {
+
+  const eventRes = await csrfFetch(`/api/events/${eventId}`, {
+    method: "DELETE",
+  });
+  const data = await eventRes.json();
+
+  dispatch(deleteEvent(data));
+  return data;
+}
+
 export const getEvent = (eventId) => async (dispatch) => {
   const res = await fetch(`/api/events/${eventId}`);
   const data = await res.json();
@@ -105,6 +123,10 @@ const eventsReducer = (state = [], action) => {
       return newState;
     case ADD_IMAGE:
       newState[action.eventId].EventImages = [action.image.url]
+
+      return newState;
+    case DELETE_EVENT:
+      delete newState[action.groupId];
 
       return newState;
     default:

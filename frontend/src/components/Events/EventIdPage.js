@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, NavLink } from "react-router-dom";
 import "./Events.css";
@@ -6,14 +6,19 @@ import { getGroup } from "../../store/groups";
 import { getEvent } from "../../store/events";
 import GroupPreview from "../Groups/GroupPreview";
 import { seperateDateAndTime } from "../../utils/dates";
+import DeleteAnEventModal from "./DeleteAnEventModal";
+import OpenModalButton from '../OpenModalButton';
 
 function EventIdPage() {
+    const ulRef = useRef();
     const dispatch = useDispatch()
     const { eventId } = useParams();
     const event = useSelector(state => state.events[eventId]);
     const groupState = useSelector(state => state.groups)
     // const events = useSelector(state => state.events.allEvents);
     const sessionUser = useSelector(state => state.session.user);
+    const [showMenu, setShowMenu] = useState(false);
+
 
     useEffect(() => {
         dispatch(getEvent(eventId));
@@ -25,6 +30,22 @@ function EventIdPage() {
             dispatch(getGroup(groupId));
         };
     }, [dispatch, event])
+
+    useEffect(() => {
+        if (!showMenu) return;
+
+        const closeMenu = (e) => {
+            if (!ulRef.current.contains(e.target)) {
+                setShowMenu(false);
+            }
+        };
+
+        document.addEventListener('click', closeMenu);
+
+        return () => document.removeEventListener("click", closeMenu);
+    }, [showMenu]);
+
+    const closeMenu = () => setShowMenu(false);
 
 
     if (!event || !groupState || !event.Group || !event.EventImages || event.EventImages.length === 0) return null;
@@ -96,7 +117,10 @@ function EventIdPage() {
                                         isOrganizer
                                             &&  <div className="event-page-details-card-buttons">
                                                     <button>Update</button>
-                                                    <button>Delete</button>
+                                                    <OpenModalButton
+                                            buttonText="Delete"
+                                            onButtonClick={closeMenu}
+                                            modalComponent={<DeleteAnEventModal eventId={eventId}/>} />
                                                 </div>
                                     }
 

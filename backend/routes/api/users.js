@@ -15,11 +15,29 @@ const validateSignup = [
     check('email')
         .exists({ checkFalsy: true })
         .isEmail()
-        .withMessage("Invalid email"),
+        .withMessage("Invalid email")
+        .custom(async email =>{
+            const existingUser = await User.unscoped().findOne({
+                where:{ email }
+            });
+            if(existingUser){
+                throw new Error('User with that email already exists')
+            }
+        })
+        .withMessage("User with that email already exists"),
     check('username')
         .exists({ checkFalsy: true })
         .isLength({ min: 3 })
-        .withMessage('Username must be 3 characters or more'),
+        .withMessage('Username must be 3 characters or more')
+        .custom(async username =>{
+            const existingUser = await User.unscoped().findOne({
+                where:{ username }
+            });
+            if(existingUser){
+                throw new Error('User with that username already exists')
+            }
+        })
+        .withMessage("User with that username already exists"),
     check('password')
         .exists({ checkFalsy: true })
         .isLength({ min: 6 })

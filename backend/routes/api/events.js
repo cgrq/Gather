@@ -326,7 +326,7 @@ router.post(
 );
 
 
-// Delete a Group
+// Delete an Event
 router.delete(
     '/:eventId',
     [requireAuth, verifyCohostStatus],
@@ -334,7 +334,7 @@ router.delete(
         try {
             const { eventId } = req.params;
 
-            const event = await Group.findByPk(eventId);
+            const event = await Event.findByPk(eventId);
 
             await event.destroy();
 

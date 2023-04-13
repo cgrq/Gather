@@ -26,7 +26,7 @@ module.exports = {
       },
       {
         groupId: 4,
-        url: "https://townsquare.media/site/519/files/2014/08/hitchhiking.jpg?w=1200&h=0&zc=1&s=0&a=t&q=89",
+        url: "https://townsquare.media/site/519/files/2014/08/hitchhiking.jpg",
         preview: true,
       },
       {
