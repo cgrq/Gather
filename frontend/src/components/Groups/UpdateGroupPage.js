@@ -18,6 +18,7 @@ function UpdateGroupPage() {
     const [errors, setErrors] = useState({});
     const { groupId } = useParams();
     const group = useSelector(state => state.groups[groupId])
+    const sessionUser = useSelector(state => state.session.user);
 
     useEffect(() => {
         dispatch(getGroup(groupId));
@@ -69,6 +70,12 @@ function UpdateGroupPage() {
     }
 
     if(!group) return null;
+
+    const organizer = group.Organizer;
+    const isOrganizer = (sessionUser && sessionUser.id) === organizer.id;
+
+    if(!isOrganizer) history.push(`/`);
+
 
     return (
         <div className="create-group-page-container">
