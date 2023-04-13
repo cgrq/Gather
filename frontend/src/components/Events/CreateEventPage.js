@@ -49,6 +49,7 @@ function CreateEventPage() {
         console.log(`🖥 ~ file: CreateEventPage.js:32 ~ handleFormSubmit ~ event:`, event)
         const image = await dispatch(createEventImage({ eventId:event.id, url }))
             .catch(async (res) => {
+
                 const data = await res.json();
                 if (data && data.errors) {
                     setErrors((prevState) => {
@@ -60,7 +61,7 @@ function CreateEventPage() {
                 }
             });
 
-        // if (event.id && image.url) history.push(`/events/${event.id}`);
+        if (event.id && image.url) history.push(`/events/${event.id}`);
     }
 
     return (

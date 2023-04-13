@@ -1,7 +1,9 @@
 import { csrfFetch } from "./csrf";
 
-const ADD_EVENT = "events/singleEvent/add";
+const ADD_EVENT = "events/:eventId/add";
 const ADD_EVENTS = "events/allEvents/add";
+
+const ADD_IMAGE = "events/:eventId/images/add";
 
 const addEvent = (event) => {
   return {
@@ -13,6 +15,14 @@ const addEvents = (events) => {
   return {
     type: ADD_EVENTS,
     events
+  }
+}
+const addImage = (eventId, image) => {
+  console.log("In action creator")
+  return {
+    type: ADD_IMAGE,
+    eventId,
+    image
   }
 }
 
@@ -29,7 +39,6 @@ export const createEvent = (event) => async (dispatch) => {
     }),
   });
   const venueData = await venueRes.json();
-  console.log(`🖥 ~ file: events.js:24 ~ createEvent ~ venueRes:`, venueRes)
   const eventRes = await csrfFetch(`/api/groups/${groupId}/events`, {
     method: "POST",
     body: JSON.stringify({
@@ -58,10 +67,10 @@ export const createEventImage = (image) => async (dispatch) => {
       preview: true
     }),
   });
-  const data = await res.json();
+  const imageData = await res.json();
 
-  dispatch(addEvent(data));
-  return res;
+  dispatch(addImage(eventId, imageData));
+  return imageData;
 }
 
 export const getEvent = (eventId) => async (dispatch) => {
@@ -93,6 +102,10 @@ const eventsReducer = (state = [], action) => {
       return newState;
     case ADD_EVENT:
       newState[action.event.id] = action.event
+      return newState;
+    case ADD_IMAGE:
+      newState[action.eventId].EventImages = [action.image.url]
+
       return newState;
     default:
       return state;

@@ -14,7 +14,6 @@ const addGroups = (groups) => {
 }
 
 const addGroup = (group) => {
-  console.log("In action creator")
   return {
     type: ADD_GROUP,
     group
@@ -24,7 +23,7 @@ const addGroup = (group) => {
 const addImage = (groupId, image) => {
   console.log("In action creator")
   return {
-    type: ADD_GROUP,
+    type: ADD_IMAGE,
     groupId,
     image
   }
@@ -65,6 +64,7 @@ export const createGroup = (group) => async (dispatch) => {
     }),
   });
   const data = await groupRes.json();
+  console.log(`🖥 ~ file: groups.js:68 ~ createGroup ~ data:`, data)
 
   dispatch(addGroup(data));
   return data;
@@ -82,7 +82,7 @@ export const createGroupImage = (image) => async (dispatch) => {
   const imageData = await res.json();
 
   dispatch(addImage(groupId, imageData));
-  return res;
+  return imageData;
 }
 
 
@@ -113,7 +113,7 @@ const groupsReducer = (state = [], action) => {
 
       return newState;
     case ADD_IMAGE:
-      newState[action.group.id].GroupImages = action.image.url
+      newState[action.groupId].GroupImages = [action.image.url]
 
       return newState;
     default:

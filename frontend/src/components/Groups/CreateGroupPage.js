@@ -49,6 +49,7 @@ function CreateGroupPage() {
         });
         const image = await dispatch(createGroupImage({ groupId: group.id, url }))
         .catch(async (res) => {
+            console.log(`🖥 ~ file: CreateGroupPage.js:52 ~ handleFormSubmit ~ res:`, res)
             const data = await res.json();
             if (data && data.errors) {
                 setErrors((prevState) => {
