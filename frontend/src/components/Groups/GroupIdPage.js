@@ -102,11 +102,12 @@ function GroupIdPage() {
                                 <div>
                                     <NavLink to={`/groups/${groupId}/events/new`}><button>Create event</button></NavLink>
                                     <NavLink to={`/groups/${groupId}/edit`}><button>Update</button></NavLink>
-                                    <OpenModalButton
-                                        buttonText="Delete"
-                                        onButtonClick={closeMenu}
-                                        modalComponent={DeleteAGroupModal} />
-
+                                    <div>
+                                        <OpenModalButton
+                                            buttonText="Delete"
+                                            onButtonClick={closeMenu}
+                                            modalComponent={<DeleteAGroupModal groupId={groupId}/>} />
+                                    </div>
                                 </div>
                             }
                         </div>

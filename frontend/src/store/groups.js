@@ -4,6 +4,7 @@ import { compareEventDates } from "../utils/dates";
 const ADD_GROUPS = "groups/allGroups/add";
 const ADD_GROUP = "groups/:groupId/add";
 const ADD_IMAGE = "groups/:groupId/images/add";
+const DELETE_GROUP = "groups/:groupId/delete";
 
 
 const addGroups = (groups) => {
@@ -17,6 +18,13 @@ const addGroup = (group) => {
   return {
     type: ADD_GROUP,
     group
+  }
+}
+
+const deleteGroup = (groupId) => {
+  return {
+    type: DELETE_GROUP,
+    groupId
   }
 }
 
@@ -106,6 +114,16 @@ export const updateGroup = (group) => async (dispatch) => {
   return data;
 }
 
+export const removeGroup = (groupId) => async (dispatch) => {
+
+  const groupRes = await csrfFetch(`/api/groups/${groupId}`, {
+    method: "DELETE",
+  });
+  const data = await groupRes.json();
+
+  dispatch(deleteGroup(data));
+  return data;
+}
 
 export const getGroup = (groupId) => async (dispatch) => {
   console.log("In thunk")
@@ -136,6 +154,10 @@ const groupsReducer = (state = [], action) => {
       return newState;
     case ADD_IMAGE:
       newState[action.groupId].GroupImages = [action.image.url]
+
+      return newState;
+    case DELETE_GROUP:
+      delete newState[action.groupId];
 
       return newState;
     default:

@@ -49,11 +49,11 @@ function App() {
           <Route exact path="/groups">
             <Groups />
           </Route>
-          <Route exact path="/events">
-            <Events />
-          </Route>
           <Route path="/events/:eventId">
             <EventIdPage />
+          </Route>
+          <Route exact path="/events">
+            <Events />
           </Route>
         </Switch>}
     </>

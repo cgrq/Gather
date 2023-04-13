@@ -1,55 +1,39 @@
-// frontend/src/components/LoginFormModal/index.js
 import React, { useState } from "react";
-// import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
+import { removeGroup } from "../../store/groups";
+import { useHistory, useParams } from "react-router-dom";
+import "./Groups.css"
 
-function DeleteAGroupModal() {
-  // const dispatch = useDispatch();
-  const [credential, setCredential] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+function DeleteAGroupModal({groupId}) {
+  console.log(`🖥 ~ file: DeleteAGroupModal.js:8 ~ DeleteAGroupModal ~ groupId:`, groupId)
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const [errors, setErrors] = useState({})
   const { closeModal } = useModal();
 
-  // const handleLoginSubmit = (e) => {
-  //   e.preventDefault();
-  //   setErrors({});
-  //   return dispatch(sessionActions.login({ credential, password }))
-  //     .then(closeModal)
-  //     .catch(async (res) => {
-  //       const data = await res.json();
-  //       if (data && data.errors) {
-  //         setErrors(data.errors);
-  //       }
-  //     });
-  // };
+  const handleClick = (e) => {
+    e.preventDefault();
+    setErrors({});
+    const removedGroup = dispatch(removeGroup(groupId))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
+      history.push("/groups")
+  };
 
   return (
     <>
-      <h1>ConfirmDelete</h1>
-      {/* <form onSubmit={""}>
-        <label>
-          Username or Email
-          <input
-            type="text"
-            value={credential}
-            onChange={(e) => setCredential(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button disabled={(credential.length < 4 || password.length < 6) ? true : false} type="submit">Log In</button>
-      </form> */}
+    <div className="delete-a-group-modal-container">
+      <h1>Confirm Delete</h1>
+      <p>Are you sure you want to remove this group?</p>
+      <button className="delete-a-group-modal-button delete-a-group-modal-button-yes" onClick={handleClick}>{"Yes (Delete Group)"}</button>
+      <button className="delete-a-group-modal-button" onClick={closeModal}>{"No (Keep Group)"}</button>
+    </div>
     </>
   );
 }
