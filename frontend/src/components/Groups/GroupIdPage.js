@@ -8,6 +8,7 @@ function GroupIdPage() {
     const dispatch = useDispatch()
     const [imageUrl, setImageUrl] = useState(process.env.PUBLIC_URL + "/default-image.png")
     const { groupId } = useParams();
+    const events = useSelector(state=> state.events.allEvents);
     const group = useSelector(state => state.groups[groupId]);
     const groups = useSelector(state => state.groups.allGroups);
     const sessionUser = useSelector(state => state.session.user);
@@ -20,10 +21,10 @@ function GroupIdPage() {
 
     useEffect(() => {
         dispatch(getGroups());
-    }, [dispatch, groupId])
+    }, [dispatch, groupId, events])
     useEffect(() => {
         dispatch(getGroup(groupId));
-    }, [dispatch, groupId])
+    }, [dispatch, groupId], events)
 
     if (!group || !groups || !group.hasOwnProperty("GroupImages") || !groups[groupId] || !(groups.hasOwnProperty(groupId))) return null;
     let isOrganizer;
@@ -75,7 +76,7 @@ function GroupIdPage() {
                                 (isOrganizer)
                                 &&
                                 <div>
-                                    <button>Create event</button>
+                                    <NavLink to={`/groups/${groupId}/events/new`}><button>Create event</button></NavLink>
                                     <button>Update</button>
                                     <button>Delete</button>
                                 </div>

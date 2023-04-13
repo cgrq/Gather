@@ -2,7 +2,8 @@ import { csrfFetch } from "./csrf";
 
 import { compareEventDates } from "../utils/dates";
 const ADD_GROUPS = "groups/allGroups/add";
-const ADD_GROUP = "groups/add";
+const ADD_GROUP = "groups/:groupId/add";
+const ADD_IMAGE = "groups/:groupId/images/add";
 
 
 const addGroups = (groups) => {
@@ -17,6 +18,15 @@ const addGroup = (group) => {
   return {
     type: ADD_GROUP,
     group
+  }
+}
+
+const addImage = (groupId, image) => {
+  console.log("In action creator")
+  return {
+    type: ADD_GROUP,
+    groupId,
+    image
   }
 }
 
@@ -59,8 +69,9 @@ export const createGroup = (group) => async (dispatch) => {
   dispatch(addGroup(data));
   return data;
 }
+
 export const createGroupImage = (image) => async (dispatch) => {
-  const {groupId, url} = image;
+  const { groupId, url } = image;
   const res = await csrfFetch(`/api/groups/${groupId}/images`, {
     method: "POST",
     body: JSON.stringify({
@@ -68,9 +79,9 @@ export const createGroupImage = (image) => async (dispatch) => {
       preview: true
     }),
   });
-  const data = await res.json();
+  const imageData = await res.json();
 
-  dispatch(addGroup(data));
+  dispatch(addImage(groupId, imageData));
   return res;
 }
 
@@ -85,7 +96,6 @@ export const getGroup = (groupId) => async (dispatch) => {
 }
 
 const groupsReducer = (state = [], action) => {
-  console.log(`🖥 ~ file: groups.js:73 ~ groupsReducer ~ action:`, action)
   console.log("IN REDUCER")
   const newState = { ...state };
   switch (action.type) {
@@ -100,6 +110,10 @@ const groupsReducer = (state = [], action) => {
       return newState;
     case ADD_GROUP:
       newState[action.group.id] = action.group
+
+      return newState;
+    case ADD_IMAGE:
+      newState[action.group.id].GroupImages = action.image.url
 
       return newState;
     default:

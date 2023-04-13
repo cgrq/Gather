@@ -1,35 +1,57 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { createEvent, createeventImage } from "../../store/events"
-import { useHistory } from 'react-router-dom';
+import { createEvent, createEventImage } from "../../store/events"
+import { useHistory, useParams } from 'react-router-dom';
 import { isValidURL } from '../../utils/validation'
+import { formatDate } from "../../utils/dates";
 
 function CreateEventPage() {
     const dispatch = useDispatch();
     const history = useHistory();
     const [name, setName] = useState("");
     const [type, setType] = useState("");
-    const [isPrivate, setIsPrivate] = useState("");
     const [price, setPrice] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [url, setUrl] = useState("");
     const [description, setDescription] = useState("");
     const [errors, setErrors] = useState({});
+    const { groupId } = useParams();
 
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
 
-        const event = await dispatch(createEvent({ name, about, type, isPrivate, city, state }))
+        const formattedStartDate = startDate ? formatDate(startDate) : "";
+        const formattedEndDate = endDate ? formatDate(endDate) : "";
+        const priceToInt = parseInt(price)
+        console.log(`🖥 ~ file: CreateEventPage.js:27 ~ handleFormSubmit ~ formattedStartDate:`, formattedStartDate)
+        console.log(`🖥 ~ file: CreateEventPage.js:28 ~ handleFormSubmit ~ formattedEndDate:`, formattedEndDate)
+
+
+        const event = await dispatch(createEvent({ groupId, name, type, price: priceToInt, startDate: formattedStartDate, endDate: formattedEndDate, description }))
+        .catch(async (res) => {
+            const data = await res.json();
+            if (data && data.errors) {
+                let urlError;
+                if (url.length === 0) urlError = "Image Url is required";
+                else if (!isValidURL(url)) urlError = "Invalid URL";
+                setErrors((prevState) => {
+                    return {
+                        ...prevState,
+                        ...data.errors,
+                        url: urlError
+                    };
+                });
+            }
+        });
+        console.log(`🖥 ~ file: CreateEventPage.js:32 ~ handleFormSubmit ~ event:`, event)
+        const image = await dispatch(createEventImage({ eventId:event.id, url }))
             .catch(async (res) => {
                 const data = await res.json();
                 if (data && data.errors) {
                     setErrors((prevState) => {
-                        if (url.length === 0) data.errors.url = "Image Url is required";
-                        else if (!isValidURL(url)) data.errors.url = "Invalid URL";
-
                         return {
                             ...prevState,
                             ...data.errors,
@@ -37,20 +59,8 @@ function CreateEventPage() {
                     });
                 }
             });
-        const image = await dispatch(createEventImage({ eventId: event.id, url }))
-            .catch(async (res) => {
-                const data = await res.json();
-                if (data && data.errors) {
-                    setErrors((prevState) => {
-                        return {
-                            ...prevState,
-                            ...data.errors,
-                        };
-                    });
-                }
-            });
 
-        if (event.id && image.url) history.push(`/events/${event.id}`);
+        // if (event.id && image.url) history.push(`/events/${event.id}`);
     }
 
     return (
@@ -76,20 +86,10 @@ function CreateEventPage() {
                             errors.type && <p className="create-event-page-errors">{errors.type}</p>
                         }
                     </div>
-                    <div className="create-event-page-sub-row">
-                        <label>Is this event private or public?</label>
-                        <select value={isPrivate} onChange={(e) => setIsPrivate(e.target.value)} >
-                            <option value="" disabled>(select one)</option>
-                            <option value="true">Private</option>
-                            <option value="false">Public</option>
-                        </select>
-                        {
-                            errors.private && <p className="create-event-page-errors">{errors.private}</p>
-                        }
-                    </div>
+
                     <div className="create-event-page-sub-row">
                         <label>What is the price of your event?</label>
-                        <input value={price} onChange={(e) => setPrice(e.target.price)} placeholder={"0"} />
+                        <input value={price} onChange={(e) => setPrice(e.target.value)} placeholder={"0"} />
                         {
                             errors.price && <p className="create-event-page-errors">{errors.price}</p>
                         }
@@ -97,11 +97,11 @@ function CreateEventPage() {
                 </div>
                 <div className="create-event-page-row">
                     <div className="create-event-page-sub-row">
-                    <label>When does  your event start?</label>
+                        <label>When does  your event start?</label>
                         <input type="datetime-local"
                             value={startDate}
-                            onChange={(e)=>setStartDate(startDate)}
-                            step="1"
+                            onChange={(e) => setStartDate(e.target.value)}
+                            step="60"
                         />
                         {
                             errors.startDate && <p className="create-event-page-errors">{errors.startDate}</p>
@@ -111,8 +111,8 @@ function CreateEventPage() {
                         <label>When does  your event end?</label>
                         <input type="datetime-local"
                             value={endDate}
-                            onChange={(e)=>setEndDate(endDate)}
-                            step="1"
+                            onChange={(e) => setEndDate(e.target.value)}
+                            step="60"
                         />
                         {
                             errors.endDate && <p className="create-event-page-errors">{errors.endDate}</p>

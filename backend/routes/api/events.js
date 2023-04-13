@@ -33,7 +33,7 @@ const validateEvent = [
         .withMessage("Capacity must be an integer"),
     check('price')
         .exists({ checkFalsy: true })
-        .isDecimal()
+        .isInt()
         .withMessage("Price is invalid"),
     check('description')
         .exists({ checkFalsy: true })

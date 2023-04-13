@@ -92,3 +92,37 @@
 .event-page-details-card-last-row{
     justify-content:space-between;
 }
+
+/* Create Event Page */
+
+.create-event-page-container{
+   display:flex;
+   flex-flow:column;
+   width:70%;
+   margin:0 auto;
+}
+
+.create-event-page-row{
+    border-bottom:1px solid black;
+    padding:30px 0;
+    display:flex;
+    flex-flow: column;
+}
+
+.create-event-page-row button,.create-event-page-row textarea,.create-event-page-row input, .create-event-page-row select{
+   max-width: 200px;
+}
+
+
+.create-event-page-sub-row{
+   display:flex;
+   flex-flow:column;
+}
+
+.create-event-page-list{
+   margin-left:15px;
+}
+
+.create-event-page-errors{
+   color:red;
+}

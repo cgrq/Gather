@@ -27,7 +27,7 @@ function EventIdPage() {
     }, [dispatch, event])
 
 
-    if (!event || !groupState) return null;
+    if (!event || !groupState || !event.Group || !event.EventImages || event.EventImages.length === 0) return null;
 
 
     const groupId = event.Group.id;
@@ -69,7 +69,7 @@ function EventIdPage() {
                             <GroupPreview group={group} />
                             <div className="event-page-details-card">
                                 <div className="event-page-details-card-row">
-                                    <div className="event-page-details-card-icon-wrapper"><i class="fa fa-clock" aria-hidden="true"></i></div>
+                                    <div className="event-page-details-card-icon-wrapper"><i className="fa fa-clock" aria-hidden="true"></i></div>
                                     <div>
                                         <div className="event-page-details-date-pair">
                                             <div className="event-page-details-date-pair-label">START</div>
@@ -89,7 +89,7 @@ function EventIdPage() {
                                 </div>
                                 <div className="event-page-details-card-row event-page-details-card-last-row">
                                     <div className="event-page-details-card-row-item-pair-wrapper">
-                                        <div className="event-page-details-card-icon-wrapper"><i class="fa fa-map-pin" aria-hidden="true"></i></div>
+                                        <div className="event-page-details-card-icon-wrapper"><i className="fa fa-map-pin" aria-hidden="true"></i></div>
                                         <div>{event.type}</div>
                                     </div>
                                     {

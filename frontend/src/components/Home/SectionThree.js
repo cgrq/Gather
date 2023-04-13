@@ -1,13 +1,14 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
-function SectionThree(){
+function SectionThree() {
     const sessionUser = useSelector(state => state.session.user);
-
-
     const seeAllGroupsCaption = "Nunc sed augue lacus viverra vitae congue. Tortor vitae purus faucibus ornare suspendisse sed nisi lacus sed. Aliquam faucibus purus in massa tempor nec feugiat nisl.";
 
-    return(
+
+
+    return (
         <div className="section-three-container">
             <ActionCard
                 iconImgPath={"./placeholder-icon.png"}
@@ -16,7 +17,7 @@ function SectionThree(){
                 caption={seeAllGroupsCaption} />
             <ActionCard
                 iconImgPath={"./placeholder-icon.png"}
-                linkPath={"/"}
+                linkPath={"/events"}
                 title={"Find an event"}
                 caption={seeAllGroupsCaption} />
             <ActionCard
@@ -29,7 +30,7 @@ function SectionThree(){
     )
 }
 
-function ActionCard({iconImgPath, linkPath, title, caption, disabled=false}){
+function ActionCard({ iconImgPath, linkPath, title, caption, disabled = false }) {
     return (
         <div className="action-card-container">
             <img src={iconImgPath} />

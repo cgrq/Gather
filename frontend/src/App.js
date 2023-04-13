@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import Home from "./components/Home";
@@ -9,10 +9,17 @@ import Events from "./components/Events";
 import GroupIdPage from "./components/Groups/GroupIdPage";
 import EventIdPage from "./components/Events/EventIdPage";
 import CreateGroupPage from "./components/Groups/CreateGroupPage";
+import CreateEventPage from "./components/Events/CreateEventPage";
 
 
 function App() {
   const dispatch = useDispatch();
+  const location = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
+
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
@@ -28,6 +35,9 @@ function App() {
           </Route>
           <Route path="/groups/new">
             <CreateGroupPage />
+          </Route>
+          <Route path="/groups/:groupId/events/new">
+            <CreateEventPage />
           </Route>
           <Route path="/groups/:groupId">
             <GroupIdPage />
