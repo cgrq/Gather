@@ -24,7 +24,7 @@ function GroupIdPage() {
     }, [dispatch, groupId, events])
     useEffect(() => {
         dispatch(getGroup(groupId));
-    }, [dispatch, groupId], events)
+    }, [dispatch, groupId, events])
 
     if (!group || !groups || !group.hasOwnProperty("GroupImages") || !groups[groupId] || !(groups.hasOwnProperty(groupId))) return null;
     let isOrganizer;
@@ -77,7 +77,7 @@ function GroupIdPage() {
                                 &&
                                 <div>
                                     <NavLink to={`/groups/${groupId}/events/new`}><button>Create event</button></NavLink>
-                                    <button>Update</button>
+                                    <NavLink to={`/groups/${groupId}/edit`}><button>Update</button></NavLink>
                                     <button>Delete</button>
                                 </div>
                             }

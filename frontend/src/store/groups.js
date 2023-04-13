@@ -64,11 +64,11 @@ export const createGroup = (group) => async (dispatch) => {
     }),
   });
   const data = await groupRes.json();
-  console.log(`🖥 ~ file: groups.js:68 ~ createGroup ~ data:`, data)
 
   dispatch(addGroup(data));
   return data;
 }
+
 
 export const createGroupImage = (image) => async (dispatch) => {
   const { groupId, url } = image;
@@ -83,6 +83,25 @@ export const createGroupImage = (image) => async (dispatch) => {
 
   dispatch(addImage(groupId, imageData));
   return imageData;
+}
+
+export const updateGroup = (group) => async (dispatch) => {
+  const { groupId, name, about, isPrivate, type, city, state } = group;
+  const groupRes = await csrfFetch(`/api/groups/${groupId}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      name,
+      about,
+      type,
+      private: isPrivate,
+      city,
+      state
+    }),
+  });
+  const data = await groupRes.json();
+
+  dispatch(addGroup(data));
+  return data;
 }
 
 
