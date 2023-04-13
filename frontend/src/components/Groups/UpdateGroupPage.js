@@ -29,7 +29,7 @@ function UpdateGroupPage() {
             setName(group.name);
             setAbout(group.about);
             setType(group.type);
-            setIsPrivate(group.private);
+            setIsPrivate(group.private.toString());
             setLocation(`${group.city}, ${group.state}`)
         }
 
@@ -48,31 +48,35 @@ function UpdateGroupPage() {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
-
-        const group = await dispatch(updateGroup({ groupId, name, about, type, isPrivate, city, state }))
-            .catch(async (res) => {
-                const data = await res.json();
-                if (data && data.errors) {
-                    setErrors((prevState) => {
-                        if (url.length === 0) data.errors.url = "Image Url is required";
-                        else if (!isValidURL(url)) data.errors.url = "Invalid URL";
-
-                        return {
-                            ...prevState,
-                            ...data.errors,
-                        };
-                    });
-                }
-            });
+    console.log(`🖥 ~ file: UpdateGroupPage.js:17 ~ UpdateGroupPage ~ isPrivate:`, isPrivate)
+    console.log(`🖥 ~ file: UpdateGroupPage.js:17 ~ UpdateGroupPage ~ isPrivate:`, typeof isPrivate)
 
 
-        if (group.id) history.push(`/groups/${group.id}`);
+
+        const groupRes = await dispatch(updateGroup({ groupId, name, about, type, isPrivate, city, state }))
+        .catch(async (res) => {
+            const data = await res.json();
+            if (data && data.errors) {
+                setErrors((prevState) => {
+                    if (url.length === 0) data.errors.url = "Image Url is required";
+                    else if (!isValidURL(url)) data.errors.url = "Invalid URL";
+
+                    return {
+                        ...prevState,
+                        ...data.errors,
+                    };
+                });
+            }
+        });
+
+
+        if (groupRes.id) history.push(`/groups/${group.id}`);
     }
 
-    if(!group) return null;
+    if(!group || !sessionUser || !group.Organizer) return null;
 
     const organizer = group.Organizer;
-    const isOrganizer = (sessionUser && sessionUser.id) === organizer.id;
+    const isOrganizer = sessionUser.id === organizer.id;
 
     if(!isOrganizer) history.push(`/`);
 
@@ -132,8 +136,8 @@ function UpdateGroupPage() {
                         <label>Is this group private or public?</label>
                         <select value={isPrivate} onChange={(e) => setIsPrivate(e.target.value)} >
                             <option value="" disabled>(select one)</option>
-                            <option value="true">Private</option>
-                            <option value="false">Public</option>
+                            <option value={true}>Private</option>
+                            <option value={false}>Public</option>
                         </select>
                         {
                             errors.private && <p className="create-group-page-errors">{errors.private}</p>

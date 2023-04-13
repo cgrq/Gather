@@ -86,7 +86,9 @@ export const createGroupImage = (image) => async (dispatch) => {
 }
 
 export const updateGroup = (group) => async (dispatch) => {
+  console.log(`🖥 ~ file: groups.js:89 ~ updateGroup ~ group:`, group)
   const { groupId, name, about, isPrivate, type, city, state } = group;
+  console.log(`🖥 ~ file: groups.js:91 ~ updateGroup ~ isPrivate:`, isPrivate)
   const groupRes = await csrfFetch(`/api/groups/${groupId}`, {
     method: "PUT",
     body: JSON.stringify({
@@ -128,6 +130,7 @@ const groupsReducer = (state = [], action) => {
       newState.allGroups.optionalOrderedList = [];
       return newState;
     case ADD_GROUP:
+      console.log(`🖥 ~ file: groups.js:133 ~ groupsReducer ~ action.group.id:`, action.group.id)
       newState[action.group.id] = action.group
 
       return newState;

@@ -1,19 +1,26 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, NavLink } from "react-router-dom";
 import { getGroup, getGroups } from "../../store/groups";
 import EventListItem from "../Events/EventListItem";
+import DeleteAGroupModal from "./DeleteAGroupModal";
+import OpenModalButton from '../OpenModalButton';
+
 
 function GroupIdPage() {
     const dispatch = useDispatch()
     const [imageUrl, setImageUrl] = useState(process.env.PUBLIC_URL + "/default-image.png")
     const { groupId } = useParams();
-    const events = useSelector(state=> state.events.allEvents);
+    const events = useSelector(state => state.events.allEvents);
     const group = useSelector(state => state.groups[groupId]);
     const groups = useSelector(state => state.groups.allGroups);
     const sessionUser = useSelector(state => state.session.user);
+    const [showMenu, setShowMenu] = useState(false);
+    const ulRef = useRef();
 
-    useEffect(()=>{
+
+
+    useEffect(() => {
         if (group && group.hasOwnProperty("GroupImages") && group.GroupImages.length > 0) {
             setImageUrl(group.GroupImages[0].url)
         }
@@ -26,19 +33,36 @@ function GroupIdPage() {
         dispatch(getGroup(groupId));
     }, [dispatch, groupId, events])
 
+    useEffect(() => {
+        if (!showMenu) return;
+
+        const closeMenu = (e) => {
+            if (!ulRef.current.contains(e.target)) {
+                setShowMenu(false);
+            }
+        };
+
+        document.addEventListener('click', closeMenu);
+
+        return () => document.removeEventListener("click", closeMenu);
+    }, [showMenu]);
+
+    const closeMenu = () => setShowMenu(false);
+
+
     if (!group || !groups || !group.hasOwnProperty("GroupImages") || !groups[groupId] || !(groups.hasOwnProperty(groupId))) return null;
     let isOrganizer;
-    if(group.Organizer){
+    if (group.Organizer) {
         console.log(`🖥 ~ file: GroupIdPage.js:24 ~ GroupIdPage ~ group.Organizer:`, group.Organizer)
         isOrganizer = (sessionUser && sessionUser.id) === group.Organizer.id;
     }
     let numberOfEvents = 0;
 
-    if(groups[groupId] && !(groups[groupId].hasOwnProperty("events"))){
+    if (groups[groupId] && !(groups[groupId].hasOwnProperty("events"))) {
         groups[groupId].events = [];
     }
 
-    if(groups[groupId] && groups[groupId].hasOwnProperty("events") && groups[groupId].events && groups[groupId].events.length > 0){
+    if (groups[groupId] && groups[groupId].hasOwnProperty("events") && groups[groupId].events && groups[groupId].events.length > 0) {
         numberOfEvents = groups[groupId].events.length;
     }
     return (
@@ -49,7 +73,7 @@ function GroupIdPage() {
                         <NavLink to="/groups">{"< Groups"}</NavLink>
                     </div>
                     <div className="group-page-content-row">
-                        <img onError={()=>setImageUrl(process.env.PUBLIC_URL + "/default-image.png")} src={imageUrl} />
+                        <img onError={() => setImageUrl(process.env.PUBLIC_URL + "/default-image.png")} src={imageUrl} />
                         <div>
                             <h1 className="group-name">{group.name}</h1>
                             <div>{group.city + ", " + group.state} </div>
@@ -78,7 +102,11 @@ function GroupIdPage() {
                                 <div>
                                     <NavLink to={`/groups/${groupId}/events/new`}><button>Create event</button></NavLink>
                                     <NavLink to={`/groups/${groupId}/edit`}><button>Update</button></NavLink>
-                                    <button>Delete</button>
+                                    <OpenModalButton
+                                        buttonText="Delete"
+                                        onButtonClick={closeMenu}
+                                        modalComponent={DeleteAGroupModal} />
+
                                 </div>
                             }
                         </div>
@@ -106,7 +134,7 @@ function GroupIdPage() {
                                     if (now.getTime() < eventDate.getTime())
 
                                         return (
-                                            <EventListItem key={event.id} event={event}/>
+                                            <EventListItem key={event.id} event={event} />
                                         )
                                 })
 
@@ -122,7 +150,7 @@ function GroupIdPage() {
                                     if (now.getTime() > eventDate.getTime())
 
                                         return (
-                                            <EventListItem key={event.id} event={event}/>
+                                            <EventListItem key={event.id} event={event} />
                                         )
                                 })
                             }

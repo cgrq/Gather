@@ -119,8 +119,8 @@ return (
                     <label>Is this group private or public?</label>
                     <select value={isPrivate} onChange={(e) => setIsPrivate(e.target.value)} >
                         <option value="" disabled>(select one)</option>
-                        <option value="true">Private</option>
-                        <option value="false">Public</option>
+                        <option value={true}>Private</option>
+                        <option value={false}>Public</option>
                     </select>
                     {
                         errors.private && <p className="create-group-page-errors">{errors.private}</p>
