@@ -31,23 +31,23 @@ function CreateEventPage() {
 
 
         const event = await dispatch(createEvent({ groupId, name, type, price: priceToInt, startDate: formattedStartDate, endDate: formattedEndDate, description }))
-        .catch(async (res) => {
-            const data = await res.json();
-            if (data && data.errors) {
-                let urlError;
-                if (url.length === 0) urlError = "Image Url is required";
-                else if (!isValidURL(url)) urlError = "Invalid URL";
-                setErrors((prevState) => {
-                    return {
-                        ...prevState,
-                        ...data.errors,
-                        url: urlError
-                    };
-                });
-            }
-        });
+            .catch(async (res) => {
+                const data = await res.json();
+                if (data && data.errors) {
+                    let urlError;
+                    if (url.length === 0) urlError = "Image Url is required";
+                    else if (!isValidURL(url)) urlError = "Invalid URL";
+                    setErrors((prevState) => {
+                        return {
+                            ...prevState,
+                            ...data.errors,
+                            url: urlError
+                        };
+                    });
+                }
+            });
         console.log(`🖥 ~ file: CreateEventPage.js:32 ~ handleFormSubmit ~ event:`, event)
-        const image = await dispatch(createEventImage({ eventId:event.id, url }))
+        const image = await dispatch(createEventImage({ eventId: event.id, url }))
             .catch(async (res) => {
 
                 const data = await res.json();
@@ -90,7 +90,10 @@ function CreateEventPage() {
 
                     <div className="create-event-page-sub-row">
                         <label>What is the price of your event?</label>
-                        <input value={price} onChange={(e) => setPrice(e.target.value)} placeholder={"0"} />
+                        <div className="create-event-page-price-input-container">
+                            <div className="create-event-page-price-input-overlay">$</div>
+                            <input className="create-event-page-price-input" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={"0"} />
+                        </div>
                         {
                             errors.price && <p className="create-event-page-errors">{errors.price}</p>
                         }

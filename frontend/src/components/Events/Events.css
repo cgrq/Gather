@@ -126,3 +126,14 @@
 .create-event-page-errors{
    color:red;
 }
+
+.create-event-page-price-input{
+   text-align: right;
+}
+
+.create-event-page-price-input-container{
+   position: relative;
+}
+.create-event-page-price-input-overlay{
+   position:absolute;
+}
