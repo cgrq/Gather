@@ -1,3 +1,5 @@
+
+
 .home-container{
     display:flex;
     flex-flow: column nowrap;
@@ -8,6 +10,16 @@
     margin:0 auto;
 }
 
+/* General */
+.home-h1, .home-container  h2, .action-card-container a{
+    font-family: 'Dongle', sans-serif;
+}
+.home-h1{
+    font-size:95px;
+    line-height: 65px;
+}
+
+
 /* Section One */
 
 .section-one-container{
@@ -16,8 +28,7 @@
     justify-content: space-between;
 }
 
-.section-one-container  h1{
-    font-size: 60px;
+.home-h1{
     margin-bottom:20px;
 }
 
@@ -28,6 +39,7 @@
 .section-one-container > img{
     width:350px;
     height:350px;
+    border-radius:60px;
 }
 
 /* Section Two */
@@ -41,7 +53,7 @@
 }
 
 .section-two-container h2{
-    font-size: 40px;
+    font-size: 60px;
     margin-bottom:20px;
 }
 
@@ -63,11 +75,12 @@
 .action-card-container img{
     width:250px;
     height:250px;
+    border-radius:60px;
 }
 
 .action-card-container a, .action-card-container div {
     color:black;
-    font-size:30px;
+    font-size:50px;
     margin:20px 0;
     text-decoration: none;
 }
@@ -89,5 +102,10 @@
 
 .section-four-container button{
     font-size:30px;
-    padding:10px;
+    font-weight: bold;
+    padding:20px 50px;
+    border-radius:60px;
+    border:none;
+    /* background: linear-gradient(to right, #00a4ff, #00e1ff); */
+    /* color:white; */
 }

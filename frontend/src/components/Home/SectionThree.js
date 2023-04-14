@@ -11,17 +11,17 @@ function SectionThree() {
     return (
         <div className="section-three-container">
             <ActionCard
-                iconImgPath={"./placeholder-icon.png"}
+                iconImgPath={"./see-all-groups-icon.png"}
                 linkPath={"/groups"}
                 title={"See all groups"}
                 caption={seeAllGroupsCaption} />
             <ActionCard
-                iconImgPath={"./placeholder-icon.png"}
+                iconImgPath={"./find-an-event-icon.png"}
                 linkPath={"/events"}
                 title={"Find an event"}
                 caption={seeAllGroupsCaption} />
             <ActionCard
-                iconImgPath={"./placeholder-icon.png"}
+                iconImgPath={"./start-a-group-icon.png"}
                 linkPath={"/groups/new"}
                 title={"Start a group"}
                 caption={seeAllGroupsCaption}
@@ -34,7 +34,7 @@ function ActionCard({ iconImgPath, linkPath, title, caption, disabled = false })
     return (
         <div className="action-card-container">
             <img src={iconImgPath} />
-            <NavLink className={disabled ? "isDisabled" : ""} to={linkPath}>{title}</NavLink>
+            <NavLink className={disabled ? " isDisabled" : ""} to={linkPath}>{title}</NavLink>
             <p>{caption}</p>
         </div>
     )
