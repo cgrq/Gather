@@ -1,21 +1,26 @@
+
 .hidden{
     display: none
 }
 
 
-i{
-    font-size: 40px;
+.nav-list i{
+    font-size: 45px;
     color:rgb(211, 211, 211)
 }
 
-.gather-title > img{
-    width:140px;
+.gather-logo{
+    width: 180px;
+    padding:10px 0;
+    height: auto;
 }
+
 
 .right-nav-container{
     display:flex;
     align-items: center;
 }
+
 
 .nav-list{
     list-style: none;

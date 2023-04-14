@@ -1,5 +1,9 @@
-/* TODO Add site wide styles */
+@import url('https://fonts.google.com/specimen/css?family=Varela+Round?query=round');
+@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@700&display=swap');
+
+
 *{
     margin:0;
     padding:0;
+    font-family:"Varela Round"
 }
