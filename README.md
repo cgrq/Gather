@@ -2,7 +2,7 @@
 
 Gather is a web app inspired by the popular [Meetup](https://www.meetup.com) site. Gather enables you to join and create groups or events in any city.
 
-[Click here for live view of site.](https://gather-j0vz.onrender.com)
+[Click here for live view of site.](https://gather.city)
 
 # Wiki Links
   * [API Documentation](https://github.com/cgrq/Gather/wiki/API-Documentation)

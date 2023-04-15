@@ -22,6 +22,7 @@ function SectionThree() {
                 caption={seeAllGroupsCaption} />
             <ActionCard
                 iconImgPath={"./start-a-group-icon.png"}
+                disabledIconImgPath={"./start-a-group-disabled-icon.png"}
                 linkPath={"/groups/new"}
                 title={"Start a group"}
                 caption={seeAllGroupsCaption}
@@ -30,10 +31,10 @@ function SectionThree() {
     )
 }
 
-function ActionCard({ iconImgPath, linkPath, title, caption, disabled = false }) {
+function ActionCard({ iconImgPath, disabledIconImgPath, linkPath, title, caption, disabled = false }) {
     return (
         <div className="action-card-container">
-            <img src={iconImgPath} />
+            <img src={ disabled ? disabledIconImgPath : iconImgPath} />
             <NavLink className={disabled ? " isDisabled" : ""} to={linkPath}>{title}</NavLink>
             <p>{caption}</p>
         </div>
