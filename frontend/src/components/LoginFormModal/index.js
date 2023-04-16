@@ -26,7 +26,7 @@ function LoginFormModal() {
   };
   const handleDemoSubmit = (e) => {
     e.preventDefault();
-    return dispatch(sessionActions.login({ credential:"Demo-lition", password:"password" }))
+    return dispatch(sessionActions.login({ credential: "Demo-lition", password: "password" }))
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
@@ -38,34 +38,41 @@ function LoginFormModal() {
 
   return (
     <>
-      <h1>Log In</h1>
-      <form onSubmit={handleLoginSubmit}>
-        <label>
-          Username or Email
-          <input
-            type="text"
-            value={credential}
-            onChange={(e) => setCredential(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button disabled={(credential.length < 4 || password.length < 6) ? true : false} type="submit">Log In</button>
-      </form>
-      <form onSubmit={handleDemoSubmit}>
-        <button type="submit">Log In as Demo User</button>
-      </form>
+      <div className="login-container">
+        <h1>Log In</h1>
+        <form className="login-main-form" onSubmit={handleLoginSubmit}>
+          <div className="login-main-input-container">
+            <label>
+              Username or Email
+            </label>
+            <input
+              type="text"
+              value={credential}
+              onChange={(e) => setCredential(e.target.value)}
+              required
+            />
+          </div>
+          <div className="login-main-input-container">
+            <label>
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          {errors.credential && (
+            <p>{errors.credential}</p>
+          )}
+          <button disabled={(credential.length < 4 || password.length < 6) ? true : false} type="submit">Log In</button>
+        </form>
+        <div className="login-dividing-line" />
+        <form className="login-demo-form" onSubmit={handleDemoSubmit}>
+          <button type="submit">Log In As Demo User</button>
+        </form>
+      </div>
     </>
   );
 }

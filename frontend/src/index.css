@@ -1,9 +1,20 @@
 @import url('https://fonts.google.com/specimen/css?family=Varela+Round?query=round');
 @import url('https://fonts.googleapis.com/css2?family=Dongle:wght@700&display=swap');
 
-
 *{
     margin:0;
     padding:0;
     font-family:"Varela Round"
+}
+a, button{
+    font-family: Roboto;
+}
+button{
+    border:none;
+    background-color:#00e1ff;
+    color:white !important;
+    cursor: pointer;
+}
+#modal-content{
+    border-radius: 30px;
 }

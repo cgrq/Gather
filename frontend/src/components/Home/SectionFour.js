@@ -30,7 +30,7 @@ function SectionFour() {
         <div className="section-four-container">
             {
                 sessionUser
-                    ? <button>Join Gather</button>
+                    ? <></>
                     : <OpenModalButton
                         buttonText="Join Gather"
                         onButtonClick={closeMenu}

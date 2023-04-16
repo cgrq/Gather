@@ -17,7 +17,7 @@ function Navigation({ isLoaded }) {
       {isLoaded && (
         <div className="right-nav-container">
           {
-            sessionUser && <NavLink className="nav-link" to="/groups/new">Start a new group</NavLink>
+            sessionUser && <NavLink className="nav-link nav-new-group" to="/groups/new">Start a new group</NavLink>
           }
           <div className="profile-container">
             <ProfileButton user={sessionUser} />

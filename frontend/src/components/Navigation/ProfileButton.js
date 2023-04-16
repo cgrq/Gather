@@ -38,42 +38,50 @@ function ProfileButton({ user }) {
     closeMenu();
   };
 
-  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const ulClassName = "profile-dropdown" + (showMenu ? "show-profile-list" : " hidden");
 
   return (
     <>
       <button className="profile-icon-button" onClick={openMenu}>
         <i className="fas fa-user-circle" />
       </button>
-      <ul className={`${ulClassName} profile-list`} ref={ulRef}>
-        {user ? (
-          <>
-            <li>Hello, {user.firstName}</li>
-            <li>{user.email}</li>
-            <li>
-              <button onClick={logout}>Log Out</button>
-            </li>
-          </>
-        ) : (
-          <>
-            <li>
-              <OpenModalButton
-                buttonText="Log In"
-                onButtonClick={closeMenu}
-                modalComponent={<LoginFormModal />}
-              />
-            </li>
-            <li>
-              <OpenModalButton
-                buttonText="Sign Up"
-                onButtonClick={closeMenu}
-                modalComponent={<SignupFormModal />}
-              />
-            </li>
-          </>
-        )}
-        <li><NavLink to="/groups">View groups</NavLink></li>
-      </ul>
+      <div className={`${ulClassName} profile-list`} ref={ulRef}>
+        <div className={user ? "nav-upper-container" : "hidden"}>
+          {
+            user
+            && (
+              <>
+                <div>Hello, {user.firstName}</div>
+                <div className="nav-user-email">{user.email}</div>
+              </>
+            )
+          }
+        </div>
+        <div className={`nav-lower-container nav-links ${!user ? `nav-lower-container-logged-out` :""}`}>
+          {
+            user
+              ? (
+                <button onClick={logout}>Log Out</button>
+              )
+              : (
+                <>
+                  <OpenModalButton
+                    buttonText="Log In"
+                    onButtonClick={closeMenu}
+                    modalComponent={<LoginFormModal />}
+                  />
+                  <OpenModalButton
+                    buttonText="Sign Up"
+                    onButtonClick={closeMenu}
+                    modalComponent={<SignupFormModal />}
+                  />
+                </>
+              )
+          }
+          <NavLink className="nav-view-groups" to="/groups">View groups</NavLink>
+
+        </div>
+      </div>
     </>
   );
 }
