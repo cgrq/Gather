@@ -8,33 +8,33 @@ function ResultsPage({ page, dataObj }) {
 
     const data = Object.values(dataObj);
 
-    if(page==="events"){
+    if (page === "events") {
         data.sort(compareEventDates)
     }
 
     return (
         <div className="results-container">
             <div className="results-header-container">
-                <ul className="results-nav">
-                    <li>
-                        <NavLink className={page === "groups" ? "looksDisabled" : ""} to="/events">
-                            Events
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink className={page === "events" ? "looksDisabled" : ""} to="/groups">
-                            Groups
-                        </NavLink>
-                    </li>
-                </ul>
-                <p>{(page === "groups" ? "Groups"  : "Events") + " in Gather"}</p>
+                <div className="results-nav">
+                    <NavLink className={page === "groups" ? "looksDisabled" : ""} to="/events">
+                        Events
+                    </NavLink>
+                    <NavLink className={page === "events" ? "looksDisabled" : ""} to="/groups">
+                        Groups
+                    </NavLink>
+                </div>
             </div>
             <div className="results-body-container">
-                {
-                    page === "groups"
-                        ? data.map((group) => <GroupListItem key={group.id} group={group} />)
-                        : data.map((event) => <EventListItem key={event.id} event={event} />)
-                }
+                <div className="results-subheader-wrapper">
+                    <h2>{(page === "groups" ? "Groups" : "Events") + " in Gather"}</h2>
+                </div>
+                <div className="results-body-wrapper">
+                    {
+                        page === "groups"
+                            ? data.map((group) => <GroupListItem key={group.id} group={group} />)
+                            : data.map((event) => <EventListItem key={event.id} event={event} />)
+                    }
+                </div>
             </div>
         </div>
     )

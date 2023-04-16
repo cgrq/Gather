@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { createGroup, createGroupImage } from "../../store/groups"
+import { createGroup, createGroupImage, removeGroup } from "../../store/groups"
 import { useHistory } from 'react-router-dom';
 import {isValidURL} from '../../utils/validation'
 
@@ -52,6 +52,7 @@ function CreateGroupPage() {
             console.log(`🖥 ~ file: CreateGroupPage.js:52 ~ handleFormSubmit ~ res:`, res)
             const data = await res.json();
             if (data && data.errors) {
+                // const removedGroup = dispatch(removeGroup(group.Id))
                 setErrors((prevState) => {
                     return {
                         ...prevState,

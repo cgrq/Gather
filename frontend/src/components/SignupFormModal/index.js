@@ -31,6 +31,8 @@ function SignupFormModal() {
         .then(closeModal)
         .catch(async (res) => {
           const data = await res.json();
+          console.log(`🖥 ~ file: index.js:38 ~ handleSubmit ~ data.errors:`, data.errors)
+
           if (data && data.errors) {
             setErrors(data.errors);
           }
@@ -57,7 +59,6 @@ function SignupFormModal() {
   return (
     <>
       <div className="signup-container">
-
         <h1>Sign Up</h1>
         <form className="signup-main-form" onSubmit={handleSubmit}>
           <div className="signup-main-input-container">
@@ -72,7 +73,7 @@ function SignupFormModal() {
             />
 
           </div>
-          {errors.email && <p>{errors.email}</p>}
+          {errors.email && <p className="input-error">{errors.email}</p>}
           <div className="signup-main-input-container">
             <label>
               Username
@@ -84,7 +85,7 @@ function SignupFormModal() {
                 required
               />
           </div>
-          {errors.username && <p>{errors.username}</p>}
+          {errors.username && <p className="input-error">{errors.username}</p>}
           <div className="signup-main-input-container">
             <label>
               First Name
@@ -97,7 +98,7 @@ function SignupFormModal() {
               />
 
           </div>
-          {errors.firstName && <p>{errors.firstName}</p>}
+          {errors.firstName && <p className="input-error">{errors.firstName}</p>}
           <div className="signup-main-input-container">
             <label>
               Last Name
@@ -110,7 +111,7 @@ function SignupFormModal() {
               />
 
           </div>
-          {errors.lastName && <p>{errors.lastName}</p>}
+          {errors.lastName && <p className="input-error">{errors.lastName}</p>}
           <div className="signup-main-input-container">
             <label>
               Password
@@ -123,7 +124,7 @@ function SignupFormModal() {
               />
 
           </div>
-          {errors.password && <p>{errors.password}</p>}
+          {errors.password && <p className="input-error">{errors.password}</p>}
           <div className="signup-main-input-container">
             <label>
               Confirm Password
@@ -136,20 +137,8 @@ function SignupFormModal() {
               />
 
           </div>
-          {errors.confirmPassword && (
-            <p>{errors.confirmPassword}</p>
-          )}
-
-
-
-
-
-
-
-
-
-
-          <button type="submit" disabled={disableSubmitButton() ? true : false} >Sign Up</button>
+          {errors.confirmPassword && (<p className="input-error">{errors.confirmPassword}</p>)}
+          <button type="submit" className={disableSubmitButton() ? "disable-button" : ""} disabled={disableSubmitButton() ? true : false} >Sign Up</button>
         </form>
       </div>
     </>

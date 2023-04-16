@@ -1,155 +1,223 @@
-.nav-link{
+.nav-link {
     text-decoration: none !important;
 }
 
-.join-button{
+.join-button {
     background-color: red;
-    color:white;
+    color: white;
 }
 
 /* Group List Item */
-.item-container{
-    display:flex;
-    padding:20px;
-    width:100%;
-    border-top:1px solid black;
+.item-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 45px 40px;
+    border-top: 3px solid #f3f3f3 !important;
+    width:950px;
+    margin:0 auto;
+    margin-top: -5px;
 }
+
 .image-container {
-    width:250px;
-    padding:0 !important;
-    height:150px;
-    border:1px solid rgb(210, 210, 210);
+    width: 322px;
+    height: 200px;
+    padding: 0 !important;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 25px 5px #dddddd;
+
 }
-.image-container > img {
-    object-fit: cover !important;
-    width:250px;
-    height:150px;
-    padding:0 !important;
+.item-image-shadow{
+    position: absolute;
+    width: 20px;
+    height: 200px;
+    /* box-shadow: inset 0 0 20px 1px #cdcdcd; */
+    top:0;
 }
 
-.text-container{
-    display:flex;
-    flex-flow:column nowrap;
-    color:black;
-    margin:0 auto;
+.image-container>img {
+    min-width: 300px;
+    min-height: 200px;
+    object-fit:cover;
+    padding: 0 !important;
 }
- .about{
-    width:400px;
- }
 
- /* Group ID Page */
-
- .group-page-container,
- .group-page-top-background,
- .group-page-bottom-background {
-    width:100%;
-    display:flex;
-    flex-flow:column nowrap;
- }
- .group-page-bottom-background{
-    background-color:rgb(197, 197, 197);
- }
-
- .group-page-top-container,
- .group-page-bottom-container{
-    display:flex;
+.text-container {
+    display: flex;
+    justify-content: center;
     flex-flow: column nowrap;
-    width:60%;
-    margin:0 auto;
-    padding:60px;
- }
-
- .group-page-content-row{
-    display:flex;
-    width:100%;
- }
- .group-page-content-row img{
-    width:700px;
-    height:350px;
-    border:1px solid black;
-    margin-right:20px;
- }
- .group-page-events-row{
-    width:600px;
- }
-
- /* Group Preview */
-
- .group-preview-container{
-    display:flex;
-    background-color:white;
-    border-radius:30px;
-    padding:30px;
- }
-
- .group-preview-container img{
-    width:120px !important;
-    height:auto !important;
- }
-
-
- .event-page-details-card{
-    display:flex;
-    flex-flow:column nowrap;
-    margin-top:20px;
+    color: black;
+    height: 200px;
+    margin: 0;
+    margin-left:68px;
 }
 
-.event-page-details-card-row{
-    display:flex;
+.text-container > h2 {
+    font-size: 25px;
+    font-family: "Roboto";
+    font-weight: bold;
 }
 
-.event-page-details-date-pair{
-    display:flex;
+.text-container > h3 {
+    font-size: 18px;
+    margin-top: 5px;
+    color:rgb(99, 99, 99);
 }
 
-.event-page-details-date-pair-label{
-    margin-right:10px;
+.text-container > p {
+    width: 520px;
+    font-size: 14px;
+    margin:10px 0;
+}
+
+.text-container > span {
+    display:flex;
+    font-size:14px;
+}
+.text-container span span {
+    font-family: "Roboto" !important;
+    font-weight: bold;
+    color:rgb(76, 76, 76);
+    display:flex;
+}
+.text-container span span p {
+    color:#00e1ff;
+    margin-right:5px
+}
+.text-container span div {
+    color:black;
+    margin:0 10px;
+}
+.text-container > span > p {
+    font-style: italic;
+}
+
+/* Group ID Page */
+
+.group-page-container,
+.group-page-top-background,
+.group-page-bottom-background {
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.group-page-bottom-background {
+    background-color: rgb(197, 197, 197);
+}
+
+.group-page-top-container,
+.group-page-bottom-container {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 60%;
+    margin: 0 auto;
+    padding: 60px;
+}
+
+.group-page-content-row {
+    display: flex;
+    width: 100%;
+}
+
+.group-page-content-row img {
+    width: 700px;
+    height: 350px;
+    border: 1px solid rgb(134, 134, 134);
+    margin-right: 20px;
+}
+
+.group-page-events-row {
+    width: 600px;
+}
+
+/* Group Preview */
+
+.group-preview-container {
+    display: flex;
+    background-color: white;
+    border-radius: 30px;
+    padding: 30px;
+}
+
+.group-preview-container img {
+    width: 120px !important;
+    height: auto !important;
+}
+
+
+.event-page-details-card {
+    display: flex;
+    flex-flow: column nowrap;
+    margin-top: 20px;
+}
+
+.event-page-details-card-row {
+    display: flex;
+}
+
+.event-page-details-date-pair {
+    display: flex;
+}
+
+.event-page-details-date-pair-label {
+    margin-right: 10px;
 }
 
 /* Create Group Page */
 
-.create-group-page-container{
-    display:flex;
-    flex-flow:column;
-    width:70%;
-    margin:0 auto;
+.create-group-page-container {
+    display: flex;
+    flex-flow: column;
+    width: 70%;
+    margin: 0 auto;
 }
 
-.create-group-page-row{
-     border-bottom:1px solid black;
-     padding:30px 0;
-     display:flex;
-     flex-flow: column;
+.create-group-page-row {
+    border-bottom: 1px solid black;
+    padding: 30px 0;
+    display: flex;
+    flex-flow: column;
 }
 
-.create-group-page-row button,.create-group-page-row textarea,.create-group-page-row input, .create-group-page-row select{
+.create-group-page-row button,
+.create-group-page-row textarea,
+.create-group-page-row input,
+.create-group-page-row select {
     max-width: 200px;
 }
 
-.create-group-page-sub-row{
-    display:flex;
-    flex-flow:column;
+.create-group-page-sub-row {
+    display: flex;
+    flex-flow: column;
 }
 
-.create-group-page-list{
-    margin-left:15px;
+.create-group-page-list {
+    margin-left: 15px;
 }
 
-.create-group-page-errors{
-    color:red;
+.create-group-page-errors {
+    color: red;
 }
 
 /* Delete a Group */
-.delete-a-group-modal-container{
-    width:100%;
-    height:100%;
-    display:flex;
+.delete-a-group-modal-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
     justify-content: center;
-    flex-flow:column nowrap;
+    flex-flow: column nowrap;
 }
-.delete-a-group-modal-button-yes{
-    background-color:red;
+
+.delete-a-group-modal-button-yes {
+    background-color: red;
 }
-.delete-a-group-modal-button{
-    width:100%;
+
+.delete-a-group-modal-button {
+    width: 100%;
 }

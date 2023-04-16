@@ -47,6 +47,7 @@ function LoginFormModal() {
             </label>
             <input
               type="text"
+              className={errors.credential ? "login-main-form-input-error" : ""}
               value={credential}
               onChange={(e) => setCredential(e.target.value)}
               required
@@ -58,17 +59,18 @@ function LoginFormModal() {
             </label>
             <input
               type="password"
+              className={errors.credential ? "login-main-form-input-error" : ""}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
           {errors.credential && (
-            <p>{errors.credential}</p>
+            <p className="input-error ">{errors.credential}</p>
           )}
           <button disabled={(credential.length < 4 || password.length < 6) ? true : false} type="submit">Log In</button>
         </form>
-        <div className="login-dividing-line" />
+        <div className="login-dividing-line" ></div>
         <form className="login-demo-form" onSubmit={handleDemoSubmit}>
           <button type="submit">Log In As Demo User</button>
         </form>

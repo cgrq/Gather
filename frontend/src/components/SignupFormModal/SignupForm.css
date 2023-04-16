@@ -8,11 +8,13 @@
     font-size:50px;
     line-height: 50px;
     margin-bottom:10px;
+    align-self: flex-start;
 }
 
 .signup-container, .signup-main-form{
     display:flex;
     flex-flow: column;
+    align-items: center;
 }
 
 .signup-main-form input{
@@ -55,4 +57,7 @@
     top:20;
     left:20;
     color:rgb(159, 159, 159);
+}
+.disable-button{
+    background-color:rgb(223, 223, 223);
 }

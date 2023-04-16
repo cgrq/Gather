@@ -7,11 +7,13 @@
     font-family: "Dongle";
     font-size:50px;
     line-height: 50px;
+    align-self: flex-start;
     margin-bottom:10px;
 }
 
 .login-container, .login-main-form{
     display:flex;
+    align-items: center;
     flex-flow: column;
 }
 
@@ -25,6 +27,9 @@
 }
 .login-main-form input:focus{
     outline-color:#00e1ff;
+}
+.login-main-form-input-error{
+    border:1px solid #ff808e !important;
 }
 
 .login-container button{
@@ -44,7 +49,8 @@
 }
 .login-dividing-line{
     margin:10px 0;
-    border-bottom:2px solid #f3f3f3;
+    width:100%;
+    border-bottom:2px solid #f3f3f3 !important;
 }
 .login-main-input-container{
     position:relative;
