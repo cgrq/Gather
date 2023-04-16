@@ -3,8 +3,7 @@
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-    width:60%;
-    max-width:1300px;
+    width:1050px;
     margin:0 auto;
 }
 
@@ -13,14 +12,15 @@
     font-family: 'Dongle', sans-serif;
 }
 .home-h1{
-    font-size:95px;
-    line-height: 65px;
+    font-size:90px;
+    line-height: 55px;
 }
 
 /* Section One */
 .section-one-container{
     margin-top:60px;
     display:flex;
+    align-items: center;
     justify-content: space-between;
 }
 
@@ -29,12 +29,12 @@
 }
 
 .section-one-container > div{
-    width:50%;
+    width:60%;
 }
 
 .section-one-container > img{
     width:350px;
-    height:350px;
+    height:auto;
     border-radius:60px;
 }
 
@@ -69,7 +69,7 @@
 
 .action-card-container img{
     width:250px;
-    height:250px;
+    height:auto;
     border-radius:60px;
 }
 

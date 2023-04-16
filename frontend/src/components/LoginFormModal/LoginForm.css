@@ -4,7 +4,10 @@
 }
 
 .login-container h1{
-    margin-bottom:20px;
+    font-family: "Dongle";
+    font-size:50px;
+    line-height: 50px;
+    margin-bottom:10px;
 }
 
 .login-container, .login-main-form{
@@ -41,7 +44,7 @@
 }
 .login-dividing-line{
     margin:10px 0;
-    border-bottom:4px solid #f3f3f3;
+    border-bottom:2px solid #f3f3f3;
 }
 .login-main-input-container{
     position:relative;
