@@ -24,7 +24,9 @@ function SectionFour() {
         return () => document.removeEventListener("click", closeMenu);
       }, [showMenu]);
 
-      const closeMenu = () => setShowMenu(false);
+      const closeMenu = () => {
+        setShowMenu(false)
+      };
 
     return (
         <div className="section-four-container">
