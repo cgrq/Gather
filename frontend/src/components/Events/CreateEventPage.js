@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import moment from 'moment';
 import { useDispatch } from "react-redux";
 import { createEvent, createEventImage, removeEvent } from "../../store/events"
 import { useHistory, useParams } from 'react-router-dom';
@@ -18,6 +19,16 @@ function CreateEventPage() {
     const [errors, setErrors] = useState({});
     const { groupId } = useParams();
 
+
+    const normalizeTimeZone = (date) => {
+        const momentDate = moment(date);
+        return momentDate.local().format('YYYY-MM-DDTHH:mm');
+    }
+
+    useEffect(()=>{
+
+        console.log(`🖥 ~ file: CreateEventPage.js:33 ~ CreateEventPage ~ startDate:`, startDate)
+    },[startDate])
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -112,7 +123,7 @@ function CreateEventPage() {
                         <span>When does  your event start?</span>
                         <input className="create-group-page-row-input" type="datetime-local"
                             value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
+                            onChange={(e) => setStartDate(normalizeTimeZone(e.target.value))}
                             step="60"
                         />
                         {
@@ -123,7 +134,7 @@ function CreateEventPage() {
                         <span>When does  your event end?</span>
                         <input className="create-group-page-row-input" type="datetime-local"
                             value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
+                            onChange={(e) => setEndDate(normalizeTimeZone(e.target.value))}
                             step="60"
                         />
                         {

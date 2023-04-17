@@ -47,18 +47,18 @@ const validateGroup = [
 
 const validateImage = [
     check('url')
-      .exists({ checkFalsy: true })
-      .notEmpty()
-      .withMessage('Image Url is required')
-      .custom(url => {
-        if (!isValidURL(url)) {
-            throw new Error('Invalid URL');
-        }
-        return true;
-    })
-      .withMessage('Invalid URL'),
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage('Image Url is required')
+        .custom(url => {
+            if (!isValidURL(url)) {
+                throw new Error('Invalid URL');
+            }
+            return true;
+        })
+        .withMessage('Invalid URL'),
     handleValidationErrors
-  ];
+];
 
 const validateVenue = [
     check('address')
@@ -111,8 +111,9 @@ const validateEvent = [
         .isInt()
         .withMessage("Capacity must be an integer"),
     check('price')
-        .exists({ checkFalsy: true })
-        .isDecimal()
+        .exists()
+        .custom(value => typeof value !== 'undefined')
+        .isInt()
         .withMessage("Price is invalid"),
     check('description')
         .exists({ checkFalsy: true })

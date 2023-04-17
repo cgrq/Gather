@@ -121,7 +121,7 @@ function EventIdPage() {
                                         {
                                             isOrganizer
                                             && <div className="event-page-details-card-buttons">
-                                                <button>Update</button>
+                                                <button className="event-page-update-button">Update</button>
                                                 <OpenModalButton
                                                     buttonText="Delete"
                                                     onButtonClick={closeMenu}

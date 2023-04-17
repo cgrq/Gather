@@ -202,9 +202,19 @@
 .event-page-details-card-last-row {
    justify-content: space-between;
 }
+.event-page-details-card-last-row button{
+   border-radius: 15px;
+    padding: 10px 20px;
+    margin-left: 5px;
+    background-color: #ff808f;
+}
+.event-page-update-button{
+   background-color:#00e1ff !important;
+}
 .event-page-details-description{
    margin-top:30px;
 }
+
 
 /* Create Event Page */
 

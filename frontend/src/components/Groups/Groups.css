@@ -3,8 +3,11 @@
 }
 
 .join-button {
-    background-color: red;
-    color: white;
+    border-radius: 15px;
+    padding: 10px 20px;
+    width: 160px;
+    margin-top:20px;
+    background-color: #ff808f;
 }
 
 /* Group List Item */

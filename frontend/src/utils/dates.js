@@ -1,3 +1,5 @@
+
+
 export const compareEventDates = (a, b) => {
     const dateA = new Date(
         a.startDate.substring(0, 4), // year
@@ -17,6 +19,7 @@ export const compareEventDates = (a, b) => {
     );
     return dateB - dateA;
 };
+
 
 export const seperateDateAndTime = (dateTimeString) => {
     const [dateString, timeString] = dateTimeString.split(" ");
