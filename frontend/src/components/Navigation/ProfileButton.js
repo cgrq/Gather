@@ -78,7 +78,7 @@ function ProfileButton({ user }) {
                 </>
               )
           }
-          <NavLink className="nav-view-groups" to="/groups">View groups</NavLink>
+          <NavLink onClick={closeMenu} className="nav-view-groups" to="/groups">View groups</NavLink>
 
         </div>
       </div>

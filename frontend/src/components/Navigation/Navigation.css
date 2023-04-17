@@ -52,6 +52,7 @@
     border-top-right-radius:0;
     flex-flow: column;
     overflow: hidden;
+    z-index:10000;
     top:50;
     right:20;
     /* box-shadow: 0 5px 15px 5px rgb(230, 230, 230);
