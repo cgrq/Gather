@@ -5,8 +5,10 @@ function GroupPreview({ group }) {
     return (
         <NavLink className="nav-link" to={`/groups/${group.id}`}>
             <div className="group-preview-container">
-                <img src={group.GroupImages[0].url} />
-                <div>
+                <div className="group-preview-image-container">
+                    <img className="group-preview-image" src={group.GroupImages[0].url} />
+                </div>
+                <div className="group-preview-text-container">
                     <h2>{group.name}</h2>
                     <div>{group.private ? "Private" : "Public"}</div>
                 </div>

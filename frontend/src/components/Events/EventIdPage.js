@@ -75,63 +75,69 @@ function EventIdPage() {
     const isOrganizer = (sessionUser && sessionUser.id) === organizer.id;
     return (
         <div className="event-page-container">
-            <div className="event-page-top-background">
-                <div className="event-page-top-container">
-                    <NavLink to="/events">{"< Events"}</NavLink>
-                    <h1>{event.name}</h1>
-                    <div>{`Hosted by ${firstName} ${lastName}`}</div>
-                </div>
+            <div className="event-page-bread-crumb-row">
+                <NavLink to="/events">{"< Events"}</NavLink>
             </div>
-            <div className="event-page-bottom-background">
-                <div className="event-page-bottom-container">
-                    <div className="event-page-content-row">
-                        <img src={eventImage} />
-                        <div>
-                            <GroupPreview group={group} />
-                            <div className="event-page-details-card">
-                                <div className="event-page-details-card-row">
-                                    <div className="event-page-details-card-icon-wrapper"><i className="fa fa-clock" aria-hidden="true"></i></div>
-                                    <div>
-                                        <div className="event-page-details-date-pair">
-                                            <div className="event-page-details-date-pair-label">START</div>
-                                            <div>{`${startDate} · ${startTime}`}</div>
+            <div className="event-page-content-wrapper">
+                <div className="event-page-top-background">
+                    <div className="event-page-top-container">
+                        <h1>{event.name}</h1>
+                        <div>{`Hosted by ${firstName} ${lastName}`}</div>
+                    </div>
+                </div>
+                <div className="event-page-bottom-background">
+                    <div className="event-page-bottom-container">
+                        <div className="event-page-content-row">
+                            <div className="event-page-image-container">
+                                <img src={eventImage} />
+                            </div>
+                            <div className="event-page-card-container">
+                                <GroupPreview group={group} />
+                                <div className="event-page-details-card">
+                                    <div className="event-page-details-card-row">
+                                        <div className="event-page-details-card-icon-wrapper"><i className="fa fa-clock" aria-hidden="true"></i></div>
+                                        <div>
+                                            <div className="event-page-details-date-pair">
+                                                <div className="event-page-details-date-pair-label">START</div>
+                                                <div>{`${startDate} · ${startTime}`}</div>
+                                            </div>
+                                            <div className="event-page-details-date-pair">
+                                                <div className="event-page-details-date-pair-label">END</div>
+                                                <div>{`${endDate} · ${endTime}`}</div>
+                                            </div>
                                         </div>
-                                        <div className="event-page-details-date-pair">
-                                            <div className="event-page-details-date-pair-label">END</div>
-                                            <div>{`${endDate} · ${endTime}`}</div>
+                                    </div>
+                                    <div className="event-page-details-card-row">
+                                        <div className="event-page-details-card-icon-wrapper">
+                                            <i className="fa fa-dollar-sign" aria-hidden="true"></i>
                                         </div>
+                                        <div>{event.price > 0 ? event.price : "FREE"}</div>
                                     </div>
-                                </div>
-                                <div className="event-page-details-card-row">
-                                    <div className="event-page-details-card-icon-wrapper">
-                                        <i className="fa fa-dollar-sign" aria-hidden="true"></i>
-                                    </div>
-                                    <div>{event.price > 0 ? event.price : "FREE"}</div>
-                                </div>
-                                <div className="event-page-details-card-row event-page-details-card-last-row">
-                                    <div className="event-page-details-card-row-item-pair-wrapper">
-                                        <div className="event-page-details-card-icon-wrapper"><i className="fa fa-map-pin" aria-hidden="true"></i></div>
-                                        <div>{event.type}</div>
-                                    </div>
-                                    {
-                                        isOrganizer
-                                            &&  <div className="event-page-details-card-buttons">
-                                                    <button>Update</button>
-                                                    <OpenModalButton
-                                            buttonText="Delete"
-                                            onButtonClick={closeMenu}
-                                            modalComponent={<DeleteAnEventModal eventId={eventId}/>} />
-                                                </div>
-                                    }
+                                    <div className="event-page-details-card-row event-page-details-card-last-row">
+                                        <div className="event-page-details-card-row-item-pair-wrapper">
+                                            <div className="event-page-details-card-icon-wrapper"><i className="fa fa-map-pin" aria-hidden="true"></i></div>
+                                            <div>{event.type}</div>
+                                        </div>
+                                        {
+                                            isOrganizer
+                                            && <div className="event-page-details-card-buttons">
+                                                <button>Update</button>
+                                                <OpenModalButton
+                                                    buttonText="Delete"
+                                                    onButtonClick={closeMenu}
+                                                    modalComponent={<DeleteAnEventModal eventId={eventId} />} />
+                                            </div>
+                                        }
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="event-page-content-row">
-                        <div>
-                            <h2>Details</h2>
-                            <div>{event.description}</div>
+                        <div className="event-page-content-row event-page-details-description">
+                            <div>
+                                <h2>Details</h2>
+                                <div>{event.description}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
