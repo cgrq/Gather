@@ -11,7 +11,7 @@ function GroupListItem({ group }) {
         }
     }, [group])
     return (
-        <NavLink to={`groups/${group.id}`} className="nav-link">
+        <NavLink to={`groups/${group.id}`} className="nav-link item-nav-link">
             <div className="item-container">
                 <div className="image-container">
                     <div className="item-image-shadow"></div>
@@ -19,9 +19,9 @@ function GroupListItem({ group }) {
                 </div>
                 <div className="text-container">
                     <h2>{group.name}</h2>
-                    <h3>{`${group.city}, ${group.state}`}</h3>
-                    <p>{group.about}</p>
-                    <span><span>{`${group.events ? group.events.length : 0} ${(group.events && group.events.length !== 1) ? "events" : "event"}`}</span> <div>·</div> <p>{group.private ? "Private" : "Public"}</p></span>
+                    <h3 className="item-opacity">{`${group.city}, ${group.state}`}</h3>
+                    <p className="item-opacity">{group.about}</p>
+                    <span className="item-opacity"><span>{`${group.events ? group.events.length : 0} ${(group.events && group.events.length !== 1) ? "events" : "event"}`}</span> <div>·</div> <p>{group.private ? "Private" : "Public"}</p></span>
                 </div>
             </div>
         </NavLink>

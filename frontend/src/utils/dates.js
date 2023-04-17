@@ -22,15 +22,17 @@ export const seperateDateAndTime = (dateTimeString) => {
     const [dateString, timeString] = dateTimeString.split(" ");
     const [year, month, day] = dateString.split("-");
     const [hours, minutes, seconds] = timeString.split(":");
+    const ampm = hours < 12 ? 'AM' : 'PM';
+    const hour12 = hours % 12 || 12;
     const newDate = new Date(year, month - 1, day, hours, minutes, seconds);
     const date = newDate.toLocaleDateString();
-    const time = newDate.toLocaleTimeString();
-    return [date,time];
+    const time = `${hour12}:${minutes} ${ampm}`;
+    return [date, time];
 }
 
 export function padZeros(num) {
     return num.toString().padStart(2, '0');
-  }
+}
 
 export function formatDate(unformattedDate) {
     const date = new Date(unformattedDate);
@@ -42,4 +44,4 @@ export function parseDate(dateString) {
     const [year, month, day] = datePart.split('-');
     const [hour, minute, second] = timePart.split(':');
     return new Date(year, month - 1, day, hour, minute, second);
-  }
+}

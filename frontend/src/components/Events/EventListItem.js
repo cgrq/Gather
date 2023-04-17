@@ -28,14 +28,16 @@ function EventListItem({ event }) {
         <NavLink to={`/events/${event.id}`} className="nav-link">
             <div className="event-details-container">
                 <div className="event-top-row-container">
-                    <img src={event.previewImage} />
-                    <div>
-                        <div>{`${startDate} · ${startTime}`}</div>
+                    <div className="image-container">
+                        <img src={event.previewImage} />
+                    </div>
+                    <div className="text-container">
+                        <span>{`${startDate} · ${startTime}`}</span>
                         <h2>{event.name}</h2>
-                        <div>{event.Venue.city + ", " + event.Venue.state}</div>
+                        <h3>{event.Venue.city + ", " + event.Venue.state}</h3>
+                        <p>{description}</p>
                     </div>
                 </div>
-                <div className="event-bottom-row-container">{description}</div>
             </div>
         </NavLink>
     );
