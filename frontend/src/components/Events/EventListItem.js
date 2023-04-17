@@ -25,7 +25,7 @@ function EventListItem({ event }) {
     const startTime = startDateTimeArr[1];
 
     return (
-        <NavLink to={`/events/${event.id}`} className="nav-link">
+        <NavLink to={`/events/${event.id}`} className="nav-link event-list-item-container">
             <div className="event-details-container">
                 <div className="event-top-row-container">
                     <div className="image-container">

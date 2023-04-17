@@ -4,6 +4,9 @@
    text-decoration: none !important;
    color: black;
 }
+.event-list-item-container:hover .text-container>h2 {
+   color: #00e1ff;
+}
 
 .event-details-container {
    display: flex;

@@ -54,7 +54,7 @@
 .results-subheader-wrapper{
     position:absolute;
     padding-top:10px;
-    top:-85px;
+    top:-75px;
     left:calc(525px - 200px);
     width:400px;
     text-align: center;
@@ -65,7 +65,7 @@
     border-top-left-radius:20px;
 }
 .results-subheader-wrapper h2{
-    font-size: 55px;
+    font-size: 45px;
     margin:0 auto;
     font-family: "Dongle";
 }

@@ -87,11 +87,11 @@ function UpdateGroupPage() {
                 <h3>UPDATE YOUR GROUP'S INFORMATION</h3>
                 <h1>We'll walk you through a few steps to update your group's information</h1>
             </div>
-            <form onSubmit={handleFormSubmit}>
+            <form className="create-group-page-form-container" onSubmit={handleFormSubmit}>
                 <div className="create-group-page-row">
                     <h1>First, set your group's location.</h1>
-                    <label>Gather groups meet locally, in person, and online, We'll connect you with people in your area, and more can join you online.</label>
-                    <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="City, STATE" />
+                    <span>Gather groups meet locally, in person, and online, We'll connect you with people in your area, and more can join you online.</span>
+                    <input className="create-group-page-row-input" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="City, STATE" />
                     {
                         errors.city && <p className="create-group-page-errors">{errors.city}</p>
                     }
@@ -101,8 +101,8 @@ function UpdateGroupPage() {
                 </div>
                 <div className="create-group-page-row">
                     <h1>What is the name of your group?</h1>
-                    <label>Choose a name that will give people a clear idea of what the group is about. Feel free to get creative! You can edit this later if you change your mind.</label>
-                    <input value={name} onChange={(e) => setName(e.target.value)} placeholder={"What is your group name?"} />
+                    <span>Choose a name that will give people a clear idea of what the group is about. Feel free to get creative! You can edit this later if you change your mind.</span>
+                    <input className="create-group-page-row-input" value={name} onChange={(e) => setName(e.target.value)} placeholder={"What is your group name?"} />
                     {
                         errors.name && <p className="create-group-page-errors">{errors.name}</p>
                     }
@@ -114,7 +114,7 @@ function UpdateGroupPage() {
                         <li>Who should join?</li>
                         <li>What will you do at your events?</li>
                     </ol>
-                    <textarea value={about} onChange={(e) => setAbout(e.target.value)} placeholder={"Please write at least 30 characters"} />
+                    <textarea className="create-group-page-row-input" value={about} onChange={(e) => setAbout(e.target.value)} placeholder={"Please write at least 30 characters"} />
                     {
                         errors.about && <p className="create-group-page-errors">{errors.about}</p>
                     }
@@ -122,8 +122,8 @@ function UpdateGroupPage() {
                 <div className="create-group-page-row">
                     <h1>Final steps...</h1>
                     <div className="create-group-page-sub-row">
-                        <label>Is this an in person or online group?</label>
-                        <select value={type} onChange={(e) => setType(e.target.value)} >
+                        <span>Is this an in person or online group?</span>
+                        <select className="create-group-page-row-input" value={type} onChange={(e) => setType(e.target.value)} >
                             <option value="" disabled>(select one)</option>
                             <option value="In person">In person</option>
                             <option value="Online">Online</option>
@@ -133,8 +133,8 @@ function UpdateGroupPage() {
                         }
                     </div>
                     <div className="create-group-page-sub-row">
-                        <label>Is this group private or public?</label>
-                        <select value={isPrivate} onChange={(e) => setIsPrivate(e.target.value)} >
+                        <span>Is this group private or public?</span>
+                        <select className="create-group-page-row-input" value={isPrivate} onChange={(e) => setIsPrivate(e.target.value)} >
                             <option value="" disabled>(select one)</option>
                             <option value={true}>Private</option>
                             <option value={false}>Public</option>
@@ -144,14 +144,14 @@ function UpdateGroupPage() {
                         }
                     </div>
                     {/* <div className="create-group-page-sub-row">
-                        <label>Please add an image url for your group below:</label>
+                        <span>Please add an image url for your group below:</span>
                         <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder={"Image Url"} />
                         {
                             errors.url && <p className="create-group-page-errors">{errors.url}</p>
                         }
                     </div> */}
                 </div>
-                <div className="create-group-page-row">
+                <div className="create-group-page-submit-row">
                     <button type="submit">Update Group</button>
                 </div>
             </form>
