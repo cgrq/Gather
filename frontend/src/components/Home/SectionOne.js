@@ -1,4 +1,24 @@
+import React, { useRef, useState, useEffect } from 'react';
+import lottie from 'lottie-web';
+import animationData from "./home-splash-lottie.json";
+
 function SectionOne() {
+    const animationContainer = useRef(null);
+    const [animationInstance, setAnimationInstance] = useState(null);
+
+    useEffect(() => {
+        if (animationContainer.current && !animationInstance) {
+            const newAnimationInstance = lottie.loadAnimation({
+                container: animationContainer.current,
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                animationData: animationData,
+            });
+            setAnimationInstance(newAnimationInstance);
+        }
+    }, [animationContainer, animationInstance]);
+
     return (
         <div className="section-one-container">
             <div className="section-one-text-container">
@@ -7,7 +27,7 @@ function SectionOne() {
             </div>
             <div className="section-one-image-container home-image-container">
                 <div className="section-one-image-shadow home-image-shadow" />
-                <img src="./main-splash-icon.png" />
+                <div className="section-one-lottie" ref={animationContainer} />
             </div>
         </div>
     )
