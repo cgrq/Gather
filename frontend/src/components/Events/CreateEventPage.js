@@ -66,11 +66,11 @@ function CreateEventPage() {
 
     return (
         <div className="create-event-page-container">
-            <form onSubmit={handleFormSubmit}>
+            <form className="create-event-page-form-container" onSubmit={handleFormSubmit}>
                 <div className="create-event-page-row">
                     <h1>Create an event for {name}</h1>
                     <span>What is the name of your event?</span>
-                    <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Event Name" />
+                    <input className="create-group-page-row-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Event Name" />
                     {
                         errors.name && <p className="create-event-page-errors">{errors.name}</p>
                     }
@@ -78,7 +78,7 @@ function CreateEventPage() {
                 <div className="create-event-page-row">
                     <div className="create-event-page-sub-row">
                         <span>Is this an in person or online event?</span>
-                        <select value={type} onChange={(e) => setType(e.target.value)} >
+                        <select className="create-group-page-row-input" value={type} onChange={(e) => setType(e.target.value)} >
                             <option value="" disabled>(select one)</option>
                             <option value="In person">In person</option>
                             <option value="Online">Online</option>
@@ -92,7 +92,7 @@ function CreateEventPage() {
                         <span>What is the price of your event?</span>
                         <div className="create-event-page-price-input-container">
                             <div className="create-event-page-price-input-overlay">$</div>
-                            <input className="create-event-page-price-input" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={"0"} />
+                            <input className="create-group-page-row-input create-event-page-price-input" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={"0"} />
                         </div>
                         {
                             errors.price && <p className="create-event-page-errors">{errors.price}</p>
@@ -102,7 +102,7 @@ function CreateEventPage() {
                 <div className="create-event-page-row">
                     <div className="create-event-page-sub-row">
                         <span>When does  your event start?</span>
-                        <input type="datetime-local"
+                        <input className="create-group-page-row-input" type="datetime-local"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                             step="60"
@@ -113,7 +113,7 @@ function CreateEventPage() {
                     </div>
                     <div className="create-event-page-sub-row">
                         <span>When does  your event end?</span>
-                        <input type="datetime-local"
+                        <input className="create-group-page-row-input" type="datetime-local"
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
                             step="60"
@@ -126,7 +126,7 @@ function CreateEventPage() {
                 <div className="create-event-page-row">
                     <div className="create-event-page-sub-row">
                         <span>Please add an image url for your event below:</span>
-                        <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder={"Image Url"} />
+                        <input className="create-group-page-row-input" value={url} onChange={(e) => setUrl(e.target.value)} placeholder={"Image Url"} />
                         {
                             errors.url && <p className="create-event-page-errors">{errors.url}</p>
                         }
@@ -134,7 +134,7 @@ function CreateEventPage() {
                 </div>
                 <div className="create-event-page-row">
                     <span>Please describe your event:</span>
-                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder={"Please write at least 30 characters"} />
+                    <textarea className="create-group-page-row-input" value={description} onChange={(e) => setDescription(e.target.value)} placeholder={"Please write at least 30 characters"} />
                     {
                         errors.description && <p className="create-event-page-errors">{errors.description}</p>
                     }

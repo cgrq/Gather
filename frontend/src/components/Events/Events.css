@@ -216,21 +216,42 @@
    font-size: 14px;
 }
 
+.create-event-page-form-container{
+   width:500px;
+   margin:40px auto;
+   box-shadow: 0 10px 15px 5px #dddddd;
+   padding:15px 40px;
+   border-radius: 30px;
+}
+
 .create-event-page-row {
    border-bottom: 1px solid black;
    padding: 30px 0;
    display: flex;
    flex-flow: column;
 }
+.create-event-page-row h1{
+   margin-bottom:30px;
+}
 
 .create-event-page-row button,
 .create-event-page-row textarea,
 .create-event-page-row input,
 .create-event-page-row select {
-   max-width: 200px;
+   width:100%;
 }
 
-
+.create-group-page-row-input{
+   padding:20px;
+   padding-top:25px;
+   margin:10px 0;
+   font-size: 14px;
+   border-radius: 25px;
+   border:1px solid #f3f3f3;
+}
+.create-group-page-row-input:focus{
+   outline-color:#00e1ff;
+}
 .create-event-page-sub-row {
    display: flex;
    flex-flow: column;
@@ -246,6 +267,7 @@
 
 .create-event-page-price-input {
    text-align: right;
+   width:120px !important;
 }
 
 .create-event-page-price-input-container {
@@ -254,6 +276,8 @@
 
 .create-event-page-price-input-overlay {
    position: absolute;
+   top:34px;
+   left:15px
 }
 
 /* Delete a Event */
