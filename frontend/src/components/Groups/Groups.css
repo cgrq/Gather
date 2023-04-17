@@ -317,37 +317,98 @@
 .create-group-page-container {
     display: flex;
     flex-flow: column;
-    width: 70%;
+    width: 1050px;
+    padding-top:60px;
     margin: 0 auto;
+}
+.create-group-page-container span{
+    font-size: 14px;
+}
+.create-group-page-form-container{
+    width:500px;
+    margin:40px auto;
+    box-shadow: 0 10px 15px 5px #dddddd;
+    padding:15px 40px;
+    border-radius: 30px;
 }
 
 .create-group-page-row {
-    border-bottom: 1px solid black;
-    padding: 30px 0;
+    border-bottom: 1px solid rgb(190, 190, 190);
+    padding: 25px 0;
     display: flex;
     flex-flow: column;
+}
+.create-group-page-row > span{
+    margin:10px 0;
+}
+.create-group-page-submit-row{
+    padding: 25px 0;
+    display: flex;
+    flex-flow: column;
+}
+.create-group-page-row > h3{
+    color:#00e1ff;
+    margin-bottom:10px;
+}
+.create-group-page-row h2{
+    font-size: 23px;
 }
 
 .create-group-page-row button,
 .create-group-page-row textarea,
 .create-group-page-row input,
 .create-group-page-row select {
-    max-width: 200px;
+    width:100%;
+}
+.create-group-page-row-input{
+    padding:20px;
+    padding-top:25px;
+    margin:10px 0;
+    font-size: 14px;
+    border-radius: 25px;
+    border:1px solid #f3f3f3;
+}
+.create-group-page-row input:focus{
+    outline-color:#00e1ff;
 }
 
 .create-group-page-sub-row {
     display: flex;
     flex-flow: column;
 }
+.create-group-page-sub-row-pair{
+    display:flex;
+    flex-flow: row;
+}
+
+.create-group-page-select-wrapper{
+    padding:10px;
+    display:flex;
+    flex-flow: column;
+    justify-content: space-between;
+    width:calc(50% - 20px);
+}
 
 .create-group-page-list {
-    margin-left: 15px;
+    margin:10px 0;
+    margin-left: 35px;
+    font-size: 14px;
 }
 
 .create-group-page-errors {
     color: red;
+    margin-right:20px;
 }
+.create-group-select-errors{
+    margin-bottom:30px;
+    display:flex;
+}
+.create-group-page-submit-row button{
+    border-radius: 15px;
+    padding: 10px 20px;
+    margin:0 auto;
 
+}
 /* Delete a Group */
 .delete-a-group-modal-container {
     width: 100%;

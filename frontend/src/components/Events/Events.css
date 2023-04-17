@@ -207,9 +207,13 @@
 
 .create-event-page-container {
    display: flex;
-   flex-flow: column;
-   width: 70%;
-   margin: 0 auto;
+    flex-flow: column;
+    width: 1050px;
+    padding-top:60px;
+    margin: 0 auto;
+}
+.create-event-page-container span{
+   font-size: 14px;
 }
 
 .create-event-page-row {

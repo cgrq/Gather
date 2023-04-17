@@ -69,7 +69,7 @@ function CreateEventPage() {
             <form onSubmit={handleFormSubmit}>
                 <div className="create-event-page-row">
                     <h1>Create an event for {name}</h1>
-                    <label>What is the name of your event?</label>
+                    <span>What is the name of your event?</span>
                     <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Event Name" />
                     {
                         errors.name && <p className="create-event-page-errors">{errors.name}</p>
@@ -77,7 +77,7 @@ function CreateEventPage() {
                 </div>
                 <div className="create-event-page-row">
                     <div className="create-event-page-sub-row">
-                        <label>Is this an in person or online event?</label>
+                        <span>Is this an in person or online event?</span>
                         <select value={type} onChange={(e) => setType(e.target.value)} >
                             <option value="" disabled>(select one)</option>
                             <option value="In person">In person</option>
@@ -89,7 +89,7 @@ function CreateEventPage() {
                     </div>
 
                     <div className="create-event-page-sub-row">
-                        <label>What is the price of your event?</label>
+                        <span>What is the price of your event?</span>
                         <div className="create-event-page-price-input-container">
                             <div className="create-event-page-price-input-overlay">$</div>
                             <input className="create-event-page-price-input" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={"0"} />
@@ -101,7 +101,7 @@ function CreateEventPage() {
                 </div>
                 <div className="create-event-page-row">
                     <div className="create-event-page-sub-row">
-                        <label>When does  your event start?</label>
+                        <span>When does  your event start?</span>
                         <input type="datetime-local"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
@@ -112,7 +112,7 @@ function CreateEventPage() {
                         }
                     </div>
                     <div className="create-event-page-sub-row">
-                        <label>When does  your event end?</label>
+                        <span>When does  your event end?</span>
                         <input type="datetime-local"
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
@@ -125,7 +125,7 @@ function CreateEventPage() {
                 </div>
                 <div className="create-event-page-row">
                     <div className="create-event-page-sub-row">
-                        <label>Please add an image url for your event below:</label>
+                        <span>Please add an image url for your event below:</span>
                         <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder={"Image Url"} />
                         {
                             errors.url && <p className="create-event-page-errors">{errors.url}</p>
@@ -133,7 +133,7 @@ function CreateEventPage() {
                     </div>
                 </div>
                 <div className="create-event-page-row">
-                    <label>Please describe your event:</label>
+                    <span>Please describe your event:</span>
                     <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder={"Please write at least 30 characters"} />
                     {
                         errors.description && <p className="create-event-page-errors">{errors.description}</p>
