@@ -282,6 +282,16 @@
    top:34px;
    left:15px
 }
+.create-event-page-submit-row{
+   width:100%;
+   padding:20px 0;
+   display:flex;
+}
+.create-event-page-submit-row button{
+   border-radius: 15px;
+   padding: 10px 20px;
+   margin:0 auto;
+}
 
 /* Delete a Event */
 .delete-a-event-modal-container {

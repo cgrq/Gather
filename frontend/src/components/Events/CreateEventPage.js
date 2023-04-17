@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { createEvent, createEventImage } from "../../store/events"
+import { createEvent, createEventImage, removeEvent } from "../../store/events"
 import { useHistory, useParams } from 'react-router-dom';
 import { isValidURL } from '../../utils/validation'
 import { formatDate } from "../../utils/dates";
@@ -26,8 +26,8 @@ function CreateEventPage() {
         const formattedStartDate = startDate ? formatDate(startDate) : "";
         const formattedEndDate = endDate ? formatDate(endDate) : "";
         const priceToInt = parseInt(price)
-        console.log(`🖥 ~ file: CreateEventPage.js:27 ~ handleFormSubmit ~ formattedStartDate:`, formattedStartDate)
-        console.log(`🖥 ~ file: CreateEventPage.js:28 ~ handleFormSubmit ~ formattedEndDate:`, formattedEndDate)
+        console.log(`🖥 ~ file: CreateEventPage.js:29 ~ handleFormSubmit ~ price:`, price)
+        console.log(`🖥 ~ file: CreateEventPage.js:29 ~ handleFormSubmit ~ priceToInt:`, priceToInt)
 
 
         const event = await dispatch(createEvent({ groupId, name, type, price: priceToInt, startDate: formattedStartDate, endDate: formattedEndDate, description }))
@@ -46,12 +46,20 @@ function CreateEventPage() {
                     });
                 }
             });
-        console.log(`🖥 ~ file: CreateEventPage.js:32 ~ handleFormSubmit ~ event:`, event)
         const image = await dispatch(createEventImage({ eventId: event.id, url }))
             .catch(async (res) => {
 
                 const data = await res.json();
                 if (data && data.errors) {
+                    const eventId = parseInt(event.id)
+
+                    const removedGroup = await dispatch(removeEvent(eventId))
+                        .catch(async (res) => {
+                            const data = await res.json();
+                            if (data && data.errors) {
+                                setErrors(data.errors);
+                            }
+                        });
                     setErrors((prevState) => {
                         return {
                             ...prevState,
@@ -139,7 +147,7 @@ function CreateEventPage() {
                         errors.description && <p className="create-event-page-errors">{errors.description}</p>
                     }
                 </div>
-                <div className="create-event-page-row">
+                <div className="create-event-page-submit-row">
                     <button type="submit">Create Event</button>
                 </div>
             </form>

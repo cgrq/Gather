@@ -49,10 +49,17 @@ function CreateGroupPage() {
             });
         const image = await dispatch(createGroupImage({ groupId: group.id, url }))
             .catch(async (res) => {
-                console.log(`🖥 ~ file: CreateGroupPage.js:52 ~ handleFormSubmit ~ res:`, res)
                 const data = await res.json();
                 if (data && data.errors) {
-                    // const removedGroup = dispatch(removeGroup(group.Id))
+                    const groupId = parseInt(group.id)
+
+                    const removedGroup = await dispatch(removeGroup(groupId))
+                        .catch(async (res) => {
+                            const data = await res.json();
+                            if (data && data.errors) {
+                                setErrors(data.errors);
+                            }
+                        });
                     setErrors((prevState) => {
                         return {
                             ...prevState,
@@ -62,7 +69,7 @@ function CreateGroupPage() {
                 }
             });
 
-        if (group.id && image.url) history.push(`/groups/${group.id}`);
+        if (group && image && group.id && image.url) history.push(`/groups/${group.id}`);
     }
 
     return (
@@ -151,7 +158,7 @@ function CreateGroupPage() {
                         </div>
 
                     </div>
-                    <div className={( errors.type || errors.private) ?"create-group-select-errors" : ""}>
+                    <div className={(errors.type || errors.private) ? "create-group-select-errors" : ""}>
                         {
                             errors.type && <p className="create-group-page-errors">{errors.type}</p>
                         }

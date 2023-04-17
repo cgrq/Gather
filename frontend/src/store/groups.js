@@ -115,6 +115,7 @@ export const updateGroup = (group) => async (dispatch) => {
 }
 
 export const removeGroup = (groupId) => async (dispatch) => {
+console.log(`🖥 ~ file: groups.js:118 ~ removeGroup ~ groupId:`, groupId)
 
   const groupRes = await csrfFetch(`/api/groups/${groupId}`, {
     method: "DELETE",
