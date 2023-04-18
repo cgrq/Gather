@@ -24,6 +24,7 @@
     font-size: 17px;
     border-radius: 25px;
     border:1px solid #f3f3f3;
+    z-index:100000;
 }
 .signup-main-form input:focus{
     outline-color:#00e1ff;
@@ -32,10 +33,12 @@
 .signup-container button{
     border-radius: 15px;
     padding:10px 20px;
+    z-index:100000;
 }
 .signup-main-form button{
     /* width:80px; */
     margin:10px auto;
+    z-index:100000;
 }
 
 .signup-demo-form{

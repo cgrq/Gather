@@ -35,7 +35,6 @@ function ActionCard({ iconImgPath, disabledIconImgPath, linkPath, title, caption
     return (
         <div className="action-card-container">
             <div className="home-image-container">
-                <div className="home-image-shadow section-three-image-shadow" />
                 <img src={disabled ? disabledIconImgPath : iconImgPath} />
             </div>
             <NavLink className={disabled ? " isDisabled" : ""} to={linkPath}>{title}</NavLink>
