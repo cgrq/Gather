@@ -32,39 +32,41 @@ Hosting:
 # Running project locally
 
 ## Step 1 (Run backend)
+
 * Index into backend folder
 
-``` cd /backend```
+    ``` cd /backend```
 
 * Install dependencies:
 
-``` npm install ```
+  ``` npm install ```
 
 * Create .env file by following the ```.env.example``` file given.
 
 * Build database using the following commands:
 
-```
-npx dotenv sequelize db:create
-npx dotenv sequelize db:migrate
-npx dotenv sequelize db:seed:all
-```
+  ```
+  npx dotenv sequelize db:create
+  npx dotenv sequelize db:migrate
+  npx dotenv sequelize db:seed:all
+  ```
 
 * And run the following command:
 
-``` npm start ```
+  ``` npm start ```
 ## Step 2 (Run frontend)
+
 * Index into frontend folder
 
-``` cd /frontend```
+  ``` cd /frontend```
 
 * Install dependencies:
 
-``` npm install ```
+  ``` npm install ```
 
 * And run the following command to be able to visit the site at https://localhost:3000:
 
-``` npm start ```
+  ``` npm start ```
 
 
 # Roadmap
@@ -75,3 +77,7 @@ npx dotenv sequelize db:seed:all
   * Events Calendar (coming soon)
   * AWS/S3 Image Upload (coming soon)
   * Google Maps Integration (coming soon)
+
+# Contact
+
+Feel free to message me on [LinkedIn](https://www.linkedin.com/in/c--r/)!
