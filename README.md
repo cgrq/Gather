@@ -36,6 +36,20 @@ Hosting:
 
 ``` cd /backend```
 
+* Install dependencies:
+
+``` npm install ```
+
+* Create .env file by following the ```.env.example``` file given.
+
+* Build database using the following commands:
+
+```
+npx dotenv sequelize db:create
+npx dotenv sequelize db:migrate
+npx dotenv sequelize db:seed:all
+```
+
 * And run the following command:
 
 ``` npm start ```
@@ -43,6 +57,10 @@ Hosting:
 * Index into frontend folder
 
 ``` cd /frontend```
+
+* Install dependencies:
+
+``` npm install ```
 
 * And run the following command to be able to visit the site at https://localhost:3000:
 
