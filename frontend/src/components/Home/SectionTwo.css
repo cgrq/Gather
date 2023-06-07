@@ -1,0 +1,13 @@
+/* Section Two */
+.section-two-container {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 60%;
+    margin-top: 60px;
+}
+
+.section-two-container h2 {
+    font-size: 60px;
+    margin-bottom: 20px;
+}

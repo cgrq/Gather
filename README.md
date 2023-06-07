@@ -14,32 +14,46 @@ Gather is a web app inspired by the popular [Meetup](https://www.meetup.com) sit
 
 Frameworks and Libraries:
 
-![react](assets/docs/react.png) ![redux](assets/docs/redux.png) ![express](assets/docs/express.png) ![node.js](assets/docs/node.png) ![javascript](assets/docs/javascript.png) ![html](assets/docs/html.png) ![html](assets/docs/css.png)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
 Database:
 
-![postgres](assets/docs/postgres.png)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 
 Hosting:
 
-![aws](assets/docs/aws.png) ![aws](assets/docs/render.png)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
 
 
+# Homepage
 
-# Features
+![landing page](assets/docs/gather-ui.png)
 
-Homepage:
+# Running project locally
 
-![landing page](assets/docs/landing-page.png)
+## Step 1 (Run backend)
+* Index into backend folder
+
+``` cd /backend```
+
+* And run the following command:
+
+``` npm start ```
+## Step 2 (Run frontend)
+* Index into frontend folder
+
+``` cd /frontend```
+
+* And run the following command to be able to visit the site at https://localhost:3000:
+
+``` npm start ```
+
 
 # Roadmap
 
-  * Groups (coming soon)
-  * Events (coming soon)
-  * RSVPs (coming soon)
-  * Joining Groups (coming soon)
-  * Search by location and group info (name, description) (coming soon)
-  * Calendar (on group page) (coming soon)
-  * Calendar (for all groups in search results) (coming soon)
+  * Groups (Complete)
+  * Events (Complete)
+  * Search (coming soon)
+  * Events Calendar (coming soon)
   * AWS/S3 Image Upload (coming soon)
   * Google Maps Integration (coming soon)

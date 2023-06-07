@@ -1,3 +1,8 @@
+@import url("SectionOne.css");
+@import url("SectionTwo.css");
+@import url("SectionThree.css");
+@import url("SectionFour.css");
+
 .home-container {
     padding-top:60px;
     display: flex;
@@ -35,106 +40,8 @@
 .home-container img{
 }
 
-/* Section One */
-.section-one-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.home-h1 {
-    margin-bottom: 20px;
-}
-
-.section-one-text-container {
-    width: 60%;
-}
-
-.section-one-image-container{
-}
-.section-one-lottie {
-    width: 350px;
-    height: auto;
-    z-index: 1;
-}
-.section-one-image-shadow{
-    width: 350px;
-    height: 350px;
-    /* box-shadow: inset 0 0 50px 1px rgb(164, 164, 164); */
-
-}
-
-/* Section Two */
-.section-two-container {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    width: 60%;
-    margin-top: 60px;
-}
-
-.section-two-container h2 {
-    font-size: 60px;
-    margin-bottom: 20px;
-}
-
-/* Section Three */
-
-.section-three-container {
-    display: flex;
-    margin-top: 60px;
-
-}
-
-.action-card-container {
-    display: flex;
-    align-items: center;
-    flex-flow: column nowrap;
-    margin: 0 20px;
-}
-
-.action-card-container img {
-    width: 250px;
-    height: auto;
-    border-radius: 60px;
-}
-.section-three-image-shadow{
-    /* box-shadow: inset 0 0 30px 1px rgb(200, 200, 200); */
-    width: 250px;
-    border-radius: 60px;
-    height: 250px;
-}
-
-.action-card-container a,
-.action-card-container div {
-    color: black;
-    font-size: 50px;
-    margin: 20px 0;
-    text-decoration: none;
-}
-
-.action-card-container a:hover {
-    text-decoration: underline;
-}
-
-.isDisabled {
-    color: rgb(188, 188, 188) !important;
-    pointer-events: none;
-}
-
-/* Section Four */
-
-.section-four-container {
-    margin: 60px 0;
-}
-
-.section-four-container button {
-    font-size: 25px;
-    font-weight: bold;
-    padding: 20px 50px;
-    border-radius: 30px;
-    box-shadow: inset 0 0 20px 1px rgb(255, 255, 255) !important;
-    border: none;
-    /* background: linear-gradient(to right, #00a4ff, #00e1ff); */
-    /* color:white; */
-}
+@media only screen and (max-width: 767px) {
+    .home-container {
+        width: 100%;
+    }
+  }
