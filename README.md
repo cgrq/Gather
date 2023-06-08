@@ -78,16 +78,6 @@ Hosting:
 
   ``` npm start ```
 
-
-# Roadmap
-
-  * Groups (Complete)
-  * Events (Complete)
-  * Search (coming soon)
-  * Events Calendar (coming soon)
-  * AWS/S3 Image Upload (coming soon)
-  * Google Maps Integration (coming soon)
-
 # Contact
 
 Feel free to message me on [LinkedIn](https://www.linkedin.com/in/c--r/)!
