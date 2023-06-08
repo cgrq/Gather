@@ -25,9 +25,19 @@ Hosting:
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
 
 
-# Homepage
+# UI
+
+## Homepage
 
 ![landing page](assets/docs/gather-ui.png)
+
+## All Groups Page
+
+![groups](assets/docs/groups-ui.png)
+
+## Group Page
+
+![landing page](assets/docs/group-page-ui.png)
 
 # Running project locally
 
