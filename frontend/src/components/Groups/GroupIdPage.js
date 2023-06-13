@@ -116,11 +116,11 @@ function GroupIdPage() {
                     <div className="group-page-bottom-container">
                         <div className="group-page-bottom-row">
                             <h2>Organizer</h2>
-                            <p>{`${group.Organizer.firstName} ${group.Organizer.lastName}`}</p>
+                            <p >{`${group.Organizer.firstName} ${group.Organizer.lastName}`}</p>
                         </div>
                         <div className="group-page-bottom-row">
                             <h2>What we're about</h2>
-                            <p>{groups[groupId].about}</p>
+                            <p className="group-page-about">{groups[groupId].about}</p>
                         </div>
                         <div className="group-page-events-row">
                             <h2>Upcoming Events</h2>

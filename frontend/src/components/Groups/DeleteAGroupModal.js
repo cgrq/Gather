@@ -6,7 +6,6 @@ import { useHistory, useParams } from "react-router-dom";
 import "./Groups.css"
 
 function DeleteAGroupModal({groupId}) {
-  console.log(`🖥 ~ file: DeleteAGroupModal.js:8 ~ DeleteAGroupModal ~ groupId:`, groupId)
   const dispatch = useDispatch();
   const history = useHistory();
   const [errors, setErrors] = useState({})

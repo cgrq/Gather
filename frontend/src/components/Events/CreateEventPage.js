@@ -27,7 +27,6 @@ function CreateEventPage() {
 
     useEffect(()=>{
 
-        console.log(`🖥 ~ file: CreateEventPage.js:33 ~ CreateEventPage ~ startDate:`, startDate)
     },[startDate])
 
     const handleFormSubmit = async (e) => {
@@ -37,8 +36,6 @@ function CreateEventPage() {
         const formattedStartDate = startDate ? formatDate(startDate) : "";
         const formattedEndDate = endDate ? formatDate(endDate) : "";
         const priceToInt = parseInt(price)
-        console.log(`🖥 ~ file: CreateEventPage.js:29 ~ handleFormSubmit ~ price:`, price)
-        console.log(`🖥 ~ file: CreateEventPage.js:29 ~ handleFormSubmit ~ priceToInt:`, priceToInt)
 
 
         const event = await dispatch(createEvent({ groupId, name, type, price: priceToInt, startDate: formattedStartDate, endDate: formattedEndDate, description }))

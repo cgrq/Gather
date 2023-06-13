@@ -18,6 +18,7 @@ function EventIdPage() {
     // const events = useSelector(state => state.events.allEvents);
     const sessionUser = useSelector(state => state.session.user);
     const [showMenu, setShowMenu] = useState(false);
+    const [eventImageUrl, setEventImageUrl] = useState()
 
 
     useEffect(() => {
@@ -47,6 +48,14 @@ function EventIdPage() {
 
     const closeMenu = () => setShowMenu(false);
 
+    useEffect(()=>{
+        if(event && event.EventImages && event.EventImages[0]){
+            setEventImageUrl(event.EventImages[0].url);
+
+        }
+
+    },[event])
+
 
     if (!event || !groupState || !event.Group || !event.EventImages || event.EventImages.length === 0) return null;
 
@@ -62,7 +71,6 @@ function EventIdPage() {
     const firstName = organizer.firstName;
     const lastName = organizer.lastName;
 
-    const eventImage = event.EventImages[0].url;
 
     const startDateTimeArr = seperateDateAndTime(event.startDate);
     const startDate = startDateTimeArr[0];
@@ -89,7 +97,7 @@ function EventIdPage() {
                     <div className="event-page-bottom-container">
                         <div className="event-page-content-row">
                             <div className="event-page-image-container">
-                                <img src={eventImage} />
+                                <img onError={() => setEventImageUrl(process.env.PUBLIC_URL + "/default-image.png")} src={eventImageUrl} />
                             </div>
                             <div className="event-page-card-container">
                                 <GroupPreview group={group} />
@@ -133,11 +141,9 @@ function EventIdPage() {
                                 </div>
                             </div>
                         </div>
-                        <div className="event-page-content-row event-page-details-description">
-                            <div>
+                        <div className="event-page-content-row event-page-details-description-wrapper">
                                 <h2>Details</h2>
-                                <div>{event.description}</div>
-                            </div>
+                                <div className="event-page-details-description" >{event.description}</div>
                         </div>
                     </div>
                 </div>

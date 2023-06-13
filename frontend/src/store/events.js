@@ -25,7 +25,6 @@ const deleteEvent = (eventId) => {
   }
 }
 const addImage = (eventId, image) => {
-  console.log("In action creator")
   return {
     type: ADD_IMAGE,
     eventId,
@@ -35,7 +34,6 @@ const addImage = (eventId, image) => {
 
 export const createEvent = (event) => async (dispatch) => {
   const { groupId, name, type, price, startDate, endDate, description } = event;
-  console.log(`🖥 ~ file: events.js:38 ~ createEvent ~ price:`, price)
   const venueRes = await csrfFetch(`/api/groups/${groupId}/venues`, {
     method: "POST",
     body: JSON.stringify({
@@ -82,7 +80,6 @@ export const createEventImage = (image) => async (dispatch) => {
 }
 
 export const removeEvent = (eventId) => async (dispatch) => {
-console.log(`🖥 ~ file: events.js:84 ~ removeEvent ~ eventId:`, eventId)
 
   const eventRes = await csrfFetch(`/api/events/${eventId}`, {
     method: "DELETE",

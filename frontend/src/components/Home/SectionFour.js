@@ -6,7 +6,6 @@ import SignupFormModal from '../SignupFormModal';
 
 function SectionFour() {
     const sessionUser = useSelector(state => state.session.user);
-    console.log(`🖥 ~ file: SectionFour.js:9 ~ SectionFour ~ sessionUser:`, sessionUser)
     const [showMenu, setShowMenu] = useState(false);
     const ulRef = useRef();
 

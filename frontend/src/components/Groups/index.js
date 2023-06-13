@@ -7,7 +7,6 @@ import { getGroups } from "../../store/groups";
 function Groups(){
     const dispatch = useDispatch()
     const groups = useSelector(state => state.groups.allGroups);
-    console.log(`🖥 ~ file: index.js:10 ~ Groups ~ groups:`, groups)
 
     useEffect(()=>{
         dispatch(getGroups());
