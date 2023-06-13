@@ -48,8 +48,6 @@ function UpdateGroupPage() {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
-    console.log(`🖥 ~ file: UpdateGroupPage.js:17 ~ UpdateGroupPage ~ isPrivate:`, isPrivate)
-    console.log(`🖥 ~ file: UpdateGroupPage.js:17 ~ UpdateGroupPage ~ isPrivate:`, typeof isPrivate)
 
 
 

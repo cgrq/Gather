@@ -132,8 +132,11 @@
 .event-page-bottom-container {
    display: flex;
    flex-flow: column nowrap;
-
    padding: 60px;
+}
+
+.event-page-top-container > h1 {
+   word-wrap: break-word;
 }
 
 .event-page-content-row,
@@ -211,10 +214,15 @@
 .event-page-update-button{
    background-color:#00e1ff !important;
 }
-.event-page-details-description{
+.event-page-details-description-wrapper{
    margin-top:30px;
+   width:100%;
+   display:flex;
+   flex-flow: column;
 }
-
+.event-page-details-description{
+   word-wrap: break-word;
+}
 
 /* Create Event Page */
 
@@ -245,6 +253,7 @@
 }
 .create-event-page-row h1{
    margin-bottom:30px;
+   word-wrap: break-word;
 }
 
 .create-event-page-row button,
@@ -252,6 +261,9 @@
 .create-event-page-row input,
 .create-event-page-row select {
    width:100%;
+}
+.create-event-page-row textarea{
+   resize:none;
 }
 
 .create-group-page-row-input{

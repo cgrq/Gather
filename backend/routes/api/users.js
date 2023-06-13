@@ -16,38 +16,46 @@ const validateSignup = [
         .exists({ checkFalsy: true })
         .isEmail()
         .withMessage("Invalid email")
-        .custom(async email =>{
+        .custom(async email => {
             const existingUser = await User.unscoped().findOne({
-                where:{ email }
+                where: { email }
             });
-            if(existingUser){
+            if (existingUser) {
                 throw new Error('User with that email already exists')
             }
         })
         .withMessage("User with that email already exists"),
     check('username')
         .exists({ checkFalsy: true })
+        .trim()
         .isLength({ min: 3 })
         .withMessage('Username must be 3 characters or more')
-        .custom(async username =>{
+        .custom(async username => {
             const existingUser = await User.unscoped().findOne({
-                where:{ username }
+                where: { username }
             });
-            if(existingUser){
+            if (existingUser) {
                 throw new Error('User with that username already exists')
             }
         })
         .withMessage("User with that username already exists"),
     check('password')
         .exists({ checkFalsy: true })
+        .trim()
         .isLength({ min: 6 })
         .withMessage('Password must be 6 characters or more'),
     check('firstName')
-          .exists({ checkFalsy: true })
-          .withMessage('First Name is required'),
+        .exists({ checkFalsy: true })
+        .trim()
+        .withMessage('First Name is required')
+        .isLength({ min: 2 })
+        .withMessage('First Name must be 2 characters or more'),
     check('lastName')
-          .exists({ checkFalsy: true })
-          .withMessage('Last Name is required'),
+        .exists({ checkFalsy: true })
+        .trim()
+        .withMessage('Last Name is required')
+        .isLength({ min: 2 })
+        .withMessage('Last Name must be 2 characters or more'),
     handleValidationErrors
 ];
 
@@ -60,20 +68,20 @@ router.post(
         const hashedPassword = bcrypt.hashSync(password);
 
         const existingUser = await User.unscoped().findOne({
-            where:{
+            where: {
                 [Op.or]: [{ username }, { email }]
             }
         });
 
-        if(existingUser){
+        if (existingUser) {
             const err = new Error("User already exists");
             err.statusCode = 500;
             err.errors = {};
 
-            if(username == existingUser.username){
+            if (username == existingUser.username) {
                 err.errors.username = "User with that username already exists";
             }
-            if(email == existingUser.email){
+            if (email == existingUser.email) {
                 err.errors.email = "User with that email already exists";
             }
             throw err;

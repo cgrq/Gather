@@ -174,6 +174,7 @@
     display: flex;
     flex-flow: column nowrap;
     margin: 0 auto;
+    width:100%;
 }
 
 .group-page-content-row {
@@ -251,9 +252,13 @@
     border-radius: 30px;
 }
 
-.group-page-events-row>h2 {
+.group-page-events-row > h2 {
     padding-top: 20px;
     padding-left: 40px;
+}
+
+.group-page-about{
+    word-wrap: break-word;
 }
 
 .group-page-upcoming-events {

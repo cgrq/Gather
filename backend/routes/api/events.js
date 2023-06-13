@@ -19,9 +19,10 @@ const validateEvent = [
         .withMessage('Venue does not exist'),
     check('name')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
-        .isLength({ min: 5 })
-        .withMessage('Name must be at least 5 characters'),
+        .isLength({ min: 5, max:50 })
+        .withMessage('Name must be between 5 and 50 characters'),
     check('type')
         .exists({ checkFalsy: true })
         .notEmpty()
@@ -37,8 +38,11 @@ const validateEvent = [
         .withMessage("Price is invalid"),
     check('description')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
-        .withMessage("Description is required"),
+        .withMessage("Description is required")
+        .isLength({ min: 30, max:255 })
+        .withMessage('Description must be between 30 and 255 characters'),
     check('startDate')
         .exists({ checkFalsy: true })
         .notEmpty()

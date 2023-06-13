@@ -15,39 +15,46 @@ const { handleValidationErrors, isValidURL } = require('../../utils/validation')
 const validateGroup = [
     check('name')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
         .isLength({ max: 60 })
         .withMessage('Name must be 60 characters or less'),
     check('about')
         .exists({ checkFalsy: true })
-        .isLength({ min: 30 })
-        .withMessage('About must be 30 characters or more'),
+        .trim()
+        .isLength({ min: 30, max:255 })
+        .withMessage('About must be between 30 and 255 characters'),
     check('type')
         .exists({ checkFalsy: true })
-        .isIn(["In person", "Online"])
-        .withMessage("Type must be 'Online' or 'In person'"),
-    check('type')
-        .exists({ checkFalsy: true })
+        .trim()
         .isIn(["In person", "Online"])
         .withMessage("Type must be 'Online' or 'In person'"),
     check('private')
         .exists({ checkFalsy: true })
+        .trim()
         .isBoolean()
         .withMessage("Private must be a boolean"),
     check('city')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
-        .withMessage("City is required"),
+        .withMessage("City is required")
+        .isLength({ max: 60 })
+        .withMessage('City must be 60 characters or less'),
     check('state')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
-        .withMessage("State is required"),
+        .withMessage("State is required")
+        .isLength({ max: 60 })
+        .withMessage('State must be 60 characters or less'),
     handleValidationErrors
 ];
 
 const validateImage = [
     check('url')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
         .withMessage('Image Url is required')
         .custom(url => {
@@ -63,22 +70,27 @@ const validateImage = [
 const validateVenue = [
     check('address')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
         .withMessage('Street address is required'),
     check('city')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
         .withMessage('City is required'),
     check('state')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
         .withMessage("State is required"),
     check('lat')
         .exists({ checkFalsy: true })
+        .trim()
         .isFloat({ min: -90, max: 90 })
         .withMessage("Latitude is not valid"),
     check('lng')
         .exists({ checkFalsy: true })
+        .trim()
         .isFloat({ min: -180, max: 180 })
         .withMessage("Longitude is not valid"),
     handleValidationErrors
@@ -87,6 +99,7 @@ const validateVenue = [
 const validateEvent = [
     check('venueId')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
         .custom(async id => {
             const venue = await Venue.findByPk(id);
@@ -98,29 +111,37 @@ const validateEvent = [
         .withMessage('Venue does not exist'),
     check('name')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
-        .isLength({ min: 5 })
-        .withMessage('Name must be at least 5 characters'),
+        .isLength({ min: 5, max:50 })
+        .withMessage('Name must be between 5 and 50 characters'),
     check('type')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
         .isIn(["In person", "Online"])
         .withMessage("Type must be 'Online' or 'In person'"),
     check('capacity')
         .exists({ checkFalsy: true })
+        .trim()
         .isInt()
         .withMessage("Capacity must be an integer"),
     check('price')
         .exists()
+        .trim()
         .custom(value => typeof value !== 'undefined')
         .isInt()
         .withMessage("Price is invalid"),
     check('description')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
-        .withMessage("Description is required"),
+        .withMessage("Description is required")
+        .isLength({ min: 5, max:255 })
+        .withMessage('Description must be between 5 and 255 characters'),
     check('startDate')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
         .custom(date => {
             const startDate = parseDate(date);
@@ -132,6 +153,7 @@ const validateEvent = [
         .withMessage("Start date must be in the future"),
     check('endDate')
         .exists({ checkFalsy: true })
+        .trim()
         .notEmpty()
         .custom((date, { req }) => {
             const endDate = parseDate(date);
