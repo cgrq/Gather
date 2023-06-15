@@ -129,7 +129,10 @@ function EventIdPage() {
                                         {
                                             isOrganizer
                                             && <div className="event-page-details-card-buttons">
+                                                <NavLink  to={`/events/${eventId}/edit`}>
                                                 <button className="event-page-update-button">Update</button>
+
+                                                </NavLink>
                                                 <OpenModalButton
                                                     buttonText="Delete"
                                                     onButtonClick={closeMenu}

@@ -64,6 +64,7 @@ export const createEvent = (event) => async (dispatch) => {
   dispatch(addEvent(data));
   return data;
 }
+
 export const createEventImage = (image) => async (dispatch) => {
   const { eventId, url } = image;
   const res = await csrfFetch(`/api/events/${eventId}/images`, {

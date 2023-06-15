@@ -11,6 +11,7 @@ import EventIdPage from "./components/Events/EventIdPage";
 import CreateGroupPage from "./components/Groups/CreateGroupPage";
 import CreateEventPage from "./components/Events/CreateEventPage";
 import UpdateGroupPage from "./components/Groups/UpdateGroupPage";
+import UpdateEventPage from "./components/Events/UpdateEventPage";
 
 
 function App() {
@@ -48,6 +49,9 @@ function App() {
           </Route>
           <Route exact path="/groups">
             <Groups />
+          </Route>
+          <Route path="/events/:eventId/edit">
+            <UpdateEventPage />
           </Route>
           <Route path="/events/:eventId">
             <EventIdPage />
