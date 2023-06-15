@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import moment from 'moment';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateEvent, updateEventImage, removeEvent, getEvent } from "../../store/events"
 import { useHistory, useParams } from 'react-router-dom';
 import { isValidURL } from '../../utils/validation'
@@ -19,6 +19,7 @@ function UpdateEventPage() {
     const [description, setDescription] = useState("");
     const [errors, setErrors] = useState({});
     const { groupId } = useParams();
+    const events = useSelector((state)=> state.events)
 
     const normalizeTimeZone = (date) => {
         const momentDate = moment(date);
@@ -28,6 +29,19 @@ function UpdateEventPage() {
     useEffect(()=>{
         dispatch(getEvent(eventId))
     },[])
+
+    useEffect(()=>{
+        if(events && events[eventId]){
+            const event = events[eventId]
+            setName(event.name)
+            setType(event.type)
+            setPrice(event.price)
+            setStartDate(event.startDate)
+            setEndDate(event.endDate)
+            setUrl(event.EventImages[0].url)
+            setDescription(event.description)
+        }
+    }, [events])
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
