@@ -125,7 +125,7 @@
 .group-page-container {
     width: 1050px;
     margin: 0 auto;
-    padding-top: 60px;
+    padding-top: 20px;
     margin-bottom: 30px;
 }
 
@@ -326,7 +326,7 @@
     display: flex;
     flex-flow: column;
     width: 1050px;
-    padding-top:60px;
+    padding-top:20px;
     margin: 0 auto;
 }
 .create-group-page-container span{
