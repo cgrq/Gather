@@ -81,7 +81,7 @@ function CreateGroupPage() {
             <form className="create-group-page-form-container" onSubmit={handleFormSubmit}>
                 <div className="create-group-page-row">
                     <h2>First steps...</h2>
-                    <span>Gather groups meet locally, in person, and online, We'll connect you with people in your area, and more can join you online.</span>
+                    <span>Gather groups meet locally, in person, and online. We'll connect you with people in your area, and more can join you online.</span>
                     <div className="login-main-input-container">
                         <label>
                             City and State

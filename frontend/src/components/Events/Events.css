@@ -91,7 +91,7 @@
 .event-page-container{
    width:1050px;
     margin:0 auto;
-    padding-top:60px;
+    padding-top:20px;
     margin-bottom:30px;
 }
 .event-page-bread-crumb-row a{
@@ -230,7 +230,7 @@
    display: flex;
     flex-flow: column;
     width: 1050px;
-    padding-top:60px;
+    padding-top:20px;
     margin: 0 auto;
 }
 .create-event-page-container span{
