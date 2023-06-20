@@ -13,10 +13,6 @@ const { check, query } = require('express-validator');
 const { handleValidationErrors, isValidURL } = require('../../utils/validation');
 
 const validateEvent = [
-    check('venueId')
-        .exists({ checkFalsy: true })
-        .notEmpty()
-        .withMessage('Venue does not exist'),
     check('name')
         .exists({ checkFalsy: true })
         .trim()
@@ -263,19 +259,25 @@ router.put(
     '/:eventId',
     [requireAuth, verifyCohostStatus, validateEvent],
     async (req, res, next) => {
-        try {
-            const { eventId } = req.params;
-            const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
 
-            const venue = await Venue.unscoped().findByPk(venueId)
+        try {
+            console.log("!!!!!!!!!!!!!")
+            const { eventId } = req.params;
+            const { name, type, capacity, price, description, startDate, endDate } = req.body;
+
+            const event = await Event.findByPk(eventId);
+            console.log(`🖥 ~ file: events.js:271 ~ event:`, event)
+
+            const { venueId } = event;
+            console.log(`🖥 ~ file: events.js:274 ~ venueId:`, venueId)
+
+            const venue = await Venue.unscoped().findByPk(venueId);
 
             if (!venue) {
                 const err = new Error("Venue couldn't be found");
                 err.statusCode = 404;
                 return next(err);
             }
-
-            const event = await Event.findByPk(eventId);
 
             const id = event.id;
 
@@ -320,6 +322,33 @@ router.post(
 
 
             const id = eventImage.id;
+
+            return res.json({ id, url, preview });
+
+        } catch (err) {
+            next(err)
+        }
+    }
+);
+
+// Edit a Event Image
+router.put(
+    '/:eventId/images/edit',
+    [requireAuth, verifyCohostStatus, validateImage],
+    async (req, res, next) => {
+        try {
+            const { eventId } = req.params;
+
+            const { url, preview } = req.body;
+
+            const eventImage = await EventImage.findOne({ where: { eventId } });
+
+            eventImage.set({ url, preview });
+
+            await eventImage.save();
+
+            const id = eventImage.id;
+
 
             return res.json({ id, url, preview });
 

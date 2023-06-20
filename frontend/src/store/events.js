@@ -65,10 +65,49 @@ export const createEvent = (event) => async (dispatch) => {
   return data;
 }
 
+export const updateEvent = (event) => async (dispatch) => {
+  const { groupId, eventId, name, type, price, startDate, endDate, description } = event;
+  console.log(`🖥 ~ file: events.js:70 ~ updateEvent ~ groupId:`, groupId)
+
+  // const venueRes = await csrfFetch(`/api/groups/${groupId}/venues`);
+  const eventRes = await csrfFetch(`/api/events/${eventId}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      name,
+      type,
+      capacity:3,
+      price,
+      startDate,
+      endDate,
+      description
+    }),
+  });
+  const data = await eventRes.json();
+
+  dispatch(addEvent(data));
+  return data;
+}
+
 export const createEventImage = (image) => async (dispatch) => {
   const { eventId, url } = image;
   const res = await csrfFetch(`/api/events/${eventId}/images`, {
     method: "POST",
+    body: JSON.stringify({
+      url,
+      preview: true
+    }),
+  });
+  const imageData = await res.json();
+
+  dispatch(addImage(eventId, imageData));
+  return imageData;
+}
+
+// NEED BACKEND ROUTE
+export const updateEventImage = (image) => async (dispatch) => {
+  const { eventId, url } = image;
+  const res = await csrfFetch(`/api/events/${eventId}/images/edit`, {
+    method: "PUT",
     body: JSON.stringify({
       url,
       preview: true

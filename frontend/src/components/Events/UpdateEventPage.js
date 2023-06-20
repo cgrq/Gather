@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import moment from 'moment';
 import { useDispatch, useSelector } from "react-redux";
-import { updateEvent, updateEventImage, removeEvent, getEvent } from "../../store/events"
+import { updateEvent, updateEventImage, getEvent } from "../../store/events"
 import { useHistory, useParams } from 'react-router-dom';
 import { isValidURL } from '../../utils/validation'
 import { formatDate } from "../../utils/dates";
@@ -10,6 +10,7 @@ function UpdateEventPage() {
     const dispatch = useDispatch();
     const { eventId } = useParams();
     const history = useHistory();
+    const [groupId, setGroupId] = useState();
     const [name, setName] = useState("");
     const [type, setType] = useState("");
     const [price, setPrice] = useState("");
@@ -18,7 +19,6 @@ function UpdateEventPage() {
     const [url, setUrl] = useState("");
     const [description, setDescription] = useState("");
     const [errors, setErrors] = useState({});
-    const { groupId } = useParams();
     const events = useSelector((state)=> state.events)
 
     const normalizeTimeZone = (date) => {
@@ -31,8 +31,9 @@ function UpdateEventPage() {
     },[])
 
     useEffect(()=>{
-        if(events && events[eventId]){
+        if(events && events[eventId] && events[eventId].EventImages && events[eventId].EventImages[0]){
             const event = events[eventId]
+            setGroupId(event.groupId)
             setName(event.name)
             setType(event.type)
             setPrice(event.price)
@@ -52,7 +53,8 @@ function UpdateEventPage() {
         const priceToInt = parseInt(price)
 
 
-        const event = await dispatch(updateEvent({ groupId, name, type, price: priceToInt, startDate: formattedStartDate, endDate: formattedEndDate, description }))
+        console.log(`🖥 ~ file: UpdateEventPage.js:56 ~ handleFormSubmit ~ groupId:`, groupId)
+        const event = await dispatch(updateEvent({ groupId, eventId, name, type, price: priceToInt, startDate: formattedStartDate, endDate: formattedEndDate, description }))
             .catch(async (res) => {
                 const data = await res.json();
                 if (data && data.errors) {
@@ -68,20 +70,13 @@ function UpdateEventPage() {
                     });
                 }
             });
-        const image = await dispatch(updateEventImage({ eventId: event.id, url }))
+        console.log("EVENT END")
+        const image = await dispatch(updateEventImage({ eventId, url }))
             .catch(async (res) => {
 
                 const data = await res.json();
                 if (data && data.errors) {
-                    const eventId = parseInt(event.id)
 
-                    const removedGroup = await dispatch(removeEvent(eventId))
-                        .catch(async (res) => {
-                            const data = await res.json();
-                            if (data && data.errors) {
-                                setErrors(data.errors);
-                            }
-                        });
                     setErrors((prevState) => {
                         return {
                             ...prevState,
@@ -91,7 +86,7 @@ function UpdateEventPage() {
                 }
             });
 
-        if (event.id && image.url) history.push(`/events/${event.id}`);
+        if (eventId && image.url) history.push(`/events/${eventId}`);
     }
 
     return (
@@ -170,7 +165,7 @@ function UpdateEventPage() {
                     }
                 </div>
                 <div className="create-event-page-submit-row">
-                    <button type="submit">update Event</button>
+                    <button type="submit">Update Event</button>
                 </div>
             </form>
         </div>

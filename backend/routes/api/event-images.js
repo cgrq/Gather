@@ -3,9 +3,10 @@ const express = require('express');
 
 const { Op } = require('sequelize');
 
-const { Group, User, Membership, Attendance, EventImage, Venue, Event } = require('../../db/models');
+const { Group, Membership, EventImage, Event } = require('../../db/models');
 
 const router = express.Router();
+
 
 
 // Delete an Image for a Group
@@ -21,7 +22,6 @@ router.delete(
                     {model: Event, include:[
                         { model: Group, include: [{ model: Membership, where: { userId }}] }
                     ]}
-
                 ]
             });
 
