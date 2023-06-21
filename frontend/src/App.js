@@ -33,7 +33,7 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded &&
         <Switch>
-          <Route path="/manage">
+          <Route path="/manage/groups">
             <ContentManagementPage />
           </Route>
           <Route path="/groups/new">
