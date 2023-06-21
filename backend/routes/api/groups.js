@@ -205,7 +205,7 @@ router.get(
     }
 );
 
-// Get all Groups joined or organized by the Current User
+// Get all Groups organized by the Current User
 router.get(
     '/current',
     requireAuth,
@@ -215,7 +215,7 @@ router.get(
 
         const groups = await Group.unscoped().findAll({
             where: { organizerId: user.id },
-            include: [{ model: Membership }, { model: GroupImage, attributes: ["url"] }]
+            include: [{ model: Event },{ model: Membership }, { model: GroupImage, attributes: ["url"] }]
         });
 
         const groupsFormatted = groups.map(group => {

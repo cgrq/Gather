@@ -12,6 +12,7 @@ import CreateGroupPage from "./components/Groups/CreateGroupPage";
 import CreateEventPage from "./components/Events/CreateEventPage";
 import UpdateGroupPage from "./components/Groups/UpdateGroupPage";
 import UpdateEventPage from "./components/Events/UpdateEventPage";
+import ContentManagementPage from "./components/ContentManagementPage";
 
 
 function App() {
@@ -32,8 +33,8 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded &&
         <Switch>
-          <Route exact path="/">
-            <Home />
+          <Route path="/manage">
+            <ContentManagementPage />
           </Route>
           <Route path="/groups/new">
             <CreateGroupPage />
@@ -58,6 +59,9 @@ function App() {
           </Route>
           <Route exact path="/events">
             <Events />
+          </Route>
+          <Route exact path="/">
+            <Home />
           </Route>
         </Switch>}
     </>
