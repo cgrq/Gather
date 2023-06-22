@@ -76,3 +76,9 @@
 .content-management-text-container span{
     font-size: 14px;
 }
+.content-management-show-events{
+    cursor: pointer;
+}
+.content-management-hide{
+    display: none;
+}

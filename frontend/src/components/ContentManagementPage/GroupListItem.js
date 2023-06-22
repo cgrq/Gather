@@ -6,6 +6,7 @@ import { useState } from "react";
 import EventListItem from "./EventListItem";
 
 export default function GroupListItem({ group }) {
+    const [showEvents, setShowEvents] = useState(false)
     const [showMenu, setShowMenu] = useState(false);
     const closeMenu = () => setShowMenu(false);
 
@@ -30,11 +31,11 @@ export default function GroupListItem({ group }) {
                                 modalComponent={<DeleteAGroupModal groupId={group.id} />} />
                         </div>
                     </div>
-                    <NavLink to={`/manage/groups/${group.id}/events`}>Membership</NavLink>
-                    <div>View Events</div>
+                    <NavLink to={`/manage/groups/${group.id}/events`}>Edit membership</NavLink>
+                    <div className="content-management-show-events" onClick={()=>setShowEvents(!showEvents)}>{showEvents ? "Hide" : "View"} Events</div>
                 </div>
             </div>
-            <div className="content-management-bottom-wrapper">
+            <div className={`content-management-bottom-wrapper ${showEvents ? "" : "content-management-hide"}`}>
                 {
                     Object.values(group.Events).map((event)=>(
                         <div>
