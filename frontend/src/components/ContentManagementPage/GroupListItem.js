@@ -3,8 +3,9 @@ import OpenModalButton from "../OpenModalButton"
 import DeleteAGroupModal from "../Groups/DeleteAGroupModal";
 import "./ContentManagementPage.css"
 import { useState } from "react";
+import EventListItem from "./EventListItem";
 
-export default function ListItem({ group }) {
+export default function GroupListItem({ group }) {
     const [showMenu, setShowMenu] = useState(false);
     const closeMenu = () => setShowMenu(false);
 
@@ -30,14 +31,14 @@ export default function ListItem({ group }) {
                         </div>
                     </div>
                     <NavLink to={`/manage/groups/${group.id}/events`}>Membership</NavLink>
-                    <div>Events</div>
+                    <div>View Events</div>
                 </div>
             </div>
             <div className="content-management-bottom-wrapper">
                 {
                     Object.values(group.Events).map((event)=>(
                         <div>
-                            {event.name}
+                            <EventListItem event={event}/>
                         </div>
                     ))
                 }

@@ -13,7 +13,7 @@
 .content-management-page-wrapper h2{
     margin-bottom:20px;
 }
-/* List Item */
+/* Group List Item */
 .content-management-list-item{
     width:600px;
     display:flex;
@@ -47,9 +47,32 @@
 }
 .content-management-buttons-wrapper{
     display:flex;
-    
+
 }
 .content-management-bottom-wrapper{
     display:flex;
     flex-flow: column;
+}
+
+/* Event List Item */
+.content-management-event-list-item-container{
+    display:flex;
+    width:400px;
+    border-radius: 20px;
+    margin-top:15px;
+    padding:20px;
+    overflow: hidden;
+    background-color: rgb(237, 237, 237);
+}
+.content-management-image-container img{
+    width:100px;
+}
+.content-management-text-container{
+    display:flex;
+    margin-left:20px;
+    flex-flow: column;
+    justify-content: center;
+}
+.content-management-text-container span{
+    font-size: 14px;
 }

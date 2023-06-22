@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getUserGroups } from "../../store/groups";
-import ListItem from "./ListItem";
+import ListItem from "./GroupListItem";
 
 export default function ContentManagementPage(){
     const dispatch = useDispatch();

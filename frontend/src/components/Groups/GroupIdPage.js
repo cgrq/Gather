@@ -126,8 +126,8 @@ function GroupIdPage() {
                             <h2>Upcoming Events</h2>
                             <div className="group-page-upcoming-events">
                                 {
-                                    groups[groupId].events
-                                    && groups[groupId].events.map(event => {
+                                    groups[groupId].Events
+                                    && groups[groupId].Events.map(event => {
                                         const now = new Date();
                                         const eventDate = new Date(event.startDate);
                                         if (now.getTime() < eventDate.getTime())

@@ -23,13 +23,12 @@ function EventListItem({ event }) {
     const startDateTimeArr = seperateDateAndTime(event.startDate);
     const startDate = startDateTimeArr[0];
     const startTime = startDateTimeArr[1];
-
     return (
         <NavLink to={`/events/${event.id}`} className="nav-link event-list-item-container">
             <div className="event-details-container">
                 <div className="event-top-row-container">
                     <div className="image-container">
-                        <img src={event.previewImage} />
+                        <img src={event.EventImages ? event.EventImages[0].url : event.previewImage} />
                     </div>
                     <div className="text-container">
                         <span>{`${startDate} · ${startTime}`}</span>
