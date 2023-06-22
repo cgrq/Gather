@@ -90,9 +90,9 @@
 /* Event ID Page */
 .event-page-container{
    width:1050px;
-    margin:0 auto;
-    padding-top:20px;
-    margin-bottom:30px;
+   margin:0 auto;
+   padding-top:20px;
+   margin-bottom:30px;
 }
 .event-page-bread-crumb-row a{
    text-decoration: none;

@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 import { compareEventDates } from "../utils/dates";
 const ADD_GROUPS = "groups/allGroups/add";
+const ADD_USER_GROUPS = "groups/userGroups/add";
 const ADD_GROUP = "groups/:groupId/add";
 const ADD_IMAGE = "groups/:groupId/images/add";
 const DELETE_GROUP = "groups/:groupId/delete";
@@ -18,6 +19,13 @@ const addGroup = (group) => {
   return {
     type: ADD_GROUP,
     group
+  }
+}
+
+const addUserGroups = (groups) => {
+  return {
+    type: ADD_USER_GROUPS,
+    groups
   }
 }
 
@@ -56,6 +64,17 @@ export const getGroups = () => async (dispatch) => {
   dispatch(addGroups(data));
   return data;
 }
+
+export const getUserGroups = () => async (dispatch) => {
+  const groupsRes = await fetch("/api/groups/current");
+  const data = await groupsRes.json();
+  console.log(`🖥 ~ file: groups.js:71 ~ getUserGroups ~ data:`, data)
+
+
+  dispatch(addUserGroups(data));
+  return data;
+}
+
 
 export const createGroup = (group) => async (dispatch) => {
   const { name, about, isPrivate, type, city, state } = group;
@@ -140,8 +159,16 @@ const groupsReducer = (state = [], action) => {
         newState.allGroups[group.id] = group
       });
 
-      newState.allGroups.optionalOrderedList = [];
       return newState;
+    case ADD_USER_GROUPS:
+        newState.userGroups = {}
+        console.log(`🖥 ~ file: groups.js:169 ~ groupsReducer ~ action.groups:`, action.groups.Groups)
+
+        action.groups.Groups.forEach(group => {
+          newState.userGroups[group.id] = group
+        });
+
+        return newState;
     case ADD_GROUP:
       newState[action.group.id] = action.group
 

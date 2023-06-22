@@ -57,7 +57,7 @@ function ProfileButton({ user }) {
             )
           }
         </div>
-        <div className={`nav-lower-container nav-links ${!user ? `nav-lower-container-logged-out` :""}`}>
+        <div className={`nav-lower-container nav-links ${!user ? `nav-lower-container-logged-out` : ""}`}>
           {
             user
               ? (
@@ -78,8 +78,15 @@ function ProfileButton({ user }) {
                 </>
               )
           }
-          <NavLink onClick={closeMenu} className="nav-view-groups" to="/groups">View groups</NavLink>
-
+          <NavLink onClick={closeMenu} className="nav-view" to="/groups">View groups</NavLink>
+          <NavLink onClick={closeMenu} className="nav-view" to="/events">View events</NavLink>
+          {
+            user &&
+              <div className="nav-manage-container">
+                <h4>Manage</h4>
+                <NavLink onClick={closeMenu} className="nav-view" to="/manage/groups">Groups</NavLink>
+              </div>
+          }
         </div>
       </div>
     </>

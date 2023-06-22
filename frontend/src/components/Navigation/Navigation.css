@@ -54,9 +54,7 @@
     right:20;
     /* box-shadow: 0 5px 15px 5px rgb(230, 230, 230);
      */
-     box-shadow: 0 1px 15px 1px rgb(238, 238, 238);
-
-
+    box-shadow: 0 1px 15px 1px rgb(238, 238, 238);
     background-color:rgb(255, 255, 255);
 }
 .nav-upper-container, .nav-lower-container{
@@ -111,8 +109,19 @@
     color:#00e1ff;
     font-size:15px;
 }
-.nav-view-groups{
+.nav-view{
     margin-top: 10px;
+}
+.nav-manage-container{
+    display:flex;
+    flex-flow: column;
+    background-color:rgb(237, 237, 237);
+    padding:20px 0;
+    margin-top:20px;
+    border-radius: 30px;
+}
+.nav-manage-container h4{
+    color:rgb(143, 143, 143);
 }
 
 @media screen and (max-width: 767px) {
