@@ -1,5 +1,3 @@
-
-
 export const compareEventDates = (a, b) => {
     const dateA = new Date(
         a.startDate.substring(0, 4), // year
@@ -22,16 +20,23 @@ export const compareEventDates = (a, b) => {
 
 
 export const seperateDateAndTime = (dateTimeString) => {
-    const [dateString, timeString] = dateTimeString.split(" ");
+    let [dateString, timeString] = dateTimeString.split(" ");
+
+    if (dateString.includes("T")) {
+      const [datePart, timePart] = dateString.split("T");
+      dateString = datePart;
+      timeString = timePart.slice(0, 8);
+    }
+
     const [year, month, day] = dateString.split("-");
     const [hours, minutes, seconds] = timeString.split(":");
-    const ampm = hours < 12 ? 'AM' : 'PM';
+    const ampm = hours < 12 ? "AM" : "PM";
     const hour12 = hours % 12 || 12;
     const newDate = new Date(year, month - 1, day, hours, minutes, seconds);
     const date = newDate.toLocaleDateString();
     const time = `${hour12}:${minutes} ${ampm}`;
     return [date, time];
-}
+  };
 
 export function padZeros(num) {
     return num.toString().padStart(2, '0');

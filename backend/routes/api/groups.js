@@ -172,7 +172,7 @@ router.get(
     '/',
     async (_req, res) => {
         const groups = await Group.unscoped().findAll({
-            include: [{ model: Membership }, { model: GroupImage, attributes: ["url"] }]
+            include: [{ model: Event, include: [{ model: EventImage }, { model: Venue, attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"] }] },{ model: Membership }, { model: GroupImage, attributes: ["url"] }]
         });
 
         const groupsFormatted = groups.map(group => {
@@ -195,6 +195,9 @@ router.get(
                 createdAt: createdAtFormatted,
                 updatedAt: updatedAtFormatted,
                 numMembers,
+                Events:group.Events,
+                Memberships:group.Memberships,
+                Venues: group.Venues,
                 previewImage
             }
         })
@@ -215,7 +218,7 @@ router.get(
 
         const groups = await Group.unscoped().findAll({
             where: { organizerId: user.id },
-            include: [{ model: Event },{ model: Membership }, { model: GroupImage, attributes: ["url"] }]
+            include: [{ model: Event, include: [{ model: EventImage }] },{ model: Membership }, { model: GroupImage, attributes: ["url"] }]
         });
 
         const groupsFormatted = groups.map(group => {
@@ -238,6 +241,8 @@ router.get(
                 createdAt: createdAtFormatted,
                 updatedAt: updatedAtFormatted,
                 numMembers,
+                Events:group.Events,
+                Memberships:group.Memberships,
                 previewImage
             }
         })
@@ -301,7 +306,6 @@ router.get(
                 Organizer,
                 Venues
             }
-
 
             return res.json({
                 Groups: groupsFormatted

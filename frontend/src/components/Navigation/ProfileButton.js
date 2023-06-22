@@ -85,7 +85,6 @@ function ProfileButton({ user }) {
               <div className="nav-manage-container">
                 <h4>Manage</h4>
                 <NavLink onClick={closeMenu} className="nav-view" to="/manage/groups">Groups</NavLink>
-                <NavLink onClick={closeMenu} className="nav-view" to="/manage/events">Events</NavLink>
               </div>
           }
         </div>
