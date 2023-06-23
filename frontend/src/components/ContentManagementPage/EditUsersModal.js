@@ -5,6 +5,7 @@ import { getGroupById, removeGroup } from "../../store/groups";
 import { getEvent } from "../../store/events";
 import { useHistory, useParams } from "react-router-dom";
 import "./ContentManagementPage.css"
+import EditUsersListItem from "./EditUsersListItem";
 
 export default function EditUsersModal({ type, id }) {
   const dispatch = useDispatch();
@@ -69,9 +70,7 @@ export default function EditUsersModal({ type, id }) {
         {
           type === "membership"
             ? Object.values(groups[id].Memberships).map((membership) => (
-              <div>
-                {membership.User.username}
-              </div>
+              <EditUsersListItem user={membership} />
             ))
             : Object.values(events[id].Attendances).map((attendance) => (
               <div>

@@ -115,3 +115,26 @@
     margin-top:10px;
     width:160px;
 }
+
+/* Edit Users List Item */
+.edit-users-list-item-wrapper{
+    display:flex;
+    align-items: center;
+    margin-top:5px;
+}
+
+.edit-users-list-item-wrapper select{
+    margin-right:10px;
+}
+
+.edit-users-list-item-wrapper div{
+    font-size:14px;
+}
+
+.edit-users-list-item-wrapper span{
+    border:1px solid black;
+    border-radius: 2px;
+    padding:1.5px 4px;
+    margin-right: 10px;
+    font-size: 13.8px;
+}
