@@ -6,21 +6,21 @@ import { getEvent } from "../../store/events";
 import { useHistory, useParams } from "react-router-dom";
 import "./ContentManagementPage.css"
 
-export default function EditUsersModal({type, id}) {
+export default function EditUsersModal({ type, id }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const [errors, setErrors] = useState({})
-  const groups = useSelector((state)=>state.groups)
-  const events = useSelector((state)=>state.events)
+  const groups = useSelector((state) => state.groups)
+  const events = useSelector((state) => state.events)
   const { closeModal } = useModal();
 
-  useEffect(()=>{
-    if(type === "membership"){
+  useEffect(() => {
+    if (type === "membership") {
       dispatch(getGroupById(id));
-    } else{
+    } else {
       dispatch(getEvent(id));
     }
-  },[])
+  }, [])
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -35,22 +35,47 @@ export default function EditUsersModal({type, id}) {
     //   });
     //   history.push("/manage/groups")
   };
-  if((type === "membership" && (!groups || !groups[id])) || (type !== "membership" && (!events || !events[id]))) return null;
+  if ((type === "membership" && (!groups || !groups[id])) || (type !== "membership" && (!events || !events[id]))) return null;
 
   return (
     <>
       <div className="edit-users-modal-container">
         <h2>Edit {type === "membership" ? "Membership" : "Attendees"}</h2>
         {
-          type === "membership"
-            ? Object.values(groups[id].Memberships).map((membership)=>(
+          type === "membership" && groups[id].Memberships[0] &&
+          <>
+            <h3>Pending</h3>
+            {
+              Object.values(groups[id].Memberships).map((membership) => (
+                <>
+                  {
+                    membership.status === "pending" &&
+                    <div>
+                      {membership.User.username}
+                    </div>
+                  }
+                </>
+              ))
+            }
+            {
+              Object.values(groups[id].Memberships).every((membership) => membership.status !== "pending") &&
               <div>
-                {membership.User.firstName}
+                None
+              </div>
+            }
+          </>
+        }
+        <h3>Members</h3>
+        {
+          type === "membership"
+            ? Object.values(groups[id].Memberships).map((membership) => (
+              <div>
+                {membership.User.username}
               </div>
             ))
-            : Object.values(events[id].Attendances).map((attendance)=>(
+            : Object.values(events[id].Attendances).map((attendance) => (
               <div>
-                {attendance.User.firstName}
+                {attendance.User.username}
               </div>
             ))
         }
