@@ -44,6 +44,15 @@ const addImage = (groupId, image) => {
   }
 }
 
+export const getGroupById = (groupId) => async (dispatch) => {
+  const res = await fetch(`/api/groups/${groupId}`);
+  const data = await res.json();
+  console.log(`🖥 ~ file: groups.js:54 ~ getGroupById ~ data:`, data)
+
+  dispatch(addGroup(data));
+  return data;
+}
+
 export const getGroups = () => async (dispatch) => {
   const groupsRes = await fetch("/api/groups");
   const eventsRes = await fetch("/api/events");

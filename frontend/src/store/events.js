@@ -134,6 +134,7 @@ export const getEvent = (eventId) => async (dispatch) => {
   const res = await fetch(`/api/events/${eventId}`);
   const data = await res.json();
 
+  console.log(`🖥 ~ file: events.js:140 ~ getEvent ~ data:`, data)
   dispatch(addEvent(data));
   return data;
 }

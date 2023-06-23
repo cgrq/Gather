@@ -207,7 +207,7 @@ router.get(
             const event = await Event.unscoped().findByPk(eventId,
                 {
                     include: [
-                        { model: Attendance },
+                        { model: Attendance, include: [{ model: User }] },
                         { model: EventImage, attributes: ["id", "url", "preview"] },
                         { model: Group, attributes: ["id", "name", "private", "city", "state"] },
                         { model: Venue, attributes: ["id", "address", "city", "state", "lat", "lng"] }
@@ -222,6 +222,7 @@ router.get(
 
             const { id, groupId, venueId, name, description, type, capacity, price, startDate, endDate } = event;
             const numAttending = event.Attendances.length;
+            const Attendances = event.Attendances;
             const eventGroup = event.Group;
             const eventVenue = event.Venue;
             const EventImages = event.EventImages;
@@ -241,6 +242,7 @@ router.get(
                 startDate: startDateFormatted,
                 endDate: endDateFormatted,
                 numAttending,
+                Attendances,
                 Group: eventGroup,
                 Venue: eventVenue,
                 EventImages
