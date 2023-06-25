@@ -13,7 +13,10 @@ export default function EditUsersModal({ type, id }) {
   const [errors, setErrors] = useState({})
   const groups = useSelector((state) => state.groups)
   const events = useSelector((state) => state.events)
+  const [memberships, setMemberships] = useState([])
+  const [attendance, setAttendance] = useState([])
   const { closeModal } = useModal();
+
 
   useEffect(() => {
     if (type === "membership") {
@@ -21,7 +24,19 @@ export default function EditUsersModal({ type, id }) {
     } else {
       dispatch(getEvent(id));
     }
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (groups && groups[id] && groups[id].Memberships) {
+      setMemberships(groups[id].Memberships);
+    }
+  }, [groups, id]);
+
+  useEffect(() => {
+    if (events && events[id] && events[id].Attendances) {
+      setAttendance(events[id].Attendances);
+    }
+  }, [events, id]);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -43,11 +58,11 @@ export default function EditUsersModal({ type, id }) {
       <div className="edit-users-modal-container">
         <h2>Edit {type === "membership" ? "Membership" : "Attendees"}</h2>
         {
-          type === "membership" && groups[id].Memberships[0] &&
+          type === "membership" && memberships &&
           <>
             <h3>Pending</h3>
             {
-              Object.values(groups[id].Memberships).map((membership) => (
+              Object.values(memberships).map((membership) => (
                 <>
                   {
                     membership.status === "pending" &&
@@ -59,7 +74,7 @@ export default function EditUsersModal({ type, id }) {
               ))
             }
             {
-              Object.values(groups[id].Memberships).every((membership) => membership.status !== "pending") &&
+              Object.values(memberships).every((membership) => membership.status !== "pending") &&
               <div>
                 None
               </div>
@@ -69,10 +84,10 @@ export default function EditUsersModal({ type, id }) {
         <h3>Members</h3>
         {
           type === "membership"
-            ? Object.values(groups[id].Memberships).map((membership) => (
+            ? Object.values(memberships).map((membership) => (
               <EditUsersListItem user={membership} />
             ))
-            : Object.values(events[id].Attendances).map((attendance) => (
+            : Object.values(attendance).map((attendance) => (
               <div>
                 {attendance.User.username}
               </div>
