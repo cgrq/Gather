@@ -67,6 +67,7 @@ export default function EditUsersModal({ type, id }) {
                   {
                     membership.status === "pending" &&
                     <EditUsersListItem
+                      key={membership.id}
                       user={membership}
                       users={memberships}
                       setUsers={setMemberships}
@@ -91,6 +92,7 @@ export default function EditUsersModal({ type, id }) {
                 {
                   membership.status !== "pending" &&
                   <EditUsersListItem
+                    key={membership.id}
                     user={membership}
                     users={memberships}
                     setUsers={setMemberships}

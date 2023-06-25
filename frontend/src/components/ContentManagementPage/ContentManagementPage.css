@@ -123,18 +123,36 @@
     margin-top:5px;
 }
 
-.edit-users-list-item-wrapper select{
-    margin-right:10px;
-}
-
-.edit-users-list-item-wrapper div{
-    font-size:14px;
-}
-
 .edit-users-list-item-wrapper span{
     border:1px solid black;
     border-radius: 2px;
     padding:1.5px 4px;
     margin-right: 10px;
     font-size: 13.8px;
+}
+.edit-users-list-item-wrapper select{
+    margin-right:10px;
+}
+
+.edit-users-list-item-username{
+    font-size:14px;
+}
+.edit-users-list-item-delete{
+    margin-left:10px;
+    cursor: pointer;
+}
+.edit-users-list-item-confirm-delete-wrapper{
+    margin-top:5px;
+    font-size: 12px;
+    display: flex;
+    width: fit-content;
+    padding:5px 15px;
+    border-radius: 3px;
+}
+.edit-users-list-item-confirm-delete-button{
+    cursor:pointer;
+    margin-left:10px;
+}
+.edit-users-list-item-confirm-delete-button-yes{
+    color:red;
 }

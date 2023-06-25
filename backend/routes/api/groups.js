@@ -825,7 +825,6 @@ router.delete(
             const userId = req.user.id;
 
             const group = await Group.findByPk(groupId);
-            const member = await User.findByPk(memberId);
 
             if (!group) {
                 const err = new Error("Group couldn't be found");
@@ -833,16 +832,7 @@ router.delete(
                 throw err;
             }
 
-            if (!member) {
-                const err = Error("Validations Error");
-                err.errors = {
-                    status: "User couldn't be found"
-                }
-                err.statusCode = 400;
-                next(err);
-            }
-
-            const memberMembership = await Membership.unscoped().findOne({ where: { userId: memberId, groupId } });
+            const memberMembership = await Membership.unscoped().findOne({ where: { id: memberId, groupId } });
 
             if (!memberMembership) {
                 const err = new Error("Membership does not exist for this User");
