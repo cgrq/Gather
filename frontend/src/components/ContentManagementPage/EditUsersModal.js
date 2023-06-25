@@ -66,9 +66,11 @@ export default function EditUsersModal({ type, id }) {
                 <>
                   {
                     membership.status === "pending" &&
-                    <div>
-                      {membership.User.username}
-                    </div>
+                    <EditUsersListItem
+                      user={membership}
+                      users={memberships}
+                      setUsers={setMemberships}
+                    />
                   }
                 </>
               ))
@@ -85,7 +87,16 @@ export default function EditUsersModal({ type, id }) {
         {
           type === "membership"
             ? Object.values(memberships).map((membership) => (
-              <EditUsersListItem user={membership} />
+              <>
+                {
+                  membership.status !== "pending" &&
+                  <EditUsersListItem
+                    user={membership}
+                    users={memberships}
+                    setUsers={setMemberships}
+                  />
+                }
+              </>
             ))
             : Object.values(attendance).map((attendance) => (
               <div>
