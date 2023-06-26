@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom/cjs/react-router-dom.min"
 import OpenModalButton from "../OpenModalButton"
 import DeleteAGroupModal from "../Groups/DeleteAGroupModal";
+import EditUsersModal from "./EditUsersModal";
 import "./ContentManagementPage.css"
 import { useState } from "react";
 import EventListItem from "./EventListItem";
@@ -15,8 +16,7 @@ export default function GroupListItem({ group }) {
             <div className="content-management-top-wrapper">
                 <div className="content-management-image-wrapper">
                     <NavLink to={`/groups/${group.id}`}>
-                    <img src={group.previewImage} />
-
+                        <img src={group.previewImage} />
                     </NavLink>
                 </div>
                 <div className="content-management-list-item-details-wrapper">
@@ -31,15 +31,18 @@ export default function GroupListItem({ group }) {
                                 modalComponent={<DeleteAGroupModal groupId={group.id} />} />
                         </div>
                     </div>
-                    <NavLink to={`/manage/groups/${group.id}/events`}>Edit membership</NavLink>
-                    <div className="content-management-show-events" onClick={()=>setShowEvents(!showEvents)}>{showEvents ? "Hide" : "View"} Events</div>
+                    <OpenModalButton
+                        buttonText="Edit membership"
+                        onButtonClick={closeMenu}
+                        modalComponent={<EditUsersModal type="membership" id={group.id} />} />
+                    <div className="content-management-show-events" onClick={() => setShowEvents(!showEvents)}>{showEvents ? "Hide" : "View"} Events</div>
                 </div>
             </div>
             <div className={`content-management-bottom-wrapper ${showEvents ? "" : "content-management-hide"}`}>
                 {
-                    Object.values(group.Events).map((event)=>(
+                    Object.values(group.Events).map((event) => (
                         <div>
-                            <EventListItem event={event}/>
+                            <EventListItem event={event} />
                         </div>
                     ))
                 }

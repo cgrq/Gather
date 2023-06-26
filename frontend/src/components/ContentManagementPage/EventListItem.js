@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton";
+import EditUsersModal from "./EditUsersModal";
 import DeleteAnEventModal from "../Events/DeleteAnEventModal";
 import { useState, useEffect } from "react";
 import { seperateDateAndTime } from "../../utils/dates";
@@ -22,7 +23,10 @@ function EventListItem({ event }) {
             <div className="content-management-text-container">
                 <span>{`${startDate} · ${startTime}`}</span>
                 <h4>{event.name}</h4>
-                <NavLink to={""}>Edit attendance</NavLink>
+                <OpenModalButton
+                        buttonText="Edit attendance"
+                        onButtonClick={closeMenu}
+                        modalComponent={<EditUsersModal type="attendance" id={event.id} />} />
             </div>
             <div>
                 <div className="event-page-details-card-buttons">

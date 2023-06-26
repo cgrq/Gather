@@ -207,7 +207,7 @@ router.get(
             const event = await Event.unscoped().findByPk(eventId,
                 {
                     include: [
-                        { model: Attendance },
+                        { model: Attendance, include: [{ model: User }] },
                         { model: EventImage, attributes: ["id", "url", "preview"] },
                         { model: Group, attributes: ["id", "name", "private", "city", "state"] },
                         { model: Venue, attributes: ["id", "address", "city", "state", "lat", "lng"] }
@@ -222,6 +222,7 @@ router.get(
 
             const { id, groupId, venueId, name, description, type, capacity, price, startDate, endDate } = event;
             const numAttending = event.Attendances.length;
+            const Attendances = event.Attendances;
             const eventGroup = event.Group;
             const eventVenue = event.Venue;
             const EventImages = event.EventImages;
@@ -241,6 +242,7 @@ router.get(
                 startDate: startDateFormatted,
                 endDate: endDateFormatted,
                 numAttending,
+                Attendances,
                 Group: eventGroup,
                 Venue: eventVenue,
                 EventImages
@@ -555,7 +557,7 @@ router.put(
             const attendee = await Attendance.unscoped().findOne({
                 where: {
                     eventId,
-                    userId: memberId
+                    id: memberId
                 }
             });
 
@@ -563,12 +565,6 @@ router.put(
                 const err = new Error("Attendance between the user and the event does not exist");
                 err.statusCode = 404;
                 return next(err);
-            }
-
-            if (status === "pending") {
-                const err = new Error("Cannot change an attendance status to pending");
-                err.statusCode = 400;
-                throw err;
             }
 
             const id = event.id;
@@ -601,7 +597,7 @@ router.delete(
             const { userId } = req.body;
             const userCurrentId = req.user.id;
 
-            const attendee = await Attendance.findOne({where: {userId}});
+            const attendeeAttendance = await Attendance.unscoped().findOne({where: {id:userId, eventId}});
 
             const event = await Event.unscoped().findByPk(eventId, {
                 include: [
@@ -614,7 +610,7 @@ router.delete(
                 throw err;
             }
 
-            if (!attendee) {
+            if (!attendeeAttendance) {
                 const err = new Error("Attendance does not exist for this User");
                 err.statusCode = 404;
                 return next(err);
@@ -630,7 +626,7 @@ router.delete(
                 throw err;
             }
 
-            await attendee.destroy();
+            await attendeeAttendance.destroy();
 
             return res.json({
                 message: "Successfully deleted attendance from event"

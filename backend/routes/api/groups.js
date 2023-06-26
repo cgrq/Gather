@@ -22,7 +22,7 @@ const validateGroup = [
     check('about')
         .exists({ checkFalsy: true })
         .trim()
-        .isLength({ min: 30, max:255 })
+        .isLength({ min: 30, max: 255 })
         .withMessage('About must be between 30 and 255 characters'),
     check('type')
         .exists({ checkFalsy: true })
@@ -113,7 +113,7 @@ const validateEvent = [
         .exists({ checkFalsy: true })
         .trim()
         .notEmpty()
-        .isLength({ min: 5, max:50 })
+        .isLength({ min: 5, max: 50 })
         .withMessage('Name must be between 5 and 50 characters'),
     check('type')
         .exists({ checkFalsy: true })
@@ -137,7 +137,7 @@ const validateEvent = [
         .trim()
         .notEmpty()
         .withMessage("Description is required")
-        .isLength({ min: 5, max:255 })
+        .isLength({ min: 5, max: 255 })
         .withMessage('Description must be between 5 and 255 characters'),
     check('startDate')
         .exists({ checkFalsy: true })
@@ -172,7 +172,7 @@ router.get(
     '/',
     async (_req, res) => {
         const groups = await Group.unscoped().findAll({
-            include: [{ model: Event, include: [{ model: EventImage }, { model: Venue, attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"] }] },{ model: Membership }, { model: GroupImage, attributes: ["url"] }]
+            include: [{ model: Event, include: [{ model: EventImage }, { model: Venue, attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"] }] }, { model: Membership }, { model: GroupImage, attributes: ["url"] }]
         });
 
         const groupsFormatted = groups.map(group => {
@@ -195,8 +195,8 @@ router.get(
                 createdAt: createdAtFormatted,
                 updatedAt: updatedAtFormatted,
                 numMembers,
-                Events:group.Events,
-                Memberships:group.Memberships,
+                Events: group.Events,
+                Memberships: group.Memberships,
                 Venues: group.Venues,
                 previewImage
             }
@@ -209,49 +209,49 @@ router.get(
 );
 
 // Get all Groups organized by the Current User
-router.get(
-    '/current',
-    requireAuth,
-    async (req, res, next) => {
+router.get('/current', requireAuth, async (req, res, next) => {
+    const { user } = req;
 
-        const { user } = req;
+    const groups = await Group.unscoped().findAll({
+        where: { organizerId: user.id },
+        include: [
+            { model: Event, include: [{ model: EventImage }] },
+            { model: Membership },
+            { model: GroupImage, attributes: ["url"] }
+        ],
+        order: [[Event, 'startDate', 'DESC']]
+    });
 
-        const groups = await Group.unscoped().findAll({
-            where: { organizerId: user.id },
-            include: [{ model: Event, include: [{ model: EventImage }] },{ model: Membership }, { model: GroupImage, attributes: ["url"] }]
-        });
+    const groupsFormatted = groups.map(group => {
+        const { id, organizerId, name, about, type, private, city, state, createdAt, updatedAt } = group;
+        const numMembers = group.Memberships.length;
+        const previewImage = group.GroupImages[0] ? group.GroupImages[0].url : "no image";
 
-        const groupsFormatted = groups.map(group => {
-            const { id, organizerId, name, about, type, private, city, state, createdAt, updatedAt } = group;
-            const numMembers = group.Memberships.length;
-            const previewImage = group.GroupImages[0] ? group.GroupImages[0].url : "no image";
+        const createdAtFormatted = formatDate(createdAt);
+        const updatedAtFormatted = formatDate(updatedAt);
 
-            const createdAtFormatted = formatDate(createdAt);
-            const updatedAtFormatted = formatDate(updatedAt);
+        return {
+            id,
+            organizerId,
+            name,
+            about,
+            type,
+            private,
+            city,
+            state,
+            createdAt: createdAtFormatted,
+            updatedAt: updatedAtFormatted,
+            numMembers,
+            Events: group.Events,
+            Memberships: group.Memberships,
+            previewImage
+        };
+    });
 
-            return {
-                id,
-                organizerId,
-                name,
-                about,
-                type,
-                private,
-                city,
-                state,
-                createdAt: createdAtFormatted,
-                updatedAt: updatedAtFormatted,
-                numMembers,
-                Events:group.Events,
-                Memberships:group.Memberships,
-                previewImage
-            }
-        })
-
-        return res.json({
-            Groups: groupsFormatted
-        });
-    }
-);
+    return res.json({
+        Groups: groupsFormatted
+    });
+});
 
 // Get details of a Group from an id
 router.get(
@@ -264,7 +264,7 @@ router.get(
             const group = await Group.unscoped().findByPk(groupId,
                 {
                     include: [
-                        { model: Membership },
+                        { model: Membership, include: [{ model: User }] },
                         { model: GroupImage },
                         { model: User, attributes: ["id", "firstName", "lastName"] },
                         { model: GroupImage, attributes: ["id", "url", "preview"] },
@@ -285,12 +285,13 @@ router.get(
 
             const numMembers = group.Memberships.length;
             const GroupImages = group.GroupImages;
+            const Memberships = group.Memberships;
             const Venues = group.Venues;
 
             const createdAtFormatted = formatDate(createdAt);
             const updatedAtFormatted = formatDate(updatedAt);
 
-            groupsFormatted = {
+            groupFormatted = {
                 id,
                 organizerId,
                 name,
@@ -303,12 +304,13 @@ router.get(
                 updatedAt: updatedAtFormatted,
                 numMembers,
                 GroupImages,
+                Memberships,
                 Organizer,
                 Venues
             }
 
             return res.json({
-                Groups: groupsFormatted
+                ...groupFormatted
             });
         } catch (err) {
             next(err)
@@ -732,7 +734,7 @@ router.post(
 
             const memberId = req.user.id;
 
-            const existingMembership = await Membership.unscoped().findOne({ where: { userId: memberId, groupId } });
+            const existingMembership = await Membership.unscoped().findOne({ where: { id: memberId, groupId } });
 
             if (existingMembership) {
                 const { status } = existingMembership;
@@ -771,7 +773,6 @@ router.put(
             const userId = req.user.id;
 
             const group = await Group.findByPk(groupId);
-            const member = await User.findByPk(memberId);
 
             if (!group) {
                 const err = new Error("Group couldn't be found");
@@ -779,16 +780,7 @@ router.put(
                 throw err;
             }
 
-            if (!member) {
-                const err = Error("Validations Error");
-                err.errors = {
-                    status: "User couldn't be found"
-                }
-                err.statusCode = 400;
-                next(err);
-            }
-
-            const memberMembership = await Membership.unscoped().findOne({ where: { userId: memberId, groupId } });
+            const memberMembership = await Membership.unscoped().findOne({ where: { id: memberId, groupId } });
 
             if (!memberMembership) {
                 const err = new Error("Membership between the user and the group does not exist");
@@ -805,16 +797,7 @@ router.put(
                 throw err;
             }
 
-            if (status === "pending") {
-                const err = Error("Validations Error");
-                err.errors = {
-                    status: "Cannot change a membership status to pending"
-                }
-                err.statusCode = 400;
-                next(err);
-            }
-
-            memberMembership.set({ memberId, groupId, status });
+            memberMembership.set({ status });
 
             await memberMembership.save();
 
@@ -842,7 +825,6 @@ router.delete(
             const userId = req.user.id;
 
             const group = await Group.findByPk(groupId);
-            const member = await User.findByPk(memberId);
 
             if (!group) {
                 const err = new Error("Group couldn't be found");
@@ -850,16 +832,7 @@ router.delete(
                 throw err;
             }
 
-            if (!member) {
-                const err = Error("Validations Error");
-                err.errors = {
-                    status: "User couldn't be found"
-                }
-                err.statusCode = 400;
-                next(err);
-            }
-
-            const memberMembership = await Membership.unscoped().findOne({ where: { userId: memberId, groupId } });
+            const memberMembership = await Membership.unscoped().findOne({ where: { id: memberId, groupId } });
 
             if (!memberMembership) {
                 const err = new Error("Membership does not exist for this User");

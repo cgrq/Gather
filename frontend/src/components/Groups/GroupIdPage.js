@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, NavLink } from "react-router-dom";
-import { getGroup, getGroups } from "../../store/groups";
+import { getGroupById, getGroups } from "../../store/groups";
+import { csrfFetch } from "../../store/csrf";
 import EventListItem from "../Events/EventListItem";
 import DeleteAGroupModal from "./DeleteAGroupModal";
 import OpenModalButton from '../OpenModalButton';
@@ -15,6 +16,8 @@ function GroupIdPage() {
     const group = useSelector(state => state.groups[groupId]);
     const groups = useSelector(state => state.groups.allGroups);
     const sessionUser = useSelector(state => state.session.user);
+    const [isMember, setIsMember] = useState(false)
+    const [status, setStatus] = useState()
     const [showMenu, setShowMenu] = useState(false);
     const ulRef = useRef();
 
@@ -22,13 +25,21 @@ function GroupIdPage() {
         if (group && group.hasOwnProperty("GroupImages") && group.GroupImages.length > 0) {
             setImageUrl(group.GroupImages[0].url)
         }
+        if (group && group.Memberships){
+            group.Memberships.forEach(membership => {
+                if((sessionUser && sessionUser.id) === membership.userId) {
+                    setIsMember(true)
+                    setStatus(membership.status)
+                }
+            });
+        }
     }, [group])
 
     useEffect(() => {
         dispatch(getGroups());
     }, [dispatch, groupId, events])
     useEffect(() => {
-        dispatch(getGroup(groupId));
+        dispatch(getGroupById(groupId));
     }, [dispatch, groupId, events])
 
     useEffect(() => {
@@ -47,12 +58,24 @@ function GroupIdPage() {
 
     const closeMenu = () => setShowMenu(false);
 
+    const handleJoinGroup = async () => {
+        await csrfFetch(`/api/groups/${group.id}/membership`, {
+            method: "POST",
+            body: JSON.stringify({
+                memberId: sessionUser.id,
+                status: "pending"
+            }),
+        });
+        setStatus("pending")
+        setIsMember(true)
+    }
 
     if (!group || !groups || !group.hasOwnProperty("GroupImages") || !groups[groupId] || !(groups.hasOwnProperty(groupId))) return null;
     let isOrganizer;
     if (group.Organizer) {
         isOrganizer = (sessionUser && sessionUser.id) === group.Organizer.id;
     }
+
     let numberOfEvents = 0;
 
     if (groups[groupId] && !(groups[groupId].hasOwnProperty("events"))) {
@@ -62,6 +85,7 @@ function GroupIdPage() {
     if (groups[groupId] && groups[groupId].hasOwnProperty("events") && groups[groupId].events && groups[groupId].events.length > 0) {
         numberOfEvents = groups[groupId].events.length;
     }
+
     return (
         <div className="group-page-container">
             <div className="group-page-bread-crumb-row">
@@ -87,11 +111,11 @@ function GroupIdPage() {
                             <div>{ }</div>
                             <div>{`Organized by: ${group.Organizer.firstName} ${group.Organizer.lastName}`}</div>
                             {
-                                (isOrganizer || !sessionUser)
-                                    ? ""
+                                (isMember || !sessionUser)
+                                    ? <div>Membership status: {status}</div>
                                     : <button
                                         className="join-button"
-                                        onClick={() => alert("Feature coming soon")}>
+                                        onClick={() => handleJoinGroup()}>
                                         Join this group
                                     </button>
                             }

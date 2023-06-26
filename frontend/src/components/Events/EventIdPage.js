@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, NavLink } from "react-router-dom";
 import "./Events.css";
-import { getGroup } from "../../store/groups";
+import { getGroupById } from "../../store/groups";
 import { getEvent } from "../../store/events";
+import { csrfFetch } from "../../store/csrf";
 import GroupPreview from "../Groups/GroupPreview";
 import { seperateDateAndTime } from "../../utils/dates";
 import DeleteAnEventModal from "./DeleteAnEventModal";
@@ -18,7 +19,14 @@ function EventIdPage() {
     // const events = useSelector(state => state.events.allEvents);
     const sessionUser = useSelector(state => state.session.user);
     const [showMenu, setShowMenu] = useState(false);
-    const [eventImageUrl, setEventImageUrl] = useState()
+    const [isMember, setIsMember] = useState(false);
+    const [firstName, setFirstName] = useState();
+    const [lastName, setLastName] = useState();
+    const [organizer, setOrganizer] = useState();
+    const [isOrganizer, setIsOrganizer] = useState(false);
+    const [group, setGroup] = useState({});
+    const [status, setStatus] = useState();
+    const [eventImageUrl, setEventImageUrl] = useState();
 
 
     useEffect(() => {
@@ -28,9 +36,43 @@ function EventIdPage() {
     useEffect(() => {
         if (event && event.hasOwnProperty("Group")) {
             const groupId = event.Group.id;
-            dispatch(getGroup(groupId));
-        };
-    }, [dispatch, event])
+            dispatch(getGroupById(groupId));
+            event.Attendances.forEach(attendance => {
+                if ((sessionUser && sessionUser.id) === attendance.userId) {
+                    setIsMember(true)
+                    setStatus(attendance.status)
+                }
+            });
+        }
+        if (event && event.EventImages && event.EventImages[0]) {
+            setEventImageUrl(event.EventImages[0].url);
+        }
+    }, [event])
+
+    useEffect(() => {
+        if (group.Organizer) {
+            setOrganizer(group.Organizer);
+        }
+
+        if (group && group.Memberships) {
+            group.Memberships.forEach(membership => {
+                if ((sessionUser && sessionUser.id) === membership.userId) {
+                    setIsMember(true)
+                }
+            });
+        }
+    }, [group])
+
+    useEffect(() => {
+        if (organizer) {
+            setFirstName(organizer.firstName);
+            setLastName(organizer.lastName);
+        }
+        if(sessionUser && sessionUser.id && organizer && organizer.id){
+            setIsOrganizer((sessionUser && sessionUser.id) === organizer.id)
+        }
+
+    }, [organizer, sessionUser])
 
     useEffect(() => {
         if (!showMenu) return;
@@ -48,29 +90,27 @@ function EventIdPage() {
 
     const closeMenu = () => setShowMenu(false);
 
-    useEffect(()=>{
-        if(event && event.EventImages && event.EventImages[0]){
-            setEventImageUrl(event.EventImages[0].url);
-
+    useEffect(() => {
+        if (groupState && event && event.Group) {
+            setGroup(groupState[event.Group.id]);
         }
 
-    },[event])
 
+    }, [groupState])
 
-    if (!event || !groupState || !event.Group || !event.EventImages || event.EventImages.length === 0) return null;
+    const handleJoinEvent = async () => {
+        await csrfFetch(`/api/events/${eventId}/attendance`, {
+            method: "POST",
+            body: JSON.stringify({
+                memberId: sessionUser.id,
+                status: "pending"
+            }),
+        });
+        setStatus("pending")
+        setIsMember(true)
+    }
 
-
-    const groupId = event.Group.id;
-
-    const group = groupState[groupId];
-
-    if (!group) return null;
-
-    const organizer = group.Organizer;
-
-    const firstName = organizer.firstName;
-    const lastName = organizer.lastName;
-
+    if (!event || !groupState || !group || !group.GroupImages || !event.Group || !event.EventImages || event.EventImages.length === 0) return null;
 
     const startDateTimeArr = seperateDateAndTime(event.startDate);
     const startDate = startDateTimeArr[0];
@@ -79,8 +119,6 @@ function EventIdPage() {
     const endDate = endDateTimeArr[0];
     const endTime = endDateTimeArr[1];
 
-
-    const isOrganizer = (sessionUser && sessionUser.id) === organizer.id;
     return (
         <div className="event-page-container">
             <div className="event-page-bread-crumb-row">
@@ -127,10 +165,21 @@ function EventIdPage() {
                                             <div>{event.type}</div>
                                         </div>
                                         {
+                                            ((isMember && sessionUser && !status))
+                                                ? <button
+                                                    className="join-button"
+                                                    onClick={() => handleJoinEvent()}>
+                                                    Join this event
+                                                </button>
+                                                : status
+                                                    ? <div>Attendance status: {status}</div>
+                                                    : ""
+                                        }
+                                        {
                                             isOrganizer
                                             && <div className="event-page-details-card-buttons">
-                                                <NavLink  to={`/events/${eventId}/edit`}>
-                                                <button className="event-page-update-button">Update</button>
+                                                <NavLink to={`/events/${eventId}/edit`}>
+                                                    <button className="event-page-update-button">Update</button>
 
                                                 </NavLink>
                                                 <OpenModalButton
@@ -139,14 +188,13 @@ function EventIdPage() {
                                                     modalComponent={<DeleteAnEventModal eventId={eventId} />} />
                                             </div>
                                         }
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="event-page-content-row event-page-details-description-wrapper">
-                                <h2>Details</h2>
-                                <div className="event-page-details-description" >{event.description}</div>
+                            <h2>Details</h2>
+                            <div className="event-page-details-description" >{event.description}</div>
                         </div>
                     </div>
                 </div>
