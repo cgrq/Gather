@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGroup, updateGroup } from "../../store/groups"
+import { getGroupById, updateGroup } from "../../store/groups"
 import { useHistory, useParams } from 'react-router-dom';
 import { isValidURL } from '../../utils/validation'
 
@@ -21,7 +21,7 @@ function UpdateGroupPage() {
     const sessionUser = useSelector(state => state.session.user);
 
     useEffect(() => {
-        dispatch(getGroup(groupId));
+        dispatch(getGroupById(groupId));
     }, [dispatch, groupId])
 
     useEffect(() => {

@@ -22,9 +22,9 @@ export default function GroupListItem({ group }) {
                 <div className="content-management-list-item-details-wrapper">
                     <h3 className="content-management-name">{group.name}</h3>
                     <div className="content-management-buttons-wrapper">
-                        <NavLink to={`/groups/${group.id}/events/new`}><button className="group-page-button group-page-button-create">Create event</button></NavLink>
-                        <NavLink to={`/groups/${group.id}/edit`}><button className="group-page-button group-page-button-update">Update</button></NavLink>
-                        <div className="group-page-delete-wrapper">
+
+                        <NavLink to={`/groups/${group.id}/edit`}><button className="content-management-button-update">Update</button></NavLink>
+                        <div className="content-management-delete-wrapper">
                             <OpenModalButton
                                 buttonText="Delete"
                                 onButtonClick={closeMenu}
@@ -39,6 +39,8 @@ export default function GroupListItem({ group }) {
                 </div>
             </div>
             <div className={`content-management-bottom-wrapper ${showEvents ? "" : "content-management-hide"}`}>
+                <NavLink to={`/groups/${group.id}/events/new`}><button className="content-management-button-create-event">+ Create event</button></NavLink>
+
                 {
                     Object.values(group.Events).map((event) => (
                         <div>

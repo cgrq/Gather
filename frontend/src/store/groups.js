@@ -49,6 +49,7 @@ export const getGroupById = (groupId) => async (dispatch) => {
   const res = await fetch(`/api/groups/${groupId}`);
   const data = await res.json();
 
+  console.log(`🖥 ~ file: groups.js:55 ~ getGroupById ~ data:`, data)
   dispatch(addGroup(data));
   return data;
 }
@@ -150,13 +151,13 @@ export const removeGroup = (groupId) => async (dispatch) => {
   return data;
 }
 
-export const getGroup = (groupId) => async (dispatch) => {
-  const res = await fetch(`/api/groups/${groupId}`);
-  const data = await res.json();
+// export const getGroup = (groupId) => async (dispatch) => {
+//   const res = await fetch(`/api/groups/${groupId}`);
+//   const data = await res.json();
 
-  dispatch(addGroup(data.Groups));
-  return data;
-}
+//   dispatch(addGroup(data.Groups));
+//   return data;
+// }
 
 const groupsReducer = (state = [], action) => {
   const newState = { ...state };
