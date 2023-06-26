@@ -149,7 +149,7 @@ export default function EditUsersModal({ type, id }) {
             ))
         }
         {
-              Object.values(attendances).every((attendance) => attendance.status === "pending") &&
+              type !== "membership" && Object.values(attendances).every((attendance) => attendance.status === "pending") &&
               <div>
                 None
               </div>
