@@ -14,7 +14,7 @@ export default function EditUsersModal({ type, id }) {
   const groups = useSelector((state) => state.groups)
   const events = useSelector((state) => state.events)
   const [memberships, setMemberships] = useState([])
-  const [attendance, setAttendance] = useState([])
+  const [attendances, setAttendances] = useState([])
   const { closeModal } = useModal();
 
 
@@ -34,7 +34,7 @@ export default function EditUsersModal({ type, id }) {
 
   useEffect(() => {
     if (events && events[id] && events[id].Attendances) {
-      setAttendance(events[id].Attendances);
+      setAttendances(events[id].Attendances);
     }
   }, [events, id]);
 
@@ -67,6 +67,7 @@ export default function EditUsersModal({ type, id }) {
                   {
                     membership.status === "pending" &&
                     <EditUsersListItem
+                      type={type}
                       key={membership.id}
                       user={membership}
                       users={memberships}
@@ -84,14 +85,43 @@ export default function EditUsersModal({ type, id }) {
             }
           </>
         }
+        {
+          type !== "membership" && attendances &&
+          <>
+            <h3>Pending</h3>
+            {
+              Object.values(attendances).map((attendance) => (
+                <>
+                  {
+                    attendance.status === "pending" &&
+                    <EditUsersListItem
+                      type={type}
+                      key={attendance.id}
+                      user={attendance}
+                      users={attendances}
+                      setUsers={setAttendances}
+                    />
+                  }
+                </>
+              ))
+            }
+            {
+              Object.values(attendances).every((attendance) => attendance.status !== "pending") &&
+              <div>
+                None
+              </div>
+            }
+          </>
+        }
         <h3>Members</h3>
         {
-          type === "membership"
-            ? Object.values(memberships).map((membership) => (
+          type === "membership" && memberships
+            && Object.values(memberships).map((membership) => (
               <>
                 {
                   membership.status !== "pending" &&
                   <EditUsersListItem
+                    type={type}
                     key={membership.id}
                     user={membership}
                     users={memberships}
@@ -100,12 +130,30 @@ export default function EditUsersModal({ type, id }) {
                 }
               </>
             ))
-            : Object.values(attendance).map((attendance) => (
-              <div>
-                {attendance.User.username}
-              </div>
+        }
+        {
+          type !== "membership" && attendances
+            && Object.values(attendances).map((attendance) => (
+              <>
+                {
+                  attendance.status !== "pending" &&
+                  <EditUsersListItem
+                    type={type}
+                    key={attendance.id}
+                    user={attendance}
+                    users={attendances}
+                    setUsers={setAttendances}
+                  />
+                }
+              </>
             ))
         }
+        {
+              Object.values(attendances).every((attendance) => attendance.status === "pending") &&
+              <div>
+                None
+              </div>
+            }
       </div>
     </>
   );

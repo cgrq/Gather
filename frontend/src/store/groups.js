@@ -48,7 +48,6 @@ const addImage = (groupId, image) => {
 export const getGroupById = (groupId) => async (dispatch) => {
   const res = await fetch(`/api/groups/${groupId}`);
   const data = await res.json();
-  console.log(`🖥 ~ file: groups.js:54 ~ getGroupById ~ data:`, data)
 
   dispatch(addGroup(data));
   return data;
@@ -173,9 +172,9 @@ const groupsReducer = (state = [], action) => {
     case ADD_USER_GROUPS:
         newState.userGroups = {}
 
-        action.groups.Groups.forEach(group => {
-          newState.userGroups[group.id] = group
-        });
+          action.groups.Groups.forEach(group => {
+            newState.userGroups[group.id] = group
+          });
 
         return newState;
 

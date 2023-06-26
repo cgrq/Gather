@@ -557,7 +557,7 @@ router.put(
             const attendee = await Attendance.unscoped().findOne({
                 where: {
                     eventId,
-                    userId: memberId
+                    id: memberId
                 }
             });
 
@@ -565,12 +565,6 @@ router.put(
                 const err = new Error("Attendance between the user and the event does not exist");
                 err.statusCode = 404;
                 return next(err);
-            }
-
-            if (status === "pending") {
-                const err = new Error("Cannot change an attendance status to pending");
-                err.statusCode = 400;
-                throw err;
             }
 
             const id = event.id;
@@ -603,7 +597,7 @@ router.delete(
             const { userId } = req.body;
             const userCurrentId = req.user.id;
 
-            const attendee = await Attendance.findOne({where: {userId}});
+            const attendeeAttendance = await Attendance.unscoped().findOne({where: {id:userId, eventId}});
 
             const event = await Event.unscoped().findByPk(eventId, {
                 include: [
@@ -616,7 +610,7 @@ router.delete(
                 throw err;
             }
 
-            if (!attendee) {
+            if (!attendeeAttendance) {
                 const err = new Error("Attendance does not exist for this User");
                 err.statusCode = 404;
                 return next(err);
@@ -632,7 +626,7 @@ router.delete(
                 throw err;
             }
 
-            await attendee.destroy();
+            await attendeeAttendance.destroy();
 
             return res.json({
                 message: "Successfully deleted attendance from event"

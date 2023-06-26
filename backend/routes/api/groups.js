@@ -734,7 +734,7 @@ router.post(
 
             const memberId = req.user.id;
 
-            const existingMembership = await Membership.unscoped().findOne({ where: { userId: memberId, groupId } });
+            const existingMembership = await Membership.unscoped().findOne({ where: { id: memberId, groupId } });
 
             if (existingMembership) {
                 const { status } = existingMembership;

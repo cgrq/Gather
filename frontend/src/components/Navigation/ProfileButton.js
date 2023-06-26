@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
@@ -9,6 +9,9 @@ import SignupFormModal from '../SignupFormModal';
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
+  const [isOwnerOfGroup, setIsOwnerOfGroup] = useState(false);
+  const sessionUser = useSelector((state)=> state.session.user)
+  const {userGroups} = useSelector((state)=> state.groups)
   const ulRef = useRef();
 
   const openMenu = () => {
@@ -35,10 +38,18 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    setIsOwnerOfGroup(false)
     closeMenu();
   };
+  useEffect(()=>{
+    if(sessionUser && userGroups && Object.values(userGroups).length){
+      setIsOwnerOfGroup(true)
+    }
+  },[userGroups])
 
   const ulClassName = "profile-dropdown" + (showMenu ? "show-profile-list" : " hidden");
+
+
 
   return (
     <>
@@ -81,7 +92,7 @@ function ProfileButton({ user }) {
           <NavLink onClick={closeMenu} className="nav-view" to="/groups">View groups</NavLink>
           <NavLink onClick={closeMenu} className="nav-view" to="/events">View events</NavLink>
           {
-            user &&
+            isOwnerOfGroup &&
               <div className="nav-manage-container">
                 <h4>Manage</h4>
                 <NavLink onClick={closeMenu} className="nav-view" to="/manage/groups">Groups</NavLink>

@@ -1,9 +1,10 @@
 // frontend/src/components/LoginFormModal/index.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import "./LoginForm.css";
+import { getUserGroups } from "../../store/groups";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -11,6 +12,12 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+
+  useEffect(() => {
+    return () => {
+      dispatch(getUserGroups());
+    };
+  }, []);
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
