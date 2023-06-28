@@ -107,13 +107,36 @@ export const createGroup = (group) => async (dispatch) => {
 
 
 export const createGroupImage = (image) => async (dispatch) => {
-  const { groupId, url } = image;
+  const { groupId, url, imageFile } = image;
+
+  const formData = new FormData();
+
+  if (image) formData.append("image", imageFile);
+
+  formData.append("preview", true);
+
   const res = await csrfFetch(`/api/groups/${groupId}/images`, {
     method: "POST",
-    body: JSON.stringify({
-      url,
-      preview: true
-    }),
+    body: formData
+  });
+  const imageData = await res.json();
+
+  dispatch(addImage(groupId, imageData));
+  return imageData;
+}
+
+export const updateGroupImage = (image) => async (dispatch) => {
+  const { groupId, url, imageFile } = image;
+
+  const formData = new FormData();
+
+  if (image) formData.append("image", imageFile);
+
+  formData.append("preview", true);
+
+  const res = await csrfFetch(`/api/groups/${groupId}/images`, {
+    method: "PUT",
+    body: formData
   });
   const imageData = await res.json();
 
