@@ -89,13 +89,18 @@ export const updateEvent = (event) => async (dispatch) => {
 }
 
 export const createEventImage = (image) => async (dispatch) => {
-  const { eventId, url } = image;
+  const { eventId, imageFile } = image;
+  console.log(`🖥 ~ file: events.js:93 ~ createEventImage ~ imageFile:`, imageFile)
+
+  const formData = new FormData();
+
+  if (image) formData.append("image", imageFile);
+
+  formData.append("preview", true);
+
   const res = await csrfFetch(`/api/events/${eventId}/images`, {
     method: "POST",
-    body: JSON.stringify({
-      url,
-      preview: true
-    }),
+    body: formData
   });
   const imageData = await res.json();
 
@@ -105,13 +110,17 @@ export const createEventImage = (image) => async (dispatch) => {
 
 // NEED BACKEND ROUTE
 export const updateEventImage = (image) => async (dispatch) => {
-  const { eventId, url } = image;
+  const { eventId, imageFile } = image;
+
+  const formData = new FormData();
+
+  if (image) formData.append("image", imageFile);
+
+  formData.append("preview", true);
+
   const res = await csrfFetch(`/api/events/${eventId}/images/edit`, {
     method: "PUT",
-    body: JSON.stringify({
-      url,
-      preview: true
-    }),
+    body: formData
   });
   const imageData = await res.json();
 

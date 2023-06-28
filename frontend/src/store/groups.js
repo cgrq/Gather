@@ -107,7 +107,7 @@ export const createGroup = (group) => async (dispatch) => {
 
 
 export const createGroupImage = (image) => async (dispatch) => {
-  const { groupId, url, imageFile } = image;
+  const { groupId, imageFile } = image;
 
   const formData = new FormData();
 
@@ -126,7 +126,7 @@ export const createGroupImage = (image) => async (dispatch) => {
 }
 
 export const updateGroupImage = (image) => async (dispatch) => {
-  const { groupId, url, imageFile } = image;
+  const { groupId, imageFile } = image;
 
   const formData = new FormData();
 

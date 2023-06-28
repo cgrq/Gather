@@ -11,6 +11,7 @@ const { requireAuth, verifyMemberStatus, verifyCohostStatus } = require('../../u
 const { formatDate, parseDate } = require('../../utils/date');
 const { check, query } = require('express-validator');
 const { handleValidationErrors, isValidURL } = require('../../utils/validation');
+const { singleMulterUpload, singleFileUpload } = require('../../awsS3');
 
 const validateEvent = [
     check('name')
@@ -66,17 +67,13 @@ const validateEvent = [
 ];
 
 const validateImage = [
-    check('url')
-      .exists({ checkFalsy: true })
-      .notEmpty()
-      .withMessage('Image Url is required')
-      .custom(url => {
-        if (!isValidURL(url)) {
-            throw new Error('Invalid URL');
+    check('image')
+      .custom(async (value, { req }) => {
+        if (!req.file) {
+          throw new Error('Image file is required');
         }
         return true;
-    })
-      .withMessage('Invalid URL'),
+      }),
     handleValidationErrors
   ];
 
@@ -311,21 +308,22 @@ router.put(
 // Create an EventImage for a Group specified by its id
 router.post(
     '/:eventId/images',
-    [requireAuth ,verifyMemberStatus, validateImage],
+    [singleMulterUpload("image"), requireAuth ,verifyMemberStatus, validateImage],
     async (req, res, next) => {
         try {
             const { eventId } = req.params;
 
-            const { url, preview } = req.body;
+            const { preview } = req.body;
+            const imageUrl = req.file
+            ? await singleFileUpload({ file: req.file, public: true })
+            : null;
 
-            const userId = req.user.id;
-
-            const eventImage = await EventImage.create({ eventId, url, preview });
+            const eventImage = await EventImage.create({ eventId, url: imageUrl, preview });
 
 
             const id = eventImage.id;
 
-            return res.json({ id, url, preview });
+            return res.json({ id, url: imageUrl, preview });
 
         } catch (err) {
             next(err)
@@ -336,23 +334,26 @@ router.post(
 // Edit a Event Image
 router.put(
     '/:eventId/images/edit',
-    [requireAuth, verifyCohostStatus, validateImage],
+    [singleMulterUpload("image"), requireAuth, verifyCohostStatus, validateImage],
     async (req, res, next) => {
         try {
             const { eventId } = req.params;
 
-            const { url, preview } = req.body;
+            const { preview } = req.body;
+            const imageUrl = req.file
+            ? await singleFileUpload({ file: req.file, public: true })
+            : null;
 
             const eventImage = await EventImage.findOne({ where: { eventId } });
 
-            eventImage.set({ url, preview });
+            eventImage.set({ url:imageUrl, preview });
 
             await eventImage.save();
 
             const id = eventImage.id;
 
 
-            return res.json({ id, url, preview });
+            return res.json({ id, url: imageUrl, preview });
 
         } catch (err) {
             next(err)

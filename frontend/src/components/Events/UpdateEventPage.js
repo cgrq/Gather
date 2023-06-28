@@ -16,15 +16,13 @@ function UpdateEventPage() {
     const [price, setPrice] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [imageFile, setImageFile] = useState(null);
     const [url, setUrl] = useState("");
     const [description, setDescription] = useState("");
     const [errors, setErrors] = useState({});
     const events = useSelector((state)=> state.events)
 
-    const normalizeTimeZone = (date) => {
-        const momentDate = moment(date);
-        return momentDate.local().format('YYYY-MM-DDTHH:mm');
-    }
+
 
     useEffect(()=>{
         dispatch(getEvent(eventId))
@@ -44,6 +42,16 @@ function UpdateEventPage() {
         }
     }, [events])
 
+    const normalizeTimeZone = (date) => {
+        const momentDate = moment(date);
+        return momentDate.local().format('YYYY-MM-DDTHH:mm');
+    }
+
+    const updateFile = e => {
+        const file = e.target.files[0];
+        if (file) setImageFile(file);
+    };
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
@@ -53,25 +61,22 @@ function UpdateEventPage() {
         const priceToInt = parseInt(price)
 
 
-        console.log(`🖥 ~ file: UpdateEventPage.js:56 ~ handleFormSubmit ~ groupId:`, groupId)
         const event = await dispatch(updateEvent({ groupId, eventId, name, type, price: priceToInt, startDate: formattedStartDate, endDate: formattedEndDate, description }))
             .catch(async (res) => {
                 const data = await res.json();
                 if (data && data.errors) {
-                    let urlError;
-                    if (url.length === 0) urlError = "Image Url is required";
-                    else if (!isValidURL(url)) urlError = "Invalid URL";
                     setErrors((prevState) => {
+                        if (!imageFile) data.errors.url = "Image is required";
+
+
                         return {
                             ...prevState,
                             ...data.errors,
-                            url: urlError
                         };
                     });
                 }
             });
-        console.log("EVENT END")
-        const image = await dispatch(updateEventImage({ eventId, url }))
+        const image = await dispatch(updateEventImage({ eventId, imageFile }))
             .catch(async (res) => {
 
                 const data = await res.json();
@@ -151,7 +156,7 @@ function UpdateEventPage() {
                 <div className="create-event-page-row">
                     <div className="create-event-page-sub-row">
                         <span>Please add an image url for your event below:</span>
-                        <input className="create-group-page-row-input" value={url} onChange={(e) => setUrl(e.target.value)} placeholder={"Image Url"} />
+                        <input className="create-group-page-row-input" type="file" onChange={updateFile} />
                         {
                             errors.url && <p className="create-event-page-errors">{errors.url}</p>
                         }

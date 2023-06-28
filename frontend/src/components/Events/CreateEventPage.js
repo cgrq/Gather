@@ -14,7 +14,7 @@ function CreateEventPage() {
     const [price, setPrice] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const [url, setUrl] = useState("");
+    const [imageFile, setImageFile] = useState(null);
     const [description, setDescription] = useState("");
     const [errors, setErrors] = useState({});
     const { groupId } = useParams();
@@ -29,6 +29,12 @@ function CreateEventPage() {
 
     },[startDate])
 
+    const updateFile = e => {
+        const file = e.target.files[0];
+        if (file) setImageFile(file);
+    };
+
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
@@ -42,19 +48,18 @@ function CreateEventPage() {
             .catch(async (res) => {
                 const data = await res.json();
                 if (data && data.errors) {
-                    let urlError;
-                    if (url.length === 0) urlError = "Image Url is required";
-                    else if (!isValidURL(url)) urlError = "Invalid URL";
                     setErrors((prevState) => {
+                        if (!imageFile) data.errors.url = "Image is required";
+
+
                         return {
                             ...prevState,
                             ...data.errors,
-                            url: urlError
                         };
                     });
                 }
             });
-        const image = await dispatch(createEventImage({ eventId: event.id, url }))
+        const image = await dispatch(createEventImage({ eventId: event.id, imageFile }))
             .catch(async (res) => {
 
                 const data = await res.json();
@@ -77,7 +82,7 @@ function CreateEventPage() {
                 }
             });
 
-        if (event.id && image.url) history.push(`/events/${event.id}`);
+        if (event.id && image.id) history.push(`/events/${event.id}`);
     }
 
     return (
@@ -141,8 +146,8 @@ function CreateEventPage() {
                 </div>
                 <div className="create-event-page-row">
                     <div className="create-event-page-sub-row">
-                        <span>Please add an image url for your event below:</span>
-                        <input className="create-group-page-row-input" value={url} onChange={(e) => setUrl(e.target.value)} placeholder={"Image Url"} />
+                        <span>Please add an image for your event below:</span>
+                        <input className="create-group-page-row-input" type="file" onChange={updateFile} />
                         {
                             errors.url && <p className="create-event-page-errors">{errors.url}</p>
                         }
