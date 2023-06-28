@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGroup, updateGroup } from "../../store/groups"
+import { getGroupById, updateGroup, updateGroupImage, removeGroup } from "../../store/groups"
 import { useHistory, useParams } from 'react-router-dom';
 import { isValidURL } from '../../utils/validation'
 
@@ -14,6 +14,7 @@ function UpdateGroupPage() {
     const [about, setAbout] = useState("");
     const [type, setType] = useState("");
     const [isPrivate, setIsPrivate] = useState("");
+    const [imageFile, setImageFile] = useState(null);
     const [url, setUrl] = useState("");
     const [errors, setErrors] = useState({});
     const { groupId } = useParams();
@@ -21,11 +22,11 @@ function UpdateGroupPage() {
     const sessionUser = useSelector(state => state.session.user);
 
     useEffect(() => {
-        dispatch(getGroup(groupId));
+        dispatch(getGroupById(groupId));
     }, [dispatch, groupId])
 
     useEffect(() => {
-        if(group){
+        if (group) {
             setName(group.name);
             setAbout(group.about);
             setType(group.type);
@@ -45,38 +46,64 @@ function UpdateGroupPage() {
         }
     }, [location])
 
+    const updateFile = e => {
+        const file = e.target.files[0];
+        if (file) setImageFile(file);
+    };
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
 
+        const group = await dispatch(updateGroup({ groupId, name, about, type, isPrivate, city, state }))
+            .catch(async (res) => {
+                const data = await res.json();
+                if (data && data.errors) {
+                    setErrors((prevState) => {
+                        if (!imageFile) data.errors.url = "Image is required";
 
+                        return {
+                            ...prevState,
+                            ...data.errors,
+                        };
+                    });
+                }
+            });
+        let image;
+        if (imageFile) {
+            image = await dispatch(updateGroupImage({ groupId: group.id, imageFile }))
+                .catch(async (res) => {
+                    const data = await res.json();
+                    if (data && data.errors) {
+                        const groupId = parseInt(group.id)
 
-        const groupRes = await dispatch(updateGroup({ groupId, name, about, type, isPrivate, city, state }))
-        .catch(async (res) => {
-            const data = await res.json();
-            if (data && data.errors) {
-                setErrors((prevState) => {
-                    if (url.length === 0) data.errors.url = "Image Url is required";
-                    else if (!isValidURL(url)) data.errors.url = "Invalid URL";
-
-                    return {
-                        ...prevState,
-                        ...data.errors,
-                    };
+                        const removedGroup = await dispatch(removeGroup(groupId))
+                            .catch(async (res) => {
+                                const data = await res.json();
+                                if (data && data.errors) {
+                                    setErrors(data.errors);
+                                }
+                            });
+                        setErrors((prevState) => {
+                            return {
+                                ...prevState,
+                                ...data.errors,
+                            };
+                        });
+                    }
                 });
-            }
-        });
+        }
 
 
-        if (groupRes.id) history.push(`/groups/${group.id}`);
+        if (group && group.id ) history.push(`/groups/${group.id}`);
     }
 
-    if(!group || !sessionUser || !group.Organizer) return null;
+    if (!group || !sessionUser || !group.Organizer) return null;
 
     const organizer = group.Organizer;
     const isOrganizer = sessionUser.id === organizer.id;
 
-    if(!isOrganizer) history.push(`/`);
+    if (!isOrganizer) history.push(`/`);
 
 
     return (
@@ -141,13 +168,12 @@ function UpdateGroupPage() {
                             errors.private && <p className="create-group-page-errors">{errors.private}</p>
                         }
                     </div>
-                    {/* <div className="create-group-page-sub-row">
-                        <span>Please add an image url for your group below:</span>
-                        <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder={"Image Url"} />
-                        {
-                            errors.url && <p className="create-group-page-errors">{errors.url}</p>
-                        }
-                    </div> */}
+                    <div className="login-main-input-container">
+                        <label>
+                            Image
+                        </label>
+                        <input className="create-group-page-row-input" type="file" onChange={updateFile} />
+                    </div>
                 </div>
                 <div className="create-group-page-submit-row">
                     <button type="submit">Update Group</button>

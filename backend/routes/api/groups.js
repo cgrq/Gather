@@ -1,6 +1,6 @@
 // backend/routes/api/groups.js
 const express = require('express');
-
+const { singleFileUpload, singleMulterUpload } = require("../../awsS3");
 const { Op } = require('sequelize');
 const { Group, Membership, Attendance, EventImage, GroupImage, User, Venue, Event } = require('../../db/models');
 
@@ -52,20 +52,15 @@ const validateGroup = [
 ];
 
 const validateImage = [
-    check('url')
-        .exists({ checkFalsy: true })
-        .trim()
-        .notEmpty()
-        .withMessage('Image Url is required')
-        .custom(url => {
-            if (!isValidURL(url)) {
-                throw new Error('Invalid URL');
-            }
-            return true;
-        })
-        .withMessage('Invalid URL'),
+    check('image')
+      .custom(async (value, { req }) => {
+        if (!req.file) {
+          throw new Error('Image file is required');
+        }
+        return true;
+      }),
     handleValidationErrors
-];
+  ];
 
 const validateVenue = [
     check('address')
@@ -357,11 +352,14 @@ router.post(
 // Add an Image to a Group based on the Group's id
 router.post(
     '/:groupId/images',
-    [requireAuth, validateImage],
+    [singleMulterUpload("image"), requireAuth,  validateImage],
     async (req, res, next) => {
 
         const { groupId } = req.params;
-        const { url, preview } = req.body;
+        const { preview } = req.body
+        const imageUrl = req.file ?
+            await singleFileUpload({ file: req.file, public: true }) :
+         null;
 
         try {
             const group = await Group.findByPk(groupId, {
@@ -380,18 +378,69 @@ router.post(
                 throw err;
             }
 
-            const groupImage = await GroupImage.create({ groupId, url, preview });
+            const groupImage = await GroupImage.create({ groupId, url:imageUrl, preview });
 
             return res.json({
                 id: groupImage.id,
-                url,
-                preview
+                url:imageUrl,
+                // preview: true
             });
 
         } catch (err) {
             next(err)
         }
+    }
+);
 
+// Update an Image to a Group based on the Group's id
+router.put(
+    '/:groupId/images',
+    [singleMulterUpload("image"), requireAuth, validateImage],
+    async (req, res, next) => {
+        const { groupId } = req.params;
+        const { preview } = req.body;
+        const imageUrl = req.file
+            ? await singleFileUpload({ file: req.file, public: true })
+            : null;
+
+        try {
+            const group = await Group.findByPk(groupId, {
+                include: [{ model: User }],
+            });
+
+            if (!group) {
+                const err = new Error("Group couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            if (group.organizerId != req.user.id) {
+                const err = new Error("Forbidden");
+                err.statusCode = 403;
+                throw err;
+            }
+
+            const groupImage = await GroupImage.findOne({ where: { groupId } });
+
+            if (!groupImage) {
+                const err = new Error("GroupImage couldn't be found");
+                err.statusCode = 404;
+                throw err;
+            }
+
+            // Update the GroupImage record with the new values
+            groupImage.url = imageUrl;
+            groupImage.preview = preview;
+            await groupImage.save();
+
+            return res.json({
+                id: groupImage.id,
+                url: imageUrl,
+                preview,
+            });
+        } catch (err) {
+            next(err);
+        }
     }
 );
 

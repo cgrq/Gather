@@ -1,6 +1,6 @@
 // backend/routes/api/venues.js
 const express = require('express');
-
+const { singleFileUpload, singleMulterUpload } = require("../../awsS3");
 const { Op } = require('sequelize');
 
 const { Group, GroupImage, User, Membership, Attendance, EventImage, Venue, Event } = require('../../db/models');

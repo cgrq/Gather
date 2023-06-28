@@ -49,6 +49,7 @@ export const getGroupById = (groupId) => async (dispatch) => {
   const res = await fetch(`/api/groups/${groupId}`);
   const data = await res.json();
 
+  console.log(`🖥 ~ file: groups.js:55 ~ getGroupById ~ data:`, data)
   dispatch(addGroup(data));
   return data;
 }
@@ -106,13 +107,36 @@ export const createGroup = (group) => async (dispatch) => {
 
 
 export const createGroupImage = (image) => async (dispatch) => {
-  const { groupId, url } = image;
+  const { groupId, imageFile } = image;
+
+  const formData = new FormData();
+
+  if (image) formData.append("image", imageFile);
+
+  formData.append("preview", true);
+
   const res = await csrfFetch(`/api/groups/${groupId}/images`, {
     method: "POST",
-    body: JSON.stringify({
-      url,
-      preview: true
-    }),
+    body: formData
+  });
+  const imageData = await res.json();
+
+  dispatch(addImage(groupId, imageData));
+  return imageData;
+}
+
+export const updateGroupImage = (image) => async (dispatch) => {
+  const { groupId, imageFile } = image;
+
+  const formData = new FormData();
+
+  if (image) formData.append("image", imageFile);
+
+  formData.append("preview", true);
+
+  const res = await csrfFetch(`/api/groups/${groupId}/images`, {
+    method: "PUT",
+    body: formData
   });
   const imageData = await res.json();
 
@@ -150,13 +174,13 @@ export const removeGroup = (groupId) => async (dispatch) => {
   return data;
 }
 
-export const getGroup = (groupId) => async (dispatch) => {
-  const res = await fetch(`/api/groups/${groupId}`);
-  const data = await res.json();
+// export const getGroup = (groupId) => async (dispatch) => {
+//   const res = await fetch(`/api/groups/${groupId}`);
+//   const data = await res.json();
 
-  dispatch(addGroup(data.Groups));
-  return data;
-}
+//   dispatch(addGroup(data.Groups));
+//   return data;
+// }
 
 const groupsReducer = (state = [], action) => {
   const newState = { ...state };

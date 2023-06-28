@@ -15,6 +15,7 @@ function CreateGroupPage() {
     const [type, setType] = useState("");
     const [isPrivate, setIsPrivate] = useState("");
     const [url, setUrl] = useState("");
+    const [imageFile, setImageFile] = useState(null);
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
@@ -28,6 +29,11 @@ function CreateGroupPage() {
         }
     }, [location])
 
+    const updateFile = e => {
+    const file = e.target.files[0];
+    if (file) setImageFile(file);
+  };
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
@@ -37,8 +43,8 @@ function CreateGroupPage() {
                 const data = await res.json();
                 if (data && data.errors) {
                     setErrors((prevState) => {
-                        if (url.length === 0) data.errors.url = "Image Url is required";
-                        else if (!isValidURL(url)) data.errors.url = "Invalid URL";
+                        if (!imageFile) data.errors.url = "Image is required";
+
 
                         return {
                             ...prevState,
@@ -47,7 +53,7 @@ function CreateGroupPage() {
                     });
                 }
             });
-        const image = await dispatch(createGroupImage({ groupId: group.id, url }))
+        const image = await dispatch(createGroupImage({ groupId: group.id, url, imageFile }))
             .catch(async (res) => {
                 const data = await res.json();
                 if (data && data.errors) {
@@ -171,9 +177,9 @@ function CreateGroupPage() {
                         <span>Please add an image url for your group below:</span>
                         <div className="login-main-input-container">
                             <label>
-                                Image Url
+                                Image
                             </label>
-                            <input className="create-group-page-row-input" value={url} onChange={(e) => setUrl(e.target.value)} />
+                            <input className="create-group-page-row-input" type="file" onChange={updateFile} />
                         </div>
                         {
                             errors.url && <p className="create-group-page-errors">{errors.url}</p>

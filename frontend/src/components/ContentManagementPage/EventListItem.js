@@ -23,23 +23,27 @@ function EventListItem({ event }) {
             <div className="content-management-text-container">
                 <span>{`${startDate} · ${startTime}`}</span>
                 <h4>{event.name}</h4>
-                <OpenModalButton
-                        buttonText="Edit attendance"
-                        onButtonClick={closeMenu}
-                        modalComponent={<EditUsersModal type="attendance" id={event.id} />} />
-            </div>
-            <div>
-                <div className="event-page-details-card-buttons">
-                    <NavLink to={`/events/${event.id}/edit`}>
-                        <button className="event-page-update-button">Update</button>
+                <div className="content-management-buttons-wrapper">
+                    <div className="event-page-details-card-buttons">
+                        <NavLink to={`/events/${event.id}/edit`}>
+                            <button className="event-page-update-button">Update</button>
 
-                    </NavLink>
-                    <OpenModalButton
-                        buttonText="Delete"
-                        onButtonClick={closeMenu}
-                        modalComponent={<DeleteAnEventModal eventId={event.id} />} />
+                        </NavLink>
+                        <div className="content-management-delete-wrapper">
+
+                        <OpenModalButton
+                            buttonText="Delete"
+                            onButtonClick={closeMenu}
+                            modalComponent={<DeleteAnEventModal eventId={event.id} />} />
+                        </div>
+                    </div>
                 </div>
+                <OpenModalButton
+                    buttonText="Edit attendance"
+                    onButtonClick={closeMenu}
+                    modalComponent={<EditUsersModal type="attendance" id={event.id} />} />
             </div>
+
         </div>
     );
 }

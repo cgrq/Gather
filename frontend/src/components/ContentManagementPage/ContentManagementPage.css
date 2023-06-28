@@ -20,14 +20,14 @@
     flex-flow: column;
     align-items: center;
     background-color: white;
-    margin-bottom:20px;
+    margin:20px;
 }
 .content-management-top-wrapper{
     display:flex;
 }
 .content-management-image-wrapper{
-    width: 150px;
-    height:100px;
+    width: 250px;
+    height:150px;
     background-color: red;
     overflow: hidden;
     border-radius: 20px;
@@ -40,6 +40,7 @@
 .content-management-list-item-details-wrapper{
     display:flex;
     flex-flow: column;
+    justify-content: center;
     margin:0 20px;
 }
 .content-management-name{
@@ -47,11 +48,42 @@
 }
 .content-management-buttons-wrapper{
     display:flex;
-
+    margin-top:10px;
+}
+.content-management-buttons-wrapper button{
+    font-size:12px !important;
+    width:90px;
+    margin-right:5px;
+    padding:5px 10px;
+    border-radius:10px;
+}
+.content-management-delete-wrapper {
+    display:inline;
+    width:fit-content;
+}
+.content-management-delete-wrapper button{
+    background-color: #ff808e;
+}
+.content-management-list-item-details-wrapper > button{
+    background:none !important;
+    color:black !important;
+    width:fit-content !important;
+    margin:10px 0;
+    font-size:14px;
+}
+.content-management-show-events{
+    cursor: pointer;
+    font-size:14px;
+}
+.content-management-button-create-event{
+    background:none;
+    color:black !important;
 }
 .content-management-bottom-wrapper{
     display:flex;
     flex-flow: column;
+    align-items: center;
+    margin-top:20px;
 }
 
 /* Event List Item */
@@ -65,7 +97,8 @@
     background-color: rgb(237, 237, 237);
 }
 .content-management-image-container img{
-    width:100px;
+    width:150px;
+    height:120px
 }
 .content-management-text-container{
     display:flex;
@@ -75,10 +108,18 @@
 }
 .content-management-text-container span{
     font-size: 14px;
+    margin-bottom:10px
 }
-.content-management-show-events{
+.content-management-text-container > button{
+    background:none !important;
+    margin-top:10px;
+    background-color: none !important;
+    color:black !important;
+    width: fit-content;
     cursor: pointer;
+    box-shadow: none !important;
 }
+
 .content-management-hide{
     display: none;
 }
