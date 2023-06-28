@@ -4,7 +4,7 @@
 @import url("SectionFour.css");
 
 .home-container {
-    padding-top:60px;
+    padding-top: 40px;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
@@ -19,29 +19,41 @@
 .action-card-container a {
     font-family: 'Dongle', sans-serif;
 }
-.home-image-container{
-    position:relative;
+
+.home-image-container {
+    position: relative;
     border-radius: 60px;
     overflow: hidden;
     box-shadow: 0 0 50px 5px rgb(211, 211, 211);
 
 }
-.home-image-shadow{
-    position:absolute;
+
+.home-image-shadow {
+    position: absolute;
     top: 0;
-    z-index:1000;
-    margin:0 !important;
+    z-index: 1000;
+    margin: 0 !important;
 }
 
 .home-h1 {
     font-size: 90px;
     line-height: 55px;
 }
-.home-container img{
-}
 
-@media only screen and (max-width: 767px) {
+.home-container img {}
+
+@media (max-width: 1450px) {
     .home-container {
         width: 100%;
+        padding-top: 20px;
     }
-  }
+
+    .home-h1 {
+        font-size: 90px;
+        max-width: 490px;
+        min-width:340px;
+        margin:0 auto;
+        margin-bottom: 20px;
+
+    }
+}

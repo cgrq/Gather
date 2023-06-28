@@ -14,3 +14,9 @@
     /* background: linear-gradient(to right, #00a4ff, #00e1ff); */
     /* color:white; */
 }
+
+@media (max-width: 1450px) {
+    .section-four-container {
+        margin: 0;
+    }
+}

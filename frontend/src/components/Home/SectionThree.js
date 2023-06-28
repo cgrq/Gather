@@ -34,8 +34,10 @@ function SectionThree() {
 function ActionCard({ iconImgPath, disabledIconImgPath, linkPath, title, caption, disabled = false }) {
     return (
         <div className="action-card-container">
-            <div className="home-image-container">
-                <img src={disabled ? disabledIconImgPath : iconImgPath} />
+            <div className="action-card-image-container">
+                <NavLink className={disabled ? " isDisabled" : ""} to={linkPath}>
+                    <img src={disabled ? disabledIconImgPath : iconImgPath} />
+                </NavLink>
             </div>
             <NavLink className={disabled ? " isDisabled" : ""} to={linkPath}>{title}</NavLink>
             <p>{caption}</p>

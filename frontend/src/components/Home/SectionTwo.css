@@ -11,3 +11,13 @@
     font-size: 60px;
     margin-bottom: 20px;
 }
+
+@media (max-width: 1450px) {
+    .section-two-container h2 {
+        font-size: 55px;
+    }
+
+    .section-two-container {
+        margin-top: 0px;
+    }
+}
