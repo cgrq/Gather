@@ -53,6 +53,8 @@
     padding: 0 !important;
     background-color: black;
     border-radius: 20px;
+    width: 322px;
+    height: 200px;
 }
 
 .text-container {
@@ -108,6 +110,15 @@
 
 .text-container>span>p {
     font-style: italic;
+}
+
+.item-container-group-list-item-span{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    vertical-align: center;
+
+    width:130px;
 }
 
 /* Group ID Page */
@@ -386,13 +397,11 @@
     justify-content: space-between;
     width:calc(50% - 20px);
 }
-
 .create-group-page-list {
     margin:10px 0;
     margin-left: 35px;
     font-size: 14px;
 }
-
 .create-group-page-errors {
     color: red;
     margin-right:20px;
@@ -407,6 +416,7 @@
     margin:0 auto;
 
 }
+
 /* Delete a Group */
 .delete-a-group-modal-container {
     height:200px;
@@ -444,21 +454,20 @@
     .item-container {
         width: 80vw;
         padding: 0 !important;
-        margin-bottom: 5px;
+        margin-bottom: 25px;
     }
     .image-container{
         width:100% !important;
-
     }
     .text-container{
         width: 80vw !important;
-        height:fit-content !important;
+        height: fit-content !important;
         margin: 0 !important;
         margin-top: 25px !important;
     }
-    .text-container>p{
+    .item-container-group-list-about{
         width: 100% !important;
-        margin:0!important;
+        margin:10px 0px !important;
     }
 }
 @media (max-width: 1150px) {
