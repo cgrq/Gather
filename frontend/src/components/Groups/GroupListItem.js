@@ -14,7 +14,6 @@ function GroupListItem({ group }) {
         <NavLink to={`groups/${group.id}`} className="nav-link item-nav-link">
             <div className="item-container">
                 <div className="image-container">
-                    <div className="item-image-shadow"></div>
                     <img onError={() => setImageUrl(process.env.PUBLIC_URL + "/default-image.png")} src={imageUrl} />
                 </div>
                 <div className="text-container">

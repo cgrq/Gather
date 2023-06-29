@@ -25,10 +25,10 @@ function ResultsPage({ page, dataObj }) {
                 </div>
             </div>
             <div className="results-body-container">
-                <div className="results-subheader-wrapper">
-                    <h2>{(page === "groups" ? "Groups" : "Events") + " in Gather"}</h2>
-                </div>
                 <div className="results-body-wrapper">
+                    <div className="results-body-title">
+                        <h2>{(page === "groups" ? "Groups" : "Events") + " in Gather"}</h2>
+                    </div>
                     {
                         page === "groups"
                             ? data.map((group) => <GroupListItem key={group.id} group={group} />)

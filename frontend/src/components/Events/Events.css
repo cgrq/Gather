@@ -76,8 +76,6 @@
 .text-container>p {
    width: 520px;
    font-size: 14px;
-   overflow: auto;
-   max-height: 120px;
    word-wrap: break-word;
    margin: 10px 0;
 }
