@@ -571,6 +571,13 @@
     .group-page-events-row > h2{
         padding:0!important;
     }
+    /* Create a group */
+    .create-group-page-container{
+        width:90%;
+    }
+    .create-group-page-form-container{
+        width:calc(100% - 80px);
+    }
 }
 @media (max-width: 1150px) {
     /* List Item */

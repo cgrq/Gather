@@ -13,6 +13,10 @@ function EventListItem({ event }) {
     const startDateTimeArr = seperateDateAndTime(event.startDate);
     const startDate = startDateTimeArr[0];
     const startTime = startDateTimeArr[1];
+
+    if(!event || !event.EventImages ||  !event.EventImages[0] || !event.EventImages[0].url) return null
+
+
     return (
         <div className="content-management-event-list-item-container">
             <div className="content-management-image-container">

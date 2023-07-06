@@ -385,7 +385,7 @@
    .event-page-top-container{
       margin:30px 0;
    }
-   .event-page-top-container > *{
+   .event-page-top-container > * {
       width:fit-content
    }
    .event-page-bottom-background,
@@ -413,7 +413,13 @@
    .event-page-details-description-wrapper{
       margin-bottom: 40px;
    }
-
+   /* Create an event */
+   .create-event-page-container{
+      width:90%;
+   }
+   .create-event-page-form-container{
+      width:calc(100% - 80px);
+   }
 }
 @media (max-width: 1150px) {
    .item-container {
