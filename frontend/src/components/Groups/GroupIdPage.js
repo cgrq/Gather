@@ -148,7 +148,7 @@ function GroupIdPage() {
                         </div>
                         <div className="group-page-events-row">
                             <h2>Upcoming Events</h2>
-                            <div className="group-page-upcoming-events">
+                            <div className="group-page-events">
                                 {
                                     groups[groupId].Events
                                     && groups[groupId].Events.map(event => {
@@ -164,7 +164,7 @@ function GroupIdPage() {
                                 }
                             </div>
                             <h2>Past Events</h2>
-                            <div>
+                            <div className="group-page-events">
                                 {
                                     groups[groupId].Events
                                     && groups[groupId].Events.map(event => {
