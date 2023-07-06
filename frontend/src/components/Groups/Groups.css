@@ -11,7 +11,7 @@
 }
 
 /* Group List Item */
-.item-nav-link:hover .text-container>h2 {
+.item-nav-link:hover .group-list-item-text-container>h2 {
     color: #00e1ff;
 }
 
@@ -27,7 +27,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 45px 40px;
+    padding: 15px 40px;
     /* border-top: 3px solid #f3f3f3 !important; */
     width: 950px;
     margin: 0 auto;
@@ -53,9 +53,11 @@
     padding: 0 !important;
     background-color: black;
     border-radius: 20px;
+    width: 322px;
+    height: 200px;
 }
 
-.text-container {
+.group-list-item-text-container {
     display: flex;
     justify-content: center;
     flex-flow: column nowrap;
@@ -65,49 +67,58 @@
     margin-left: 68px;
 }
 
-.text-container>h2 {
+.group-list-item-text-container>h2 {
     font-size: 25px;
     font-family: "Roboto";
     font-weight: bold;
 }
 
-.text-container>h3 {
+.group-list-item-text-container>h3 {
     font-size: 18px;
     margin-top: 5px;
     color: rgb(99, 99, 99);
 }
 
-.text-container>p {
+.group-list-item-text-container>p {
     width: 520px;
     font-size: 14px;
     word-wrap: break-word;
     margin: 10px 0;
 }
 
-.text-container>span {
+.group-list-item-text-container>span {
     display: flex;
     font-size: 14px;
 }
 
-.text-container span span {
+.group-list-item-text-container span span {
     font-family: "Roboto" !important;
     font-weight: bold;
     color: rgb(76, 76, 76);
     display: flex;
 }
 
-.text-container span span p {
+.group-list-item-text-container span span p {
     color: #00e1ff;
     margin-right: 5px
 }
 
-.text-container span div {
+.group-list-item-text-container span div {
     color: black;
     margin: 0 10px;
 }
 
-.text-container>span>p {
+.group-list-item-text-container>span>p {
     font-style: italic;
+}
+
+.item-container-group-list-item-span{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    vertical-align: center;
+
+    width:130px;
 }
 
 /* Group ID Page */
@@ -169,6 +180,8 @@
 
 .group-page-content-row {
     display: flex;
+    align-items: center;
+
     width: 800px;
     align-items: center;
 }
@@ -386,13 +399,11 @@
     justify-content: space-between;
     width:calc(50% - 20px);
 }
-
 .create-group-page-list {
     margin:10px 0;
     margin-left: 35px;
     font-size: 14px;
 }
-
 .create-group-page-errors {
     color: red;
     margin-right:20px;
@@ -407,6 +418,7 @@
     margin:0 auto;
 
 }
+
 /* Delete a Group */
 .delete-a-group-modal-container {
     height:200px;
@@ -441,27 +453,92 @@
 }
 
 @media (max-width: 1050px) {
+    /* List Item */
     .item-container {
         width: 80vw;
         padding: 0 !important;
-        margin-bottom: 5px;
+        margin-bottom: 25px;
     }
     .image-container{
         width:100% !important;
-
     }
-    .text-container{
+    .group-list-item-text-container{
         width: 80vw !important;
-        height:fit-content !important;
+        height: fit-content !important;
         margin: 0 !important;
         margin-top: 25px !important;
     }
-    .text-container>p{
+    .item-container-group-list-about{
         width: 100% !important;
+        margin:10px 0px !important;
+    }
+    /* Group ID Page */
+    .group-page-container{
+        width:350px;
+    }
+    .group-page-image-container{
+        width: 322px !important;
+        height: 200px !important;
+        justify-content: center;
+    }
+    .group-page-content-row img {
+        min-width: 322px !important;
+        min-height: 200px !important;
+    }
+    .group-page-bottom-row {
+        padding: 0 !important;
+    }
+    .group-page-top-background{
+        padding:0!important;
+        display:flex;
+        flex-flow: column;
+        justify-content: center;
+    }
+    .group-page-content-row {
+        width:100% !important;
+        display:flex;
+        justify-content: center;
+        flex-flow: column;
+        margin: 0 auto;
+        margin-top:15px;
+    }
+    .group-page-text-container{
+        margin:20px 0;
+    }
+    .group-page-text-container div{
+        margin:10px 0;
+    }
+
+    .group-page-bottom-container{
+        padding:20px;
+        border-radius: 20px;
+        width:calc(100% - 30px);
+    }
+    .group-page-bottom-background{
+        border-radius: 20px;
+    }
+    .group-page-events-row{
+        width:100%;
+        padding:0!important;
         margin:0!important;
+        display:flex;
+        flex-flow: column;
+        justify-content: left;
+    }
+    .group-page-events-row img{
+        width:calc(100% - 40px)!important;
+    }
+    .group-page-upcoming-events{
+        border-radius:20px;
+        overflow: hidden;
+    }
+    .group-page-events-row > h2{
+        padding:0!important;
     }
 }
 @media (max-width: 1150px) {
+    /* List Item */
+
     .item-container {
         flex-flow: column;
     }

@@ -16,11 +16,11 @@ function GroupListItem({ group }) {
                 <div className="image-container">
                     <img onError={() => setImageUrl(process.env.PUBLIC_URL + "/default-image.png")} src={imageUrl} />
                 </div>
-                <div className="text-container">
+                <div className="group-list-item-text-container">
                     <h2>{group.name}</h2>
                     <h3 className="item-opacity">{`${group.city}, ${group.state}`}</h3>
-                    <p className="item-opacity">{group.about}</p>
-                    <span className="item-opacity"><span>{`${group.events ? group.events.length : 0} ${(group.events && group.events.length !== 1) ? "events" : "event"}`}</span> <div>·</div> <p>{group.private ? "Private" : "Public"}</p></span>
+                    <p className="item-opacity item-container-group-list-about">{group.about}</p>
+                    <div className="item-opacity item-container-group-list-item-span"><span>{`${group.events ? group.events.length : 0} ${(group.events && group.events.length !== 1) ? "events" : "event"}`}</span> <div>{` · `}</div> <span>{group.private ? "Private" : "Public"}</span></div>
                 </div>
             </div>
         </NavLink>
