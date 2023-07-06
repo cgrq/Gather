@@ -13,11 +13,19 @@
 }
 
 @media (max-width: 1450px) {
+
+    .section-two-container{
+        width: calc(100% - 40px);
+        padding: 0 20px;
+        align-items: center !important;
+        margin-top:0 !important;
+    }
     .section-two-container h2 {
-        font-size: 55px;
+        font-size: 50px;
+        margin: 0;
+    }
+    .section-two-container p {
+        width:calc(80% + 40px);
     }
 
-    .section-two-container {
-        margin-top: 0px;
-    }
 }

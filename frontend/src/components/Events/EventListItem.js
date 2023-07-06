@@ -30,7 +30,7 @@ function EventListItem({ event }) {
                     <div className="image-container">
                         <img src={event.EventImages ? event.EventImages[0].url : event.previewImage} />
                     </div>
-                    <div className="text-container">
+                    <div className="event-list-item-text-container">
                         <span>{`${startDate} · ${startTime}`}</span>
                         <h2>{event.name}</h2>
                         <h3>{event.Venue.city + ", " + event.Venue.state}</h3>
