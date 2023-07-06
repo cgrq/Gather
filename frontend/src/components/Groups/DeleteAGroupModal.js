@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import { removeGroup } from "../../store/groups";
+import { getUserGroups, removeGroup } from "../../store/groups";
 import { useHistory, useParams } from "react-router-dom";
 import "./Groups.css"
 
-function DeleteAGroupModal({groupId}) {
+function DeleteAGroupModal({groupId, manage = false}) {
   const dispatch = useDispatch();
   const history = useHistory();
   const [errors, setErrors] = useState({})
@@ -22,7 +22,13 @@ function DeleteAGroupModal({groupId}) {
           setErrors(data.errors);
         }
       });
-      history.push("/groups")
+      if(manage){
+        dispatch(getUserGroups()) 
+
+      } else {
+        history.push("/groups")
+      }
+
   };
 
   return (

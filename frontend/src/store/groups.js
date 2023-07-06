@@ -6,6 +6,7 @@ const ADD_USER_GROUPS = "groups/userGroups/add";
 const ADD_GROUP = "groups/:groupId/add";
 const ADD_IMAGE = "groups/:groupId/images/add";
 const DELETE_GROUP = "groups/:groupId/delete";
+const DELETE_GROUP_EVENT = "groups/:groupId/:eventId/delete";
 
 
 const addGroups = (groups) => {
@@ -36,6 +37,13 @@ const deleteGroup = (groupId) => {
     groupId
   }
 }
+const deleteGroupEvent = (groupId, eventId) => {
+  return {
+    type: DELETE_GROUP_EVENT,
+    groupId,
+    eventId
+  }
+}
 
 const addImage = (groupId, image) => {
   return {
@@ -49,7 +57,6 @@ export const getGroupById = (groupId) => async (dispatch) => {
   const res = await fetch(`/api/groups/${groupId}`);
   const data = await res.json();
 
-  console.log(`🖥 ~ file: groups.js:55 ~ getGroupById ~ data:`, data)
   dispatch(addGroup(data));
   return data;
 }
@@ -78,7 +85,6 @@ export const getGroups = () => async (dispatch) => {
 export const getUserGroups = () => async (dispatch) => {
   const groupsRes = await fetch("/api/groups/current");
   const data = await groupsRes.json();
-  console.log(`🖥 ~ file: groups.js:71 ~ getUserGroups ~ data:`, data)
 
 
   dispatch(addUserGroups(data));
@@ -170,7 +176,18 @@ export const removeGroup = (groupId) => async (dispatch) => {
   });
   const data = await groupRes.json();
 
-  dispatch(deleteGroup(data));
+  dispatch(deleteGroup(groupId));
+  return data;
+}
+
+export const removeGroupEvent = (groupId, eventId) => async (dispatch) => {
+
+  const eventRes = await csrfFetch(`/api/events/${eventId}`, {
+    method: "DELETE",
+  });
+  const data = await eventRes.json();
+
+  dispatch(deleteGroupEvent(groupId, eventId));
   return data;
 }
 
@@ -194,13 +211,13 @@ const groupsReducer = (state = [], action) => {
 
       return newState;
     case ADD_USER_GROUPS:
-        newState.userGroups = {}
+      newState.userGroups = {}
 
-          action.groups.Groups.forEach(group => {
-            newState.userGroups[group.id] = group
-          });
+      action.groups.Groups.forEach(group => {
+        newState.userGroups[group.id] = group
+      });
 
-        return newState;
+      return newState;
 
     case ADD_GROUP:
       newState[action.group.id] = action.group
@@ -212,6 +229,23 @@ const groupsReducer = (state = [], action) => {
       return newState;
     case DELETE_GROUP:
       delete newState[action.groupId];
+
+      if (newState.userGroups && newState.userGroups[action.groupId]) {
+        delete newState.userGroups[action.groupId]
+      }
+
+      return newState;
+    case DELETE_GROUP_EVENT:
+      const groupId = action.groupId;
+      const eventId = action.eventId;
+
+      const eventIndex = newState.userGroups[groupId].Events.findIndex(
+        (event) => event.id === eventId
+      );
+
+      if (eventIndex !== -1) {
+        newState.userGroups[groupId].Events.splice(eventIndex, 1);
+      }
 
       return newState;
     default:

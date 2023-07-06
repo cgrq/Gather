@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { seperateDateAndTime } from "../../utils/dates";
 import "./ContentManagementPage.css";
 
-function EventListItem({ event }) {
+function EventListItem({ event, group }) {
     const [showMenu, setShowMenu] = useState(false);
     const closeMenu = () => setShowMenu(false);
 
@@ -31,14 +31,13 @@ function EventListItem({ event }) {
                     <div className="event-page-details-card-buttons">
                         <NavLink to={`/events/${event.id}/edit`}>
                             <button className="event-page-update-button">Update</button>
-
                         </NavLink>
                         <div className="content-management-delete-wrapper">
 
                         <OpenModalButton
                             buttonText="Delete"
                             onButtonClick={closeMenu}
-                            modalComponent={<DeleteAnEventModal eventId={event.id} />} />
+                            modalComponent={<DeleteAnEventModal eventId={event.id} groupId={group.id} manage={true} />} />
                         </div>
                     </div>
                 </div>
