@@ -43,9 +43,7 @@ export default function GroupListItem({ group }) {
 
                 {
                     Object.values(group.Events).map((event) => (
-                        <div>
                             <EventListItem event={event} />
-                        </div>
                     ))
                 }
             </div>
