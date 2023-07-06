@@ -28,7 +28,7 @@ export default function GroupListItem({ group }) {
                             <OpenModalButton
                                 buttonText="Delete"
                                 onButtonClick={closeMenu}
-                                modalComponent={<DeleteAGroupModal groupId={group.id} />} />
+                                modalComponent={<DeleteAGroupModal groupId={group.id}  manage={true} />} />
                         </div>
                     </div>
                     <OpenModalButton
@@ -43,9 +43,7 @@ export default function GroupListItem({ group }) {
 
                 {
                     Object.values(group.Events).map((event) => (
-                        <div>
-                            <EventListItem event={event} />
-                        </div>
+                            <EventListItem event={event} group={group} />
                     ))
                 }
             </div>

@@ -98,7 +98,7 @@ function UpdateEventPage() {
         <div className="create-event-page-container">
             <form className="create-event-page-form-container" onSubmit={handleFormSubmit}>
                 <div className="create-event-page-row">
-                    <h1>Update an event for {name}</h1>
+                    <h1>Update the "{name}" event</h1>
                     <span>What is the name of your event?</span>
                     <input className="create-group-page-row-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Event Name" />
                     {

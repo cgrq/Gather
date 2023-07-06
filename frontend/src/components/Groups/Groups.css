@@ -188,6 +188,7 @@
 
 .group-page-text-container {
     width: 300px;
+    margin-left: 50px;
 }
 
 .group-page-button {
@@ -264,8 +265,15 @@
     word-wrap: break-word;
 }
 
-.group-page-upcoming-events {
+.group-page-events {
     border-radius: 30px !important;
+    overflow: hidden;
+    display: flex;
+    flex-flow: column;
+    width:fit-content;
+    padding:0 50px;
+    margin:0 auto;
+    background-color: white;
 }
 
 /* Group Preview */
@@ -494,6 +502,9 @@
         flex-flow: column;
         justify-content: center;
     }
+    .group-page-bottom-background{
+        padding:0;
+    }
     .group-page-content-row {
         width:100% !important;
         display:flex;
@@ -505,14 +516,26 @@
     .group-page-text-container{
         margin:20px 0;
     }
-    .group-page-text-container div{
+    .group-page-text-container > div{
         margin:10px 0;
     }
-
+    .group-page-crud-buttons{
+        min-width: 200px;
+        margin-top: 26px !important;
+        flex-flow: column;
+        align-items: center;
+    }
+    .group-page-crud-buttons button {
+        font-size: 16px !important;
+    }
+    .group-page-button{
+        margin:0;
+        margin-bottom: 16px;
+    }
     .group-page-bottom-container{
         padding:20px;
         border-radius: 20px;
-        width:calc(100% - 30px);
+        width:calc(100% - 40px);
     }
     .group-page-bottom-background{
         border-radius: 20px;
@@ -527,13 +550,33 @@
     }
     .group-page-events-row img{
         width:calc(100% - 40px)!important;
+        margin:0;
     }
-    .group-page-upcoming-events{
-        border-radius:20px;
-        overflow: hidden;
+    .group-page-events div{
+        padding:0!important;
+        margin:0 !important;
+    }
+    .group-page-events{
+        padding:20px;
+        width:calc(100% - 40px);
+    }
+    .group-page-events .image-container,
+    .group-page-events .event-details-container,
+    .group-page-events .event-top-row-container{
+        width:100% !important;
+    }
+    .group-page-events .image-container{
+        margin-bottom:20px !important;
     }
     .group-page-events-row > h2{
         padding:0!important;
+    }
+    /* Create a group */
+    .create-group-page-container{
+        width:90%;
+    }
+    .create-group-page-form-container{
+        width:calc(100% - 80px);
     }
 }
 @media (max-width: 1150px) {

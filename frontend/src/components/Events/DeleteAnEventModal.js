@@ -4,8 +4,9 @@ import { useModal } from "../../context/Modal";
 import { removeEvent } from "../../store/events";
 import { useHistory, useParams } from "react-router-dom";
 import "./Events.css"
+import { removeGroupEvent } from "../../store/groups";
 
-function DeleteAnEventModal({eventId}) {
+function DeleteAnEventModal({eventId, groupId, manage = false}) {
   const dispatch = useDispatch();
   const history = useHistory();
   const [errors, setErrors] = useState({})
@@ -14,15 +15,28 @@ function DeleteAnEventModal({eventId}) {
   const handleClick = (e) => {
     e.preventDefault();
     setErrors({});
-    const removedEvent = dispatch(removeEvent(eventId))
-      .then(closeModal)
-      .catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
+    if(manage){
+      const removedEvent = dispatch(removeGroupEvent(groupId, eventId))
+        .then(closeModal)
+        .catch(async (res) => {
+          const data = await res.json();
+          if (data && data.errors) {
+            setErrors(data.errors);
+          }
+        });
+    } else{
+      const removedEvent = dispatch(removeEvent(eventId))
+        .then(closeModal)
+        .catch(async (res) => {
+          const data = await res.json();
+          if (data && data.errors) {
+            setErrors(data.errors);
+          }
+        });
+        if(!manage){
+          history.push("/events")
         }
-      });
-      history.push("/events")
+    }
   };
 
   return (

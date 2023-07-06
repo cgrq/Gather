@@ -5,6 +5,7 @@ import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import { NavLink } from 'react-router-dom';
 import SignupFormModal from '../SignupFormModal';
+import { getUserGroups } from "../../store/groups";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -18,6 +19,12 @@ function ProfileButton({ user }) {
     if (showMenu) return;
     setShowMenu(true);
   };
+
+  useEffect(()=>{
+    if(user){
+      dispatch(getUserGroups())
+    }
+  },[user])
 
   useEffect(() => {
     if (!showMenu) return;

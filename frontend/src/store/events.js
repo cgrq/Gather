@@ -135,7 +135,7 @@ export const removeEvent = (eventId) => async (dispatch) => {
   });
   const data = await eventRes.json();
 
-  dispatch(deleteEvent(data));
+  dispatch(deleteEvent(eventId));
   return data;
 }
 

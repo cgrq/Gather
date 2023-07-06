@@ -197,3 +197,56 @@
 .edit-users-list-item-confirm-delete-button-yes{
     color:red;
 }
+
+@media (max-width: 1050px) {
+    .content-management-page-wrapper{
+        width:calc(90% - 40px);
+    }
+    .content-management-list-item{
+        width:100%;
+    }
+    .content-management-top-wrapper{
+        display:flex;
+        flex-flow: column;
+    }
+    .content-management-image-wrapper{
+        margin-bottom: 20px;
+    }
+    .content-management-name{
+        margin:20px;
+        font-size: 20px
+    }
+    .content-management-list-item-details-wrapper{
+        align-items: center;
+    }
+
+    .content-management-list-item-details-wrapper button,
+    .content-management-bottom-wrapper button,
+    .content-management-show-events
+    {
+        font-size: 16px!important;
+        padding:10px;
+        border-radius: 20px;
+    }
+    .content-management-event-list-item-container{
+        display:flex;
+        flex-flow: column;
+        width:100%;
+        align-items: center;
+        text-align: center;
+    }
+    .content-management-event-list-item-container img{
+        width:200px !important;
+        margin-bottom:20px;
+    }
+    .content-management-text-container{
+        margin:0;
+        align-items: center;
+    }
+    .content-management-buttons-wrapper {
+        justify-content: center;
+    }
+    .content-management-event-list-item-container button{
+        margin:0
+    }
+}

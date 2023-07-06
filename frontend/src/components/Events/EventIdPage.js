@@ -68,7 +68,7 @@ function EventIdPage() {
             setFirstName(organizer.firstName);
             setLastName(organizer.lastName);
         }
-        if(sessionUser && sessionUser.id && organizer && organizer.id){
+        if (sessionUser && sessionUser.id && organizer && organizer.id) {
             setIsOrganizer((sessionUser && sessionUser.id) === organizer.id)
         }
 
@@ -159,12 +159,16 @@ function EventIdPage() {
                                         </div>
                                         <div>{event.price > 0 ? event.price : "FREE"}</div>
                                     </div>
-                                    <div className="event-page-details-card-row event-page-details-card-last-row">
+                                    <div className="event-page-details-card-row">
                                         <div className="event-page-details-card-row-item-pair-wrapper">
                                             <div className="event-page-details-card-icon-wrapper"><i className="fa fa-map-pin" aria-hidden="true"></i></div>
                                             <div>{event.type}</div>
                                         </div>
-                                        {
+
+
+                                    </div>
+                                    <div className="event-page-details-card-row event-page-details-card-attendance-row">
+                                    {
                                             ((isMember && sessionUser && !status))
                                                 ? <button
                                                     className="join-button"
@@ -175,7 +179,9 @@ function EventIdPage() {
                                                     ? <div>Attendance status: {status}</div>
                                                     : ""
                                         }
-                                        {
+                                    </div>
+                                    <div className="event-page-details-card-row event-page-details-card-last-row">
+                                    {
                                             isOrganizer
                                             && <div className="event-page-details-card-buttons">
                                                 <NavLink to={`/events/${eventId}/edit`}>
