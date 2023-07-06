@@ -195,9 +195,13 @@
 .event-page-details-card-buttons {
    align-self: flex-end;
 }
+.event-page-details-card-attendance-row{
+   margin-top:20px;
+}
 
 .event-page-details-card-last-row {
-   justify-content: space-between;
+   justify-content: center;
+   margin-top:20px;
 }
 .event-page-details-card-last-row button{
    border-radius: 15px;
@@ -363,6 +367,53 @@
        width: 100% !important;
        margin:10px 0px !important;
    }
+   /* Event ID Page */
+   .event-page-container{
+      width:90% !important;
+      overflow: hidden;
+      display:flex;
+      flex-flow: column;
+   }
+   .event-page-top-background,
+   .event-page-top-container{
+      width:100% !important;
+      padding:0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
+   .event-page-top-container{
+      margin:30px 0;
+   }
+   .event-page-top-container > *{
+      width:fit-content
+   }
+   .event-page-bottom-background,
+   .event-page-content-row{
+      width:100%;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+   }
+   .event-page-image-container{
+      width: 322px !important;
+      height: 200px !important;
+      margin:30px 0;
+   }
+   .event-page-image-container img{
+      width: 322px !important;
+      height: 200px !important;
+   }
+   .event-page-bottom-container{
+      padding:0;
+   }
+   .event-page-card-container{
+      margin:0;
+   }
+   .event-page-details-description-wrapper{
+      margin-bottom: 40px;
+   }
+
 }
 @media (max-width: 1150px) {
    .item-container {
