@@ -128,27 +128,23 @@ const validateEvent = [
         .exists({ checkFalsy: true })
         .notEmpty()
         .custom(date => {
-            console.log(`🖥 ~ file: events.js:53 ~ date:`, date)
-            const startDate = moment(date, 'YYYY-MM-DDTHH:mm');
-            console.log(`🖥 ~ file: events.js:54 ~ startDate:`, startDate)
+            const startDate = moment.utc(date, 'YYYY-MM-DDTHH:mm');
             if (!startDate.isValid()) {
                 throw new Error('Invalid start date');
             }
-            console.log(`🖥 ~ file: events.js:58 ~ startDate:`, startDate)
-            console.log(`🖥 ~ file: events.js:59 ~ moment():`, moment())
             if (startDate <= moment()) {
-                throw new Error('Start date must be in the future 1');
+                throw new Error('Start date must be in the future');
             }
             return true;
         })
-        .withMessage("Start date must be in the future 2"),
+        .withMessage("Start date must be in the future"),
 
     check('endDate')
         .exists({ checkFalsy: true })
         .notEmpty()
         .custom((date, { req }) => {
-            const endDate = moment(date, 'YYYY-MM-DDTHH:mm');
-            const startDate = moment(req.body.startDate, 'YYYY-MM-DDTHH:mm');
+            const endDate = moment.utc(date, 'YYYY-MM-DDTHH:mm');
+            const startDate = moment.utc(req.body.startDate, 'YYYY-MM-DDTHH:mm');
             if (!endDate.isValid()) {
                 throw new Error('Invalid end date');
             }
