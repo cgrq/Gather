@@ -9,6 +9,7 @@ const router = express.Router();
 
 const { requireAuth, verifyMemberStatus, verifyCohostStatus } = require('../../utils/auth');
 const { formatDate, parseDate } = require('../../utils/date');
+const moment = require('moment');
 const { check, query } = require('express-validator');
 const { handleValidationErrors, isValidURL } = require('../../utils/validation');
 const { singleMulterUpload, singleFileUpload } = require('../../awsS3');
@@ -18,51 +19,68 @@ const validateEvent = [
         .exists({ checkFalsy: true })
         .trim()
         .notEmpty()
-        .isLength({ min: 5, max:50 })
+        .isLength({ min: 5, max: 50 })
         .withMessage('Name must be between 5 and 50 characters'),
+
     check('type')
         .exists({ checkFalsy: true })
         .notEmpty()
         .isIn(["In person", "Online"])
         .withMessage("Type must be 'Online' or 'In person'"),
+
     check('capacity')
         .exists({ checkFalsy: true })
         .isInt()
         .withMessage("Capacity must be an integer"),
+
     check('price')
         .exists({ checkFalsy: true })
         .isInt()
         .withMessage("Price is invalid"),
+
     check('description')
         .exists({ checkFalsy: true })
         .trim()
         .notEmpty()
         .withMessage("Description is required")
-        .isLength({ min: 30, max:255 })
+        .isLength({ min: 30, max: 255 })
         .withMessage('Description must be between 30 and 255 characters'),
+
     check('startDate')
         .exists({ checkFalsy: true })
         .notEmpty()
         .custom(date => {
-            const startDate = parseDate(date);
-            if (startDate <= new Date()) {
-                throw new Error('Start date must be in the future');
+            console.log(`🖥 ~ file: events.js:53 ~ date:`, date)
+            const startDate = moment(date, 'YYYY-MM-DDTHH:mm');
+            console.log(`🖥 ~ file: events.js:54 ~ startDate:`, startDate)
+            if (!startDate.isValid()) {
+                throw new Error('Invalid start date');
+            }
+            console.log(`🖥 ~ file: events.js:58 ~ startDate:`, startDate)
+            console.log(`🖥 ~ file: events.js:59 ~ moment():`, moment())
+            if (startDate <= moment()) {
+                throw new Error('Start date must be in the future 1');
             }
             return true;
         })
-        .withMessage("Start date must be in the future"),
+        .withMessage("Start date must be in the future 2"),
+
     check('endDate')
         .exists({ checkFalsy: true })
         .notEmpty()
         .custom((date, { req }) => {
-            const endDate = parseDate(date);
-            const startDate = parseDate(req.body.startDate);
+            const endDate = moment(date, 'YYYY-MM-DDTHH:mm');
+            const startDate = moment(req.body.startDate, 'YYYY-MM-DDTHH:mm');
+            if (!endDate.isValid()) {
+                throw new Error('Invalid end date');
+            }
             if (endDate <= startDate) {
                 throw new Error('End date is less than start date');
             }
             return true;
         })
         .withMessage("End date is less than start date"),
+
     handleValidationErrors
 ];
 
@@ -334,7 +352,7 @@ router.post(
 // Edit a Event Image
 router.put(
     '/:eventId/images/edit',
-    [singleMulterUpload("image"), requireAuth, verifyCohostStatus, validateImage],
+    [singleMulterUpload("image"), requireAuth, verifyCohostStatus],
     async (req, res, next) => {
         try {
             const { eventId } = req.params;
