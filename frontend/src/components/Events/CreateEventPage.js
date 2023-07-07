@@ -19,8 +19,8 @@ function CreateEventPage() {
     const { groupId } = useParams();
 
     const normalizeTimeZone = (date) => {
-        const momentDate = moment(date);
-        return momentDate.local().format('YYYY-MM-DDTHH:mm');
+        const momentDate = moment.utc(date);
+        return momentDate.format('YYYY-MM-DDTHH:mm:ss');
     }
 
     useEffect(() => {
