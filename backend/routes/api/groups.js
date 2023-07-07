@@ -8,7 +8,7 @@ const router = express.Router();
 
 const { requireAuth, verifyCohostStatus } = require('../../utils/auth')
 const { formatDate, parseDate } = require('../../utils/date')
-const moment = require('moment');
+const moment = require('moment-timezone');
 const { check } = require('express-validator');
 const { handleValidationErrors, isValidURL } = require('../../utils/validation');
 
@@ -54,14 +54,14 @@ const validateGroup = [
 
 const validateImage = [
     check('image')
-      .custom(async (value, { req }) => {
-        if (!req.file) {
-          throw new Error('Image file is required');
-        }
-        return true;
-      }),
+        .custom(async (value, { req }) => {
+            if (!req.file) {
+                throw new Error('Image file is required');
+            }
+            return true;
+        }),
     handleValidationErrors
-  ];
+];
 
 const validateVenue = [
     check('address')
@@ -128,11 +128,14 @@ const validateEvent = [
         .exists({ checkFalsy: true })
         .notEmpty()
         .custom(date => {
+            moment.tz.setDefault('UTC');
             const startDate = moment.utc(date, 'YYYY-MM-DDTHH:mm');
+            console.log(`🖥 ~ file: groups.js:133 ~ startDate:`, startDate)
+            console.log(`🖥 ~ file: groups.js:138 ~ moment.utc():`, moment())
             if (!startDate.isValid()) {
                 throw new Error('Invalid start date');
             }
-            if (startDate <= moment()) {
+            if (startDate <= moment.utc()) {
                 throw new Error('Start date must be in the future');
             }
             return true;
@@ -143,8 +146,8 @@ const validateEvent = [
         .exists({ checkFalsy: true })
         .notEmpty()
         .custom((date, { req }) => {
-            const endDate = moment.utc(date, 'YYYY-MM-DDTHH:mm');
-            const startDate = moment.utc(req.body.startDate, 'YYYY-MM-DDTHH:mm');
+            const endDate = moment.utc(date, 'YYYY-MM-DDTHH:mm').tz('UTC');
+            const startDate = moment.utc(req.body.startDate, 'YYYY-MM-DDTHH:mm').tz('UTC');
             if (!endDate.isValid()) {
                 throw new Error('Invalid end date');
             }
@@ -154,6 +157,7 @@ const validateEvent = [
             return true;
         })
         .withMessage("End date is less than start date"),
+
 
     handleValidationErrors
 ];
@@ -348,14 +352,14 @@ router.post(
 // Add an Image to a Group based on the Group's id
 router.post(
     '/:groupId/images',
-    [singleMulterUpload("image"), requireAuth,  validateImage],
+    [singleMulterUpload("image"), requireAuth, validateImage],
     async (req, res, next) => {
 
         const { groupId } = req.params;
         const { preview } = req.body
         const imageUrl = req.file ?
             await singleFileUpload({ file: req.file, public: true }) :
-         null;
+            null;
 
         try {
             const group = await Group.findByPk(groupId, {
@@ -374,11 +378,11 @@ router.post(
                 throw err;
             }
 
-            const groupImage = await GroupImage.create({ groupId, url:imageUrl, preview });
+            const groupImage = await GroupImage.create({ groupId, url: imageUrl, preview });
 
             return res.json({
                 id: groupImage.id,
-                url:imageUrl,
+                url: imageUrl,
                 // preview: true
             });
 

@@ -50,27 +50,23 @@ const validateEvent = [
         .exists({ checkFalsy: true })
         .notEmpty()
         .custom(date => {
-            console.log(`🖥 ~ file: events.js:53 ~ date:`, date)
-            const startDate = moment(date, 'YYYY-MM-DDTHH:mm');
-            console.log(`🖥 ~ file: events.js:54 ~ startDate:`, startDate)
+            const startDate = moment.utc(date, 'YYYY-MM-DDTHH:mm').tz('UTC');
             if (!startDate.isValid()) {
                 throw new Error('Invalid start date');
             }
-            console.log(`🖥 ~ file: events.js:58 ~ startDate:`, startDate)
-            console.log(`🖥 ~ file: events.js:59 ~ moment():`, moment())
-            if (startDate <= moment()) {
-                throw new Error('Start date must be in the future 1');
+            if (startDate <= moment.utc()) {
+                throw new Error('Start date must be in the future');
             }
             return true;
         })
-        .withMessage("Start date must be in the future 2"),
+        .withMessage("Start date must be in the future"),
 
     check('endDate')
         .exists({ checkFalsy: true })
         .notEmpty()
         .custom((date, { req }) => {
-            const endDate = moment(date, 'YYYY-MM-DDTHH:mm');
-            const startDate = moment(req.body.startDate, 'YYYY-MM-DDTHH:mm');
+            const endDate = moment.utc(date, 'YYYY-MM-DDTHH:mm').tz('UTC');
+            const startDate = moment.utc(req.body.startDate, 'YYYY-MM-DDTHH:mm').tz('UTC');
             if (!endDate.isValid()) {
                 throw new Error('Invalid end date');
             }
@@ -86,14 +82,14 @@ const validateEvent = [
 
 const validateImage = [
     check('image')
-      .custom(async (value, { req }) => {
-        if (!req.file) {
-          throw new Error('Image file is required');
-        }
-        return true;
-      }),
+        .custom(async (value, { req }) => {
+            if (!req.file) {
+                throw new Error('Image file is required');
+            }
+            return true;
+        }),
     handleValidationErrors
-  ];
+];
 
 const validateEventQueries = [
     query('page')
@@ -326,15 +322,15 @@ router.put(
 // Create an EventImage for a Group specified by its id
 router.post(
     '/:eventId/images',
-    [singleMulterUpload("image"), requireAuth ,verifyMemberStatus, validateImage],
+    [singleMulterUpload("image"), requireAuth, verifyMemberStatus, validateImage],
     async (req, res, next) => {
         try {
             const { eventId } = req.params;
 
             const { preview } = req.body;
             const imageUrl = req.file
-            ? await singleFileUpload({ file: req.file, public: true })
-            : null;
+                ? await singleFileUpload({ file: req.file, public: true })
+                : null;
 
             const eventImage = await EventImage.create({ eventId, url: imageUrl, preview });
 
@@ -359,12 +355,12 @@ router.put(
 
             const { preview } = req.body;
             const imageUrl = req.file
-            ? await singleFileUpload({ file: req.file, public: true })
-            : null;
+                ? await singleFileUpload({ file: req.file, public: true })
+                : null;
 
             const eventImage = await EventImage.findOne({ where: { eventId } });
 
-            eventImage.set({ url:imageUrl, preview });
+            eventImage.set({ url: imageUrl, preview });
 
             await eventImage.save();
 
@@ -616,11 +612,11 @@ router.delete(
             const { userId } = req.body;
             const userCurrentId = req.user.id;
 
-            const attendeeAttendance = await Attendance.unscoped().findOne({where: {id:userId, eventId}});
+            const attendeeAttendance = await Attendance.unscoped().findOne({ where: { id: userId, eventId } });
 
             const event = await Event.unscoped().findByPk(eventId, {
                 include: [
-                    { model: Group, include: [{ model: Membership, where: { userId:userCurrentId } }] }]
+                    { model: Group, include: [{ model: Membership, where: { userId: userCurrentId } }] }]
             });
 
             if (!event) {

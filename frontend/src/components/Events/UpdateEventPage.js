@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useDispatch, useSelector } from "react-redux";
 import { updateEvent, updateEventImage, getEvent } from "../../store/events"
 import { useHistory, useParams } from 'react-router-dom';
@@ -22,8 +22,8 @@ function UpdateEventPage() {
     const events = useSelector((state) => state.events);
 
     const normalizeTimeZone = (date) => {
-        const momentDate = moment.utc(date);
-        return momentDate.format('YYYY-MM-DDTHH:mm:ss');
+        const userTimezone = moment.tz.guess();
+        return moment.tz(date, userTimezone).utc().format('YYYY-MM-DDTHH:mm:ss');
     }
 
     useEffect(() => {

@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useDispatch } from "react-redux";
 import { createEvent, createEventImage, removeEvent } from "../../store/events"
 import { useHistory, useParams } from 'react-router-dom';
-import { isValidURL } from '../../utils/validation';
 
 function CreateEventPage() {
     const dispatch = useDispatch();
@@ -19,9 +18,10 @@ function CreateEventPage() {
     const { groupId } = useParams();
 
     const normalizeTimeZone = (date) => {
-        const momentDate = moment.utc(date);
-        return momentDate.format('YYYY-MM-DDTHH:mm:ss');
-    }
+        const userTimezone = moment.tz.guess();
+        return moment.tz(date, userTimezone).utc().format('YYYY-MM-DDTHH:mm:ss');
+      };
+
 
     useEffect(() => {
 
@@ -37,9 +37,7 @@ function CreateEventPage() {
         setErrors({});
 
         const formattedStartDate = startDate ? normalizeTimeZone(startDate) : "";
-        console.log(`🖥 ~ file: CreateEventPage.js:40 ~ handleFormSubmit ~ formattedStartDate:`, formattedStartDate)
         const formattedEndDate = endDate ? normalizeTimeZone(endDate) : "";
-        console.log(`🖥 ~ file: CreateEventPage.js:42 ~ handleFormSubmit ~ formattedEndDate:`, formattedEndDate)
         const priceToInt = parseInt(price);
 
         const event = await dispatch(createEvent({ groupId, name, type, price: priceToInt, startDate: formattedStartDate, endDate: formattedEndDate, description }))
@@ -85,7 +83,7 @@ function CreateEventPage() {
 
     return (
         <div className="create-event-page-container">
-              <form className="create-event-page-form-container" onSubmit={handleFormSubmit}>
+            <form className="create-event-page-form-container" onSubmit={handleFormSubmit}>
                 <div className="create-event-page-row">
                     <h1>Create an event for {name}</h1>
                     <span>What is the name of your event?</span>
@@ -123,7 +121,7 @@ function CreateEventPage() {
                         <span>When does  your event start?</span>
                         <input className="create-group-page-row-input" type="datetime-local"
                             value={startDate}
-                            onChange={(e) => setStartDate(normalizeTimeZone(e.target.value))}
+                            onChange={(e) => setStartDate(e.target.value)}
                             step="60"
                         />
                         {
@@ -134,7 +132,7 @@ function CreateEventPage() {
                         <span>When does  your event end?</span>
                         <input className="create-group-page-row-input" type="datetime-local"
                             value={endDate}
-                            onChange={(e) => setEndDate(normalizeTimeZone(e.target.value))}
+                            onChange={(e) => setEndDate(e.target.value)}
                             step="60"
                         />
                         {

@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 export const compareEventDates = (a, b) => {
     const dateA = new Date(
         a.startDate.substring(0, 4), // year
@@ -20,22 +22,12 @@ export const compareEventDates = (a, b) => {
 
 
 export const seperateDateAndTime = (dateTimeString) => {
-    let [dateString, timeString] = dateTimeString.split(" ");
+    const localDate = moment.utc(dateTimeString).local();
 
-    if (dateString.includes("T")) {
-      const [datePart, timePart] = dateString.split("T");
-      dateString = datePart;
-      timeString = timePart.slice(0, 8);
-    }
+  const formattedDate = localDate.format('LL');
+  const formattedTime = localDate.format('h:mm A');
 
-    const [year, month, day] = dateString.split("-");
-    const [hours, minutes, seconds] = timeString.split(":");
-    const ampm = hours < 12 ? "AM" : "PM";
-    const hour12 = hours % 12 || 12;
-    const newDate = new Date(year, month - 1, day, hours, minutes, seconds);
-    const date = newDate.toLocaleDateString();
-    const time = `${hour12}:${minutes} ${ampm}`;
-    return [date, time];
+  return [formattedDate, formattedTime];
   };
 
 export function padZeros(num) {
