@@ -3,8 +3,7 @@ import moment from 'moment';
 import { useDispatch, useSelector } from "react-redux";
 import { updateEvent, updateEventImage, getEvent } from "../../store/events"
 import { useHistory, useParams } from 'react-router-dom';
-import { isValidURL } from '../../utils/validation'
-import { formatDate } from "../../utils/dates";
+import { isValidURL } from '../../utils/validation';
 
 function UpdateEventPage() {
     const dispatch = useDispatch();
@@ -20,32 +19,30 @@ function UpdateEventPage() {
     const [url, setUrl] = useState("");
     const [description, setDescription] = useState("");
     const [errors, setErrors] = useState({});
-    const events = useSelector((state)=> state.events)
-
-
-
-    useEffect(()=>{
-        dispatch(getEvent(eventId))
-    },[])
-
-    useEffect(()=>{
-        if(events && events[eventId] && events[eventId].EventImages && events[eventId].EventImages[0]){
-            const event = events[eventId]
-            setGroupId(event.groupId)
-            setName(event.name)
-            setType(event.type)
-            setPrice(event.price)
-            setStartDate(event.startDate)
-            setEndDate(event.endDate)
-            setUrl(event.EventImages[0].url)
-            setDescription(event.description)
-        }
-    }, [events])
+    const events = useSelector((state) => state.events);
 
     const normalizeTimeZone = (date) => {
         const momentDate = moment(date);
         return momentDate.local().format('YYYY-MM-DDTHH:mm');
-    }
+    };
+
+    useEffect(() => {
+        dispatch(getEvent(eventId));
+    }, []);
+
+    useEffect(() => {
+        if (events && events[eventId] && events[eventId].EventImages && events[eventId].EventImages[0]) {
+            const event = events[eventId];
+            setGroupId(event.groupId);
+            setName(event.name);
+            setType(event.type);
+            setPrice(event.price);
+            setStartDate(event.startDate);
+            setEndDate(event.endDate);
+            setUrl(event.EventImages[0].url);
+            setDescription(event.description);
+        }
+    }, [events]);
 
     const updateFile = e => {
         const file = e.target.files[0];
@@ -56,10 +53,9 @@ function UpdateEventPage() {
         e.preventDefault();
         setErrors({});
 
-        const formattedStartDate = startDate ? formatDate(startDate) : "";
-        const formattedEndDate = endDate ? formatDate(endDate) : "";
-        const priceToInt = parseInt(price)
-
+        const formattedStartDate = startDate ? normalizeTimeZone(startDate) : "";
+        const formattedEndDate = endDate ? normalizeTimeZone(endDate) : "";
+        const priceToInt = parseInt(price);
 
         const event = await dispatch(updateEvent({ groupId, eventId, name, type, price: priceToInt, startDate: formattedStartDate, endDate: formattedEndDate, description }))
             .catch(async (res) => {
@@ -67,8 +63,6 @@ function UpdateEventPage() {
                 if (data && data.errors) {
                     setErrors((prevState) => {
                         if (!imageFile) data.errors.url = "Image is required";
-
-
                         return {
                             ...prevState,
                             ...data.errors,
@@ -76,23 +70,23 @@ function UpdateEventPage() {
                     });
                 }
             });
-        const image = await dispatch(updateEventImage({ eventId, imageFile }))
-            .catch(async (res) => {
+        if(imageFile){
+            const image = await dispatch(updateEventImage({ eventId, imageFile }))
+                .catch(async (res) => {
+                    const data = await res.json();
+                    if (data && data.errors) {
+                        setErrors((prevState) => {
+                            return {
+                                ...prevState,
+                                ...data.errors,
+                            };
+                        });
+                    }
+                });
+        }
 
-                const data = await res.json();
-                if (data && data.errors) {
-
-                    setErrors((prevState) => {
-                        return {
-                            ...prevState,
-                            ...data.errors,
-                        };
-                    });
-                }
-            });
-
-        if (eventId && image.url) history.push(`/events/${eventId}`);
-    }
+        if (eventId) history.push(`/events/${eventId}`);
+    };
 
     return (
         <div className="create-event-page-container">

@@ -8,6 +8,7 @@ const router = express.Router();
 
 const { requireAuth, verifyCohostStatus } = require('../../utils/auth')
 const { formatDate, parseDate } = require('../../utils/date')
+const moment = require('moment');
 const { check } = require('express-validator');
 const { handleValidationErrors, isValidURL } = require('../../utils/validation');
 
@@ -92,73 +93,72 @@ const validateVenue = [
 ];
 
 const validateEvent = [
-    check('venueId')
-        .exists({ checkFalsy: true })
-        .trim()
-        .notEmpty()
-        .custom(async id => {
-            const venue = await Venue.findByPk(id);
-            if (!venue) {
-                throw new Error('Venue does not exist');
-            }
-            return true;
-        })
-        .withMessage('Venue does not exist'),
     check('name')
         .exists({ checkFalsy: true })
         .trim()
         .notEmpty()
         .isLength({ min: 5, max: 50 })
         .withMessage('Name must be between 5 and 50 characters'),
+
     check('type')
         .exists({ checkFalsy: true })
-        .trim()
         .notEmpty()
         .isIn(["In person", "Online"])
         .withMessage("Type must be 'Online' or 'In person'"),
+
     check('capacity')
         .exists({ checkFalsy: true })
-        .trim()
         .isInt()
         .withMessage("Capacity must be an integer"),
+
     check('price')
-        .exists()
-        .trim()
-        .custom(value => typeof value !== 'undefined')
+        .exists({ checkFalsy: true })
         .isInt()
         .withMessage("Price is invalid"),
+
     check('description')
         .exists({ checkFalsy: true })
         .trim()
         .notEmpty()
         .withMessage("Description is required")
-        .isLength({ min: 5, max: 255 })
-        .withMessage('Description must be between 5 and 255 characters'),
+        .isLength({ min: 30, max: 255 })
+        .withMessage('Description must be between 30 and 255 characters'),
+
     check('startDate')
         .exists({ checkFalsy: true })
-        .trim()
         .notEmpty()
         .custom(date => {
-            const startDate = parseDate(date);
-            if (startDate <= new Date()) {
-                throw new Error('Start date must be in the future');
+            console.log(`🖥 ~ file: events.js:53 ~ date:`, date)
+            const startDate = moment(date, 'YYYY-MM-DDTHH:mm');
+            console.log(`🖥 ~ file: events.js:54 ~ startDate:`, startDate)
+            if (!startDate.isValid()) {
+                throw new Error('Invalid start date');
+            }
+            console.log(`🖥 ~ file: events.js:58 ~ startDate:`, startDate)
+            console.log(`🖥 ~ file: events.js:59 ~ moment():`, moment())
+            if (startDate <= moment()) {
+                throw new Error('Start date must be in the future 1');
             }
             return true;
         })
-        .withMessage("Start date must be in the future"),
+        .withMessage("Start date must be in the future 2"),
+
     check('endDate')
         .exists({ checkFalsy: true })
-        .trim()
         .notEmpty()
         .custom((date, { req }) => {
-            const endDate = parseDate(date);
-            const startDate = parseDate(req.body.startDate);
+            const endDate = moment(date, 'YYYY-MM-DDTHH:mm');
+            const startDate = moment(req.body.startDate, 'YYYY-MM-DDTHH:mm');
+            if (!endDate.isValid()) {
+                throw new Error('Invalid end date');
+            }
             if (endDate <= startDate) {
                 throw new Error('End date is less than start date');
             }
             return true;
         })
         .withMessage("End date is less than start date"),
+
     handleValidationErrors
 ];
 

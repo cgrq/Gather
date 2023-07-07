@@ -3,8 +3,7 @@ import moment from 'moment';
 import { useDispatch } from "react-redux";
 import { createEvent, createEventImage, removeEvent } from "../../store/events"
 import { useHistory, useParams } from 'react-router-dom';
-import { isValidURL } from '../../utils/validation'
-import { formatDate } from "../../utils/dates";
+import { isValidURL } from '../../utils/validation';
 
 function CreateEventPage() {
     const dispatch = useDispatch();
@@ -19,30 +18,29 @@ function CreateEventPage() {
     const [errors, setErrors] = useState({});
     const { groupId } = useParams();
 
-
     const normalizeTimeZone = (date) => {
         const momentDate = moment(date);
         return momentDate.local().format('YYYY-MM-DDTHH:mm');
     }
 
-    useEffect(()=>{
+    useEffect(() => {
 
-    },[startDate])
+    }, [startDate]);
 
     const updateFile = e => {
         const file = e.target.files[0];
         if (file) setImageFile(file);
     };
 
-
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
 
-        const formattedStartDate = startDate ? formatDate(startDate) : "";
-        const formattedEndDate = endDate ? formatDate(endDate) : "";
-        const priceToInt = parseInt(price)
-
+        const formattedStartDate = startDate ? normalizeTimeZone(startDate) : "";
+        console.log(`🖥 ~ file: CreateEventPage.js:40 ~ handleFormSubmit ~ formattedStartDate:`, formattedStartDate)
+        const formattedEndDate = endDate ? normalizeTimeZone(endDate) : "";
+        console.log(`🖥 ~ file: CreateEventPage.js:42 ~ handleFormSubmit ~ formattedEndDate:`, formattedEndDate)
+        const priceToInt = parseInt(price);
 
         const event = await dispatch(createEvent({ groupId, name, type, price: priceToInt, startDate: formattedStartDate, endDate: formattedEndDate, description }))
             .catch(async (res) => {
@@ -50,8 +48,6 @@ function CreateEventPage() {
                 if (data && data.errors) {
                     setErrors((prevState) => {
                         if (!imageFile) data.errors.url = "Image is required";
-
-
                         return {
                             ...prevState,
                             ...data.errors,
@@ -59,12 +55,13 @@ function CreateEventPage() {
                     });
                 }
             });
+
         const image = await dispatch(createEventImage({ eventId: event.id, imageFile }))
             .catch(async (res) => {
 
                 const data = await res.json();
                 if (data && data.errors) {
-                    const eventId = parseInt(event.id)
+                    const eventId = parseInt(event.id);
 
                     const removedGroup = await dispatch(removeEvent(eventId))
                         .catch(async (res) => {
@@ -73,6 +70,7 @@ function CreateEventPage() {
                                 setErrors(data.errors);
                             }
                         });
+
                     setErrors((prevState) => {
                         return {
                             ...prevState,
@@ -83,11 +81,11 @@ function CreateEventPage() {
             });
 
         if (event.id && image.id) history.push(`/events/${event.id}`);
-    }
+    };
 
     return (
         <div className="create-event-page-container">
-            <form className="create-event-page-form-container" onSubmit={handleFormSubmit}>
+              <form className="create-event-page-form-container" onSubmit={handleFormSubmit}>
                 <div className="create-event-page-row">
                     <h1>Create an event for {name}</h1>
                     <span>What is the name of your event?</span>
@@ -165,7 +163,7 @@ function CreateEventPage() {
                 </div>
             </form>
         </div>
-    )
+    );
 }
 
 export default CreateEventPage;
