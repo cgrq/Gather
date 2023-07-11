@@ -124,6 +124,19 @@
     color:rgb(143, 143, 143);
 }
 
+/* Social Links */
+.nav-social-links-wrapper{
+    display:flex;
+    justify-content: center;
+    width:100%;
+}
+.nav-social-links-wrapper img{
+    width:20px;
+    margin:20px;
+    margin-top:0;
+}
+
+
 @media screen and (max-width: 767px) {
     .nav-list{
         padding:20px 20px;
