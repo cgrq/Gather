@@ -22,7 +22,6 @@ function SectionOne() {
     return (
         <div className="section-one-container">
             <div className="section-one-image-container home-image-container">
-                <div className="section-one-image-shadow home-image-shadow" />
                 <div className="section-one-lottie" ref={animationContainer} />
             </div>
             <div className="section-one-text-container">
